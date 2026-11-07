@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-07 · Agent Full-Stack</title>
+<style>
+  :root {
+    --ink: #1a2332;
+    --ink-soft: #5a6a80;
+    --accent: #2563eb;
+    --accent-soft: #eff4ff;
+    --warn: #d97706;
+    --ok: #059669;
+    --line: #e5eaf1;
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --code-bg: #0f172a;
+    --code-ink: #e2e8f0;
+    --en-soft: #fafbfd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+    line-height: 1.7; font-size: 14.5px;
+    max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px;
+  }
+  header { border-bottom: 3px solid var(--accent); padding-bottom: 22px; margin-bottom: 28px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; }
+  h1 { font-size: 28px; margin: 6px 0 4px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 13px; }
+
+  /* bilingual mirror blocks: CN left, EN right, IDENTICAL content */
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); margin: 14px 0; }
+  .bi > div { padding: 14px 18px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 13.5px; color: #3b4a61; }
+  .bi .head { font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+
+  h2 { font-size: 19px; margin: 36px 0 6px; padding-left: 12px; border-left: 4px solid var(--accent); }
+  .h2sub { color: var(--ink-soft); font-size: 12.5px; margin-bottom: 10px; padding-left: 16px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 16px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .stat .num { font-size: 26px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 12px; color: var(--ink-soft); }
+
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; color: var(--code-ink); background: var(--code-bg); padding: 6px 9px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 3px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; background: var(--accent-soft); color: var(--accent); padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 10px; }
+  .tag.ok { background: #ecfdf5; color: var(--ok); }
+  .tag.warn { background: #fffbeb; color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 8px; padding: 12px 16px; font-size: 13px; margin: 14px 0; }
+  footer { margin-top: 50px; color: var(--ink-soft); font-size: 12px; text-align: center; border-top: 1px solid var(--line); padding-top: 18px; }
+
+  /* read-aloud feature */
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: #fff7e6 !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Agent Full-Stack Track · Day 1</div>
+  <h1>学习报告 Study Report — 2026-11-07</h1>
+  <div class="meta">Session 1 + 2 · 从零到流式 LLM 调用 · From zero to streaming LLM calls · 6 个真实报错全部转化为知识点 · 6 real errors, all converted into knowledge</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">2/3</div><div class="lbl">Step 2 进度<br>Phase 0 · Step 2 progress</div></div>
+  <div class="stat"><div class="num">6</div><div class="lbl">翻车并根因定位<br>Errors root-caused</div></div>
+  <div class="stat"><div class="num">+19</div><div class="lbl">技术词汇入库<br>Vocab entries added</div></div>
+  <div class="stat"><div class="num">2</div><div class="lbl">脚本产出<br>Scripts shipped</div></div>
+</div>
+
+<h2>一、轨道状态 Track Status</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    <strong>agent-fullstack(主轨道)</strong> <span class="tag ok">活跃</span> — 中转站探测、流式调用完成。断点:运行 <code>0002-structured-output.py</code><br>
+    <strong>ops-engineer</strong> <span class="tag warn">暂停</span> — 集群未启动(<code>orbctl start k8s</code> 待执行)<br>
+    <strong>languages · English</strong> <span class="tag ok">贯穿</span> — 词汇库 +19 条;全程英文报错自主阅读
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    <strong>agent-fullstack (primary track)</strong> <span class="tag ok">ACTIVE</span> — relay probing and streaming done. Break point: run <code>0002-structured-output.py</code><br>
+    <strong>ops-engineer</strong> <span class="tag warn">PAUSED</span> — cluster not started yet (<code>orbctl start k8s</code> pending)<br>
+    <strong>languages · English</strong> <span class="tag ok">ALWAYS-ON</span> — 19 vocabulary entries added; raw error messages read without translation
+  </div>
+</div>
+
+<h2>二、报错原句精读 Error Messages</h2>
+<div class="h2sub">每句左右镜像:左侧中文解读,右侧英文原文与要点 · Each block mirrored: CN interpretation left, EN original & takeaway right</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① 凭证缺失(实为变量名拼错)</div>
+    API key 必须放在 Authorization 请求头里(Bearer 方案)。<br>
+    <em>语法</em>:required in... 被动语态;scheme 此处=方案/机制。<br>
+    <em>要点</em>:报错说缺 key 而你确实设了 key 时,先怀疑变量名。
+  </div>
+  <div class="en">
+    <div class="head">① CREDENTIAL MISSING (actually a variable-name typo)</div>
+    <span class="en-code">API key is required in Authorization header (Bearer scheme)</span>
+    <em>Grammar</em>: "required in..." passive voice; "scheme" here means mechanism, not plot.<br>
+    <em>Takeaway</em>: when an error says "missing key" but you set one, suspect the variable name first.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② 模型不可用(分组配置问题)</div>
+    该分组下没有任何已配置的账号支持 glm-5.3。<br>
+    <em>语法</em>:configured 过去分词作定语。<br>
+    <em>要点</em>:模型可用性取决于 key → 分组 → 渠道配置,不是模型本身的属性。
+  </div>
+  <div class="en">
+    <div class="head">② MODEL UNAVAILABLE (group config issue)</div>
+    <span class="en-code">Model "glm-5.3" is not supported by any configured account in this group</span>
+    <em>Grammar</em>: "configured" — past participle used as attribute.<br>
+    <em>Takeaway</em>: model availability is a property of key → group → channel config, not of the model itself.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ 拼写错误击穿安全网</div>
+    名称错误:未定义 'Excepetion'。你是想写 'Exception' 吗?<br>
+    <em>要点</em>:Did you mean 是 Python 和 Google 共用的标准纠错句式;except 块里有 bug 时安全网失效。
+  </div>
+  <div class="en">
+    <div class="head">③ TYPO THAT BROKE THE SAFETY NET</div>
+    <span class="en-code">NameError: name 'Excepetion' is not defined. Did you mean: 'Exception'?</span>
+    <em>Takeaway</em>: "Did you mean" — the standard correction pattern in Python and Google alike; a bug inside except defeats the safety net.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">④⑤ 访问了不存在的属性 ×2</div>
+    ThinkingBlock / SignatureDelta 对象没有 text 属性。<br>
+    <em>要点</em>:has no attribute = 访问不存在的属性。响应内容是类型块数组,按类型解析,永远不要按位置猜。
+  </div>
+  <div class="en">
+    <div class="head">④⑤ NON-EXISTENT ATTRIBUTE ×2</div>
+    <span class="en-code">'ThinkingBlock' object has no attribute 'text'</span>
+    <span class="en-code">'SignatureDelta' object has no attribute 'text'</span>
+    <em>Takeaway</em>: response content is a TYPED block array — parse by type, never by position.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">⑥ 处理异常时又炸出异常</div>
+    处理上述异常的过程中,又发生了另一个异常。<br>
+    <em>要点</em>:日志里看到这句,直接检查 except 块本身,九成是它有 bug。
+  </div>
+  <div class="en">
+    <div class="head">⑥ EXCEPTION INSIDE EXCEPTION HANDLING</div>
+    <span class="en-code">During handling of the above exception, another exception occurred</span>
+    <em>Takeaway</em>: see this line → inspect the except block itself. Nine times out of ten it's buggy.
+  </div>
+</div>
+
+<h2>三、词汇表 Vocabulary(19 terms · 4 themes)</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">主题 1 · 协议与请求</div>
+    <strong>endpoint</strong> 端点 — 服务接受请求的 URL 地址<br>
+    <strong>Bearer</strong> 持有者 — Authorization: Bearer sk-xxx 认证方案<br>
+    <strong>relay</strong> 中转 — 转发 API 请求的代理服务<br>
+    <strong>probe</strong> 探测 — 验证是否真能用的小测试请求<br>
+    <strong>deep health check</strong> 深度健康检查 — 发真实请求,而非只看状态上报
+  </div>
+  <div class="en">
+    <div class="head">THEME 1 · PROTOCOL &amp; REQUESTS</div>
+    <strong>endpoint</strong> — the URL address where a service accepts requests<br>
+    <strong>Bearer</strong> — the auth scheme in "Authorization: Bearer sk-xxx"<br>
+    <strong>relay</strong> — a proxy service that forwards API requests to providers<br>
+    <strong>probe</strong> — a tiny test request that checks if something actually works<br>
+    <strong>deep health check</strong> — verifying by sending a REAL request, not just reading status
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">主题 2 · 流式</div>
+    <strong>streaming</strong> 流式 — 边生成边接收,不是憋完再给<br>
+    <strong>SSE (Server-Sent Events)</strong> 服务器推送事件 — 服务端持续推送的 Web 技术<br>
+    <strong>buffer / buffering</strong> 缓冲 — 攒一批再转发(打字机效果的杀手)<br>
+    <strong>flush</strong> 冲刷 — 强制把缓冲区内容立刻输出<br>
+    <strong>bisection</strong> 二分定位 — 每次测试砍掉一半可能性,定位坏的那层
+  </div>
+  <div class="en">
+    <div class="head">THEME 2 · STREAMING</div>
+    <strong>streaming</strong> — receiving output piece by piece as it is generated<br>
+    <strong>SSE (Server-Sent Events)</strong> — a web technology for a server to push events continuously<br>
+    <strong>buffer / buffering</strong> — holding data in a queue before passing it on (kills the typewriter effect)<br>
+    <strong>flush</strong> — force buffered output out immediately<br>
+    <strong>bisection</strong> — cutting the problem in half with each test to locate the failing layer
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">主题 3 · 解析与防御</div>
+    <strong>allowlist / denylist</strong> 白名单/黑名单 — 只认想要的 vs 只挡知道的<br>
+    <strong>defensive parsing</strong> 防御性解析 — 永远假设输入是坏的<br>
+    <strong>chatter</strong> 废话 — 模型在正经答案前加的客套话<br>
+    <strong>markdown fence</strong> 代码围栏 — ``` 包裹,会让 json.loads 炸<br>
+    <strong>hallucination</strong> 幻觉 — 貌似合理实则错误的输出
+  </div>
+  <div class="en">
+    <div class="head">THEME 3 · PARSING &amp; DEFENSE</div>
+    <strong>allowlist / denylist</strong> — accept known-good (survives new types) vs block known-bad (breaks on new types)<br>
+    <strong>defensive parsing</strong> — always assume the input is malformed<br>
+    <strong>chatter</strong> — polite filler text the model adds before the real answer<br>
+    <strong>markdown fence</strong> — the ``` wrapper that breaks json.loads<br>
+    <strong>hallucination</strong> — plausible-looking but wrong output
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">主题 4 · 安全与业务</div>
+    <strong>compromise</strong> 泄露/攻破 — 秘密一旦暴露即视为失守<br>
+    <strong>rotate / rotation</strong> 轮换 — 作废旧凭证换新的<br>
+    <strong>signature</strong> 签名 — 防篡改的加密证明<br>
+    <strong>mitigation</strong> 缓解措施 — 降低风险严重程度的动作<br>
+    <strong>rollback</strong> 回滚 — 恢复到上一个可用版本<br>
+    <strong>deploy to production</strong> 部署到生产环境 — 周五晚上干这事是经典反面教材
+  </div>
+  <div class="en">
+    <div class="head">THEME 4 · SECURITY &amp; BUSINESS</div>
+    <strong>compromise</strong> — a secret being exposed = treated as broken<br>
+    <strong>rotate / rotation</strong> — replacing a leaked secret with a new one<br>
+    <strong>signature</strong> — a cryptographic proof that content was not tampered with<br>
+    <strong>mitigation</strong> — an action that reduces the severity of a risk<br>
+    <strong>rollback</strong> — reverting a deployment to the previous working version<br>
+    <strong>deploy to production</strong> — doing this on Friday night is the classic anti-pattern
+  </div>
+</div>
+
+<h2>四、明日断点 Tomorrow's Break Point</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    ① <strong>agent 轨道</strong>:运行 <code>0002-structured-output.py</code>(代码已在手),然后 <code>0003-tool-use.py</code><br>
+    ② <strong>待办</strong>:轮换泄露的 API key — <code>~/.claude/settings.json</code> 和项目 <code>.env</code> 两处都要改<br>
+    ③ <strong>ops 轨道</strong>(想换口味时):<code>orbctl start k8s</code>
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    ① <strong>agent track</strong>: run <code>0002-structured-output.py</code> (code in hand), then <code>0003-tool-use.py</code><br>
+    ② <strong>TODO</strong>: rotate the leaked API key — update BOTH <code>~/.claude/settings.json</code> and the project <code>.env</code><br>
+    ③ <strong>ops track</strong> (when in the mood): <code>orbctl start k8s</code>
+  </div>
+</div>
+
+<div class="note">
+  <strong>两年目标进度 Day 1/730</strong> — agent-fullstack → ops-engineer → English,三条轨道首日全部启动。
+  本报告每条记录都达到"陌生人可凭记录复学"的密度,是悦鹤个人 IP 内容库的原料。
+</div>
+
+<footer>
+  Generated 2026-11-07 · ~/growth-plan/agent-fullstack/reports/0001-report-2026-11-07.html<br>
+  镜像双语 Mirror bilingual: 中文 | English · Next report after Session 3
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+
+  // pick the best English voice automatically: Google > Premium/Enhanced > preferred system names
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) {
+      return v.lang && v.lang.indexOf("en") === 0;
+    });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+
+  // clean text for speech: strip symbols TTS would read aloud, then split into sentences
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")        // badge line
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")                 // circled numbers get read as noise
+      .replace(/[·•→←←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")                            // dashes → comma pause
+      .replace(/\s*\n\s*/g, " | ")                       // line breaks → sentence boundary
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    // split at sentence punctuation and line markers
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)     // sentence end or line break
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+
+    el.classList.add("speaking");
+    current = el;
+
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);   // queue: natural pause between sentences
+    });
+  }
+
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function () {};   // voice picked per-speak call
+
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>
