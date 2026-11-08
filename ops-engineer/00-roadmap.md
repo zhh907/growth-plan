@@ -13,6 +13,7 @@ AI 时代"会执行命令"不值钱,"知道系统为什么坏、坏了怎么办�
 
 ### 阶段 0:k8s 上手(2026-11 ~ 2026-12)← 当前
 - [ ] 本机 OrbStack 集群启动(orbctl start k8s)
+- [ ] **Docker 基础**(2026-11-08 加入):镜像与分层缓存 / 容器=被隔离的进程(呼应已见的 containerd-shim 与 pause)/ run·exec·logs·inspect / `-p` 端口映射与 bridge 网络 / volume 挂载 / Compose 多容器编排 —— 用自己现成的 Tomcat 容器当活教材
 - [ ] 核心对象:Pod / Deployment / Service / ConfigMap / Ingress
 - [ ] 独立部署一个多服务应用(含滚动更新与回滚)
 - 环境:macOS arm64 / 32GB / OrbStack 2.2.5 / kubectl(上下文 orbstack)

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-08 · Ops Engineer</title>
+<style>
+  :root {
+    --ink: #1a2332; --ink-soft: #5a6a80; --accent: #2563eb; --accent-soft: #eff4ff;
+    --warn: #d97706; --ok: #059669; --err: #dc2626; --line: #e5eaf1; --bg: #f7f9fc;
+    --card: #ffffff; --code-bg: #0f172a; --code-ink: #e2e8f0; --en-soft: #fafbfd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.7; font-size: 14.5px;
+    max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+  header { border-bottom: 3px solid var(--accent); padding-bottom: 22px; margin-bottom: 28px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; }
+  h1 { font-size: 28px; margin: 6px 0 4px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 13px; }
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); margin: 14px 0; }
+  .bi > div { padding: 14px 18px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 13.5px; color: #3b4a61; }
+  .bi .head { font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+  h2 { font-size: 19px; margin: 36px 0 6px; padding-left: 12px; border-left: 4px solid var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 16px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .stat .num { font-size: 26px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 12px; color: var(--ink-soft); }
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; color: var(--code-ink); background: var(--code-bg); padding: 6px 9px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 3px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; background: var(--accent-soft); color: var(--accent); padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 10px; }
+  .tag.ok { background: #ecfdf5; color: var(--ok); }
+  .tag.warn { background: #fffbeb; color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 8px; padding: 12px 16px; font-size: 13px; margin: 14px 0; }
+  table { border-collapse: collapse; width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 13px; margin: 12px 0; }
+  th { background: var(--accent-soft); color: var(--ink); text-align: left; padding: 8px 12px; font-size: 12px; }
+  td { padding: 8px 12px; border-top: 1px solid var(--line); }
+  footer { margin-top: 50px; color: var(--ink-soft); font-size: 12px; text-align: center; border-top: 1px solid var(--line); padding-top: 18px; }
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: #fff7e6 !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Ops Engineer Track · Session 3</div>
+  <h1>学习报告 Study Report — 2026-11-08</h1>
+  <div class="meta">三个追问闭环 + 钻进节点内部 + 第一个 Deployment/Service</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">3/3</div><div class="lbl">上次遗留追问闭环<br>recap questions closed</div></div>
+  <div class="stat"><div class="num">1</div><div class="lbl">悬案破案:kubelet 藏在 k3s 里<br>mystery solved: kubelet inside k3s</div></div>
+  <div class="stat"><div class="num">1</div><div class="lbl">交付物:0000-deploy-svc.yaml<br>artifact applied</div></div>
+  <div class="stat"><div class="num">5</div><div class="lbl">localhost:30080 到 nginx 的层数<br>hops Mac → Pod</div></div>
+</div>
+
+<h2>一、上次三问的答案</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">Q1:容器跑在谁肚子里</div>
+    跑在 OrbStack 内部的 Linux 虚拟机里。Pod 只是 k8s 数据库里的一条记录;真正起容器的是虚拟机里的 containerd。<br>
+    破案:进程表里找不到 kubelet,是因为 OrbStack 的 k8s 是 <strong>k3s</strong>——把 kubelet、api-server 等全部打包进一个叫 k3s 的程序。
+  </div>
+  <div class="en">
+    <div class="head">Q1: WHERE DO CONTAINERS LIVE</div>
+    Inside OrbStack's internal Linux VM. A Pod is just a record in k8s' database; the actual work is done by containerd in the VM.<br>
+    Case solved: no process named "kubelet" exists because OrbStack's k8s is <strong>k3s</strong> — one binary bundling kubelet, api-server and friends.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">Q2:Events 像什么</div>
+    像后端服务的日志:带时间戳、只追加、按时间排。Pod 出问题先 <code>kubectl describe</code> 翻 Events,从最后一条 Warning 往上找原因——和查日志一个套路。
+  </div>
+  <div class="en">
+    <div class="head">Q2: WHAT EVENTS RESEMBLE</div>
+    Backend service logs: timestamped, append-only, time-ordered. When a Pod misbehaves, read Events in <code>kubectl describe</code> bottom-up — same habit as reading a log file.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">Q3:Pod IP 和 Mac 的关系</div>
+    没关系。Pod IP 由 CNI 插件从 <code>cni0</code> 网桥的网段发(192.168.194.x),这个网络只存在于虚拟机内部。实测 Mac 直接 curl Pod IP:<strong>等满 75 秒超时</strong>。<br>
+    超时 = 包被丢弃(路由不通);秒拒 = 包到了但端口没人听。失败模式本身就是诊断信息。
+  </div>
+  <div class="en">
+    <div class="head">Q3: POD IP vs MAC IP</div>
+    No relation. Pod IPs come from the <code>cni0</code> bridge segment (192.168.194.x), which exists only inside the VM. Tested: curl from Mac to a Pod IP <strong>timed out after 75s</strong>.<br>
+    Timeout = packets dropped (no route); instant refusal = arrived but port closed. The failure MODE is itself a diagnostic.
+  </div>
+</div>
+
+<h2>二、钻进节点看到的三样东西</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">进入方式:kubectl debug node/</div>
+    节点虚拟机不开放 SSH(OrbStack 的 ssh orb 只进用户自建的机器)。要看节点内部,用 <code>kubectl debug node/orbstack -it --image=busybox</code>:起一个共享宿主进程表的调试容器,就能看到节点的进程和网卡。用完记得删。
+  </div>
+  <div class="en">
+    <div class="head">ENTRY: kubectl debug node/</div>
+    The node VM has no SSH (OrbStack's ssh orb only reaches user-created machines). Use <code>kubectl debug node/orbstack -it --image=busybox</code>: a debug pod sharing the host's process table, so node processes and interfaces are visible. Delete it when done.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① containerd-shim:每个容器一个"养父"进程</div>
+    进程表里每个容器对应一个 shim。容器死了 shim 负责收尸,containerd 本体不受牵连。7 个 shim = 7 个容器。
+  </div>
+  <div class="en">
+    <div class="head">① containerd-shim: A FOSTER PARENT PER CONTAINER</div>
+    Each container maps to one shim process. When a container dies, the shim reaps it so containerd itself never goes down. 7 shims = 7 containers.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② pause 容器:Pod 网络的真正主人</div>
+    每个 Pod 先起一个几乎不耗资源的 pause 容器,由它持有网络命名空间(拿 IP)。Pod 里的其他容器加入它——这就是同一 Pod 内容器共享 IP 和 localhost 的实现。
+  </div>
+  <div class="en">
+    <div class="head">② pause CONTAINER: THE REAL OWNER OF A POD'S NETWORK</div>
+    Each Pod first starts a near-zero-cost pause container that holds the network namespace (gets the IP). Other containers join it — this is how containers in one Pod share IP and localhost.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ 自己的 Tomcat 还在里面跑着</div>
+    进程表第 381 行是一个 Java 8 Tomcat——以前 docker 起的,挂在 docker 网桥上,和 k8s 的 Pod 网络互不相干。同一台虚拟机里,docker 世界和 k8s 世界各用各的网段。这只 Tomcat 以后就是 Docker 单元的活教材。
+  </div>
+  <div class="en">
+    <div class="head">③ MY OWN TOMCAT STILL RUNNING (PID 381)</div>
+    Line 381 is a Java 8 Tomcat started long ago via docker, sitting on a docker bridge — untouched by, and unrelated to, the k8s Pod network. Two worlds, one VM, separate subnets. This Tomcat becomes the living textbook for the upcoming Docker unit.
+  </div>
+</div>
+
+<h2>三、第一个 Deployment + Service</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">两个新对象,各管一件事</div>
+    <strong>Deployment</strong>:你声明"要 2 个 Pod",它盯着现实,少了补、多了删(自愈)。<br>
+    <strong>Service</strong>:一个不变的地址,转发给后面的 Pod。Pod 换 IP 它自动跟踪,靠的是 label 选择器。
+  </div>
+  <div class="en">
+    <div class="head">TWO NEW OBJECTS, ONE JOB EACH</div>
+    <strong>Deployment</strong>: you declare "I want 2 Pods"; it watches reality and fixes any gap (self-healing).<br>
+    <strong>Service</strong>: a stable address forwarding to its Pods. It tracks IP changes automatically via label selectors.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">途中修了一个真实报错</div>
+    <span class="en-code">cannot unmarshal string into ... replicas of type int32</span>
+    YAML 按写法定类型:<code>2</code> 是数字,<code>"2"</code> 是字符串。k8s 服务端是强类型,报错会写明哪个字段、期望什么类型——读懂就不用猜。<br>
+    另学到:apply 按对象逐个处理,不成事务——Service 成了、Deployment 失败,是正常现象;重跑幂等。
+  </div>
+  <div class="en">
+    <div class="head">ONE REAL ERROR, FIXED</div>
+    <span class="en-code">cannot unmarshal string into ... replicas of type int32</span>
+    YAML types come from syntax: <code>2</code> is a number, <code>"2"</code> a string. The k8s API is strongly typed server-side, and errors name the field and expected type — read them instead of guessing.<br>
+    Bonus: apply is per-object, not a transaction — Service created while Deployment failed is normal; re-applying is idempotent.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">localhost:30080 到 nginx:共 5 层</div>
+    ① OrbStack 把 Mac 的 30080 映射进虚拟机 → ② 节点的 nodePort 被 iptables 规则认出 → ③ DNAT 改写成某个 Pod IP:80 → ④ 包经 cni0 网桥进入 Pod 的网络命名空间 → ⑤ nginx 收到。<br>
+    关键认知:Service 的 IP 没有进程在监听,它只是 iptables 规则造出的虚拟地址。
+  </div>
+  <div class="en">
+    <div class="head">localhost:30080 → nginx: 5 HOPS</div>
+    ① OrbStack maps Mac's 30080 into the VM → ② iptables rules recognize the nodePort → ③ DNAT rewrites the destination to some Pod IP:80 → ④ the packet crosses cni0 into the Pod's network namespace → ⑤ nginx answers.<br>
+    Key fact: nothing listens on a Service IP — it is a virtual address invented by iptables rules.
+  </div>
+</div>
+
+<h2>四、词汇表 Vocabulary</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">容器运行时</div>
+    <strong>k3s</strong> — 轻量 k8s 发行版,把所有控制组件打进一个二进制<br>
+    <strong>containerd-shim</strong> — 每容器一个的中间进程,负责收尸隔离<br>
+    <strong>pause container</strong> — 持有 Pod 网络命名空间的占位容器<br>
+    <strong>hostPID</strong> — 容器与宿主共享进程表的开关
+  </div>
+  <div class="en">
+    <div class="head">RUNTIME</div>
+    <strong>k3s</strong> — lightweight k8s distro; all control components in one binary<br>
+    <strong>containerd-shim</strong> — per-container middleman that isolates containerd from deaths<br>
+    <strong>pause container</strong> — placeholder container owning the Pod's network namespace<br>
+    <strong>hostPID</strong> — flag making a container share the host's process table
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">网络</div>
+    <strong>CNI</strong> — 给 Pod 分配网络的插件体系,cni0 是它的网桥<br>
+    <strong>DNAT</strong> — 改写目标地址,Service 转发的实现手段<br>
+    <strong>nodePort</strong> — 在节点上开的 30000-32767 端口,对外入口<br>
+    <strong>timeout vs refused</strong> — 超时=包丢失;秒拒=端口没人听
+  </div>
+  <div class="en">
+    <div class="head">NETWORKING</div>
+    <strong>CNI</strong> — the plugin family that wires Pod networking; cni0 is its bridge<br>
+    <strong>DNAT</strong> — destination-address rewrite; how Service forwarding works<br>
+    <strong>nodePort</strong> — a port opened on the node (30000-32767) as an external entry<br>
+    <strong>timeout vs refused</strong> — timeout = packets lost; refusal = port closed
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">对象与机制</div>
+    <strong>reconcile</strong> 调谐 — 控制器循环:对比期望与现实,补差距<br>
+    <strong>endpoints</strong> — Service 的"通讯录",只收 Ready 的 Pod<br>
+    <strong>label selector</strong> — Deployment/Service 靠标签认领对象<br>
+    <strong>幂等 idempotent</strong> — 同一操作重复执行结果不变,apply 的特性
+  </div>
+  <div class="en">
+    <div class="head">OBJECTS &amp; MECHANICS</div>
+    <strong>reconcile</strong> — the controller loop: compare desired vs actual, close the gap<br>
+    <strong>endpoints</strong> — the Service's contact list; Ready pods only<br>
+    <strong>label selector</strong> — how Deployments/Services claim objects<br>
+    <strong>idempotent</strong> — repeating the same operation changes nothing further; apply's property
+  </div>
+</div>
+
+<h2>五、下次做什么 Next</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    ① 收尾第 4 条:自愈演示(delete pod → <code>-w</code> 看补位 → endpoints 前后对比)+ 浏览器打开 localhost:30080<br>
+    ② 第 5 条:滚动更新与回滚(rollout / set image / undo)<br>
+    ③ <strong>新增:Docker 基础已写进 roadmap 阶段 0</strong>——镜像分层、容器=进程、端口映射、volume、Compose,拿那只现成的 Tomcat 当教材
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    ① Finish step 4: self-heal demo (delete pod → watch <code>-w</code> → endpoints before/after) + open localhost:30080 in the browser<br>
+    ② Step 5: rolling update & rollback (rollout / set image / undo)<br>
+    ③ <strong>NEW: Docker basics added to roadmap Phase 0</strong> — image layers, container=process, port mapping, volumes, Compose; the existing Tomcat is the living textbook
+  </div>
+</div>
+
+<div class="note">
+  <strong>Session 3 · Phase 0 进度过半(checklist 3/6)。</strong>今天最重要的一条:Pod IP 是内网领地、随时会换——所以才有 Service 这个永远不变的入口。下次浏览器里看到 nginx 欢迎页时,中间隔着 5 层转发,每一层今天都见过实物。
+</div>
+
+<footer>
+  Generated 2026-11-08 · ~/growth-plan/ops-engineer/reports/0003-report-2026-11-08.html<br>
+  中英对照 · 点右侧英文块朗读
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) { return v.lang && v.lang.indexOf("en") === 0; });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+    el.classList.add("speaking");
+    current = el;
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+  speechSynthesis.getVoices();
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>

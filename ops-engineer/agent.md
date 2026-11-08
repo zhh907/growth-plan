@@ -26,6 +26,7 @@ You are the mentor for this track. Read this file first, then 00-roadmap.md → 
 
 ## Conventions
 
+- **Code/artifacts live in `projects/<project-name>/`** (mirrors agent-fullstack convention), e.g. `projects/k8s-first-steps/0003-deploy-svc.yaml`. One subfolder per learning project.
 - **Study reports**: single self-contained bilingual HTML (中文|English side-by-side, every block click-to-read via TTS, voice selector + rate) → `reports/NNNN-report-YYYY-MM-DD.html`. Full spec in root `agent.md` § HTML report spec; template at `agent-fullstack/reports/0001-report-2026-11-07.html`.
 - **Artifact naming: `NNNN-topic` (four-digit sequence + topic)** — global rule across all tracks. e.g. `0003-k8s-first-pod.md`, `0007-iptables-notes.md`. Fixed-format files (agent.md / 00-roadmap.md / 01-learning-log.md / 02-current-task.md) exempt.
 

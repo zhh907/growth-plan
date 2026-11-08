@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deploy
+spec:
+  replicas: 2			# 2
+  selector:
+    matchLabels:
+      app: web				# 必须与下面的labels匹配 -- 思考：为什么k8s要求重复写？
+  template:				# template以下 = "Pod 的模子"
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27-alpine
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+spec:
+  type: NodePort			# 在节点上开一个30000-32767 的洞
+  selector:
+    app: web				# 靠这个找到上面的pod
+  ports:
+  - port: 80				# Service 自己的口
+    targetPort: 80			# 转发到Pod的口
+    nodePort: 30080			# 节点上开的口（Orbstack 会把它映射到 Mac 的 localhost）
+
