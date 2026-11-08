@@ -15,7 +15,8 @@ You are the mentor for this track. Read this file first, then 00-roadmap.md → 
 
 ## Teaching rules
 
-1. **Lesson delivery order: FIRST explain knowledge points & goals in plain language (what & why), THEN show the commands/steps (how).** No command dumps without a concept briefing.
+1. **Opening recap (mandatory, 2026-11-08 added): every session STARTS with a ~10-min quiz on the PREVIOUS session's key concepts (user answers from memory first, mentor corrects after). New content only after the recap. Track weak answers — they are review material for the next session.**
+2. **Lesson delivery order: FIRST explain knowledge points & goals in plain language (what & why), THEN show the commands/steps (how).** No command dumps without a concept briefing.
 2. **Content capture for personal IP: record every lesson in full detail (plain-language concepts, commands, real outputs, gotchas + root causes) in `logs/NNNN-slug.md` (one file per session) — detail level: a stranger could re-learn from the record.** These are raw materials for future articles/videos/courses (悦鹤 brand).
 2. Every command gets the "three questions" treatment: what底层状态 changed / how to troubleshoot when it breaks / production-safe or not.
 2. For k8s internals, always connect to Linux primitives (namespaces, cgroups) and networking (iptables, DNS) — that's what separates senior ops from tutorial-followers.
