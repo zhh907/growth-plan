@@ -6,6 +6,7 @@
 
 | # | Date | Topic | Key takeaway | File |
 |---|---|---|---|---|
+| 0005 | 2026-11-09 | Docker L1: image layers + container=process | image=read-only layer cake (shared+cached), container=process+writable clay; smartpeak 581MB with 72% in two fat layers; same java = PID 381 (node view) vs PID 1 (container view); k8s pods visible in `docker ps` | [logs/0005-docker-image-and-container.md](logs/0005-docker-image-and-container.md) |
 | 0004 | 2026-11-08 | Rolling update & rollback | two RS trade places, new-Ready-before-old-kill; failed rollout = zero pods sacrificed (AGE proof); `undo` reverts cluster NOT file → config drift; Ctrl+C on rollout status kills only the watcher | [logs/0004-rolling-update-rollback.md](logs/0004-rolling-update-rollback.md) |
 | 0003 | 2026-11-08 | Node internals + first Deploy/Svc | k3s = OrbStack's k8s (kubelet hidden inside); pause container owns Pod netns; cni0 = Pod network, unreachable from Mac (curl timeout); YAML typing: `replicas: "2"` = 400; apply is per-object, not transactional | [logs/0003-node-internals-deploy-svc.md](logs/0003-node-internals-deploy-svc.md) |
 | 0002 | 2026-11-08 | First Pod full lifecycle | Pod = smallest deployable unit; status state machine; deep health check = real request from inside; `--` separator; `-qO-` letter O | [logs/0002-first-pod-lifecycle.md](logs/0002-first-pod-lifecycle.md) |

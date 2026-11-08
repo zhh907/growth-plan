@@ -17,6 +17,8 @@
 - [x] 5. 滚动更新与回滚练习(2026-11-08 完成:watch 抓到"先 Ready 再杀旧"全程;坏镜像发布 44s 卡死期间 curl 不断流;undo 后 AGE 证明旧 RS 零牺牲;发现 config drift:undo 不回滚 yaml 文件)
 - [ ] 5. 滚动更新与回滚练习
 - [ ] 6.(新增 2026-11-08)Docker 基础单元,见 00-roadmap.md 阶段 0 新条目;拿现成 Tomcat 容器当教材
+  - [x] L1 镜像分层 + 容器=进程(2026-11-09:smartpeak 581MB 千层饼考古;PID 381 vs PID 1 双视角;k8s Pod 在 docker ps 同框;开场抽考 2.5/4 创新高)
+  - [ ] L2 容器网络(-p 背后的 pstub 真相)+ volume(数据活过容器死亡)+ Compose ← **断点**
 
 ### Notes
 
