@@ -66,5 +66,4 @@ for round_no in range(1,5):
             "content":json.dumps(output),
         })
     messages.append({"role":"user","content":results})
-
 print(f"\n usage total_in={total_in} total_out={total_out}")

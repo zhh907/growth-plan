@@ -17,17 +17,25 @@
 - [x] Relay probing done (0000-probe.py): glm-5.3 & deepseek-chat OK via Anthropic protocol (2026-11-07)
 - [x] LLM API call with streaming output (0001-streaming.py, 2026-11-07)
 - [x] Structured output (0002-structured-output.py PASSED 2026-11-08: clean JSON on first try, 78 in / 188 out tokens)
-- [ ] Tool use loop (0003-tool-use.py) ← **断点**
+- [x] Tool use loop (0003-tool-use.py PASSED 2026-11-08: schema typo saga → parallel calls + CWD anchoring verified)
 
 ### Step 3 — Tool use loop
 
-- [ ] Define 1-2 tools (function calling)
-- [ ] Agent loop: model calls tool → execute → feed result back
+- [x] Define 1-2 tools (function calling) — get_file_info (line count + bytes)
+- [x] Agent loop: model calls tool → execute → feed result back (0003, wrapped as `run_agent()` in 0004)
 
-### Step 4 — Ship first CLI agent
+### Step 3.5 — CLI wrap (added 2026-11-08)
 
-- [ ] Candidate: MQL4 code analyzer (reads EA source, flags common bugs) — leverages your domain edge
-- [ ] Candidate B: generic single-agent CLI (simpler, less domain-coupled)
+- [x] 0004-cli-agent.py: argparse + run_agent + exit codes 0/1/2 + stderr (PASSED all 4 acceptance checks 2026-11-08)
+
+### Step 4 — Ship first CLI agent ← **断点(2026-11-08)**
+
+**DECIDED 2026-11-08: Candidate A — MQL4 code analyzer** (rationale: 0004 already IS candidate B; A = domain edge × new learning; natural eval set with seeded-bug samples).
+
+- [ ] 0005-mql4-analyzer.py: new tool `read_file_chunk` (context budget + tool granularity lesson)
+- [ ] Wire both tools + analyzer prompt; findings output (bug type / line / severity / note)
+- [ ] Evals: 2-3 seeded-bug .mq4 samples in `evals/`, measure hit rate / false positives
+- [ ] Ship + final review
 
 ### Notes
 
