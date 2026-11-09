@@ -6,6 +6,7 @@
 
 | # | Date | Topic | Key takeaway | File |
 |---|---|---|---|---|
+| 0006 | 2026-11-10 | 0005 Step B: wiring + first real audit | domain knowledge → SYSTEM_PROMPT checklist; assistant=tool_use / user=tool_result direction; 7-bug debug saga (entry guard, filter typo, indent, max_tokens arithmetic); glm thinking blocks; hallucinated line count self-corrected via error dicts; UTF-16LE .mq4 doubles lines; cost: in=206K/audit; real-EA verdict 2 hits + 0 false positives | [logs/0006-mql4-analyzer-stepb.md](logs/0006-mql4-analyzer-stepb.md) |
 | 0005 | 2026-11-08 | Script → CLI tool (0004) | deterministic shell wraps probabilistic core; return > print for composability; exit codes 0/1/2 = pipeline handshake; stderr keeps data channel clean; nargs="+" = graceful degradation | [logs/0005-cli-agent.md](logs/0005-cli-agent.md) |
 | 0004 | 2026-11-08 | Tool use — empty-input saga (0003) | `input` vs `input_schema` typo = silent contract failure; dump RAW request before blaming infra; CWD vs script dir; parallel tool calls; hard cap | [logs/0004-tool-use-empty-input-saga.md](logs/0004-tool-use-empty-input-saga.md) |
 | 0003 | 2026-11-08 | Structured output passed (0002) | schema-in-prompt works first try; extraction/validation = insurance; parsed output feeds downstream code | [logs/0003-structured-output.md](logs/0003-structured-output.md) |

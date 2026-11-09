@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-10 · Agent Full-Stack</title>
+<style>
+  :root {
+    --ink: #1a2332; --ink-soft: #5a6a80; --accent: #2563eb; --accent-soft: #eff4ff;
+    --warn: #d97706; --ok: #059669; --err: #dc2626; --line: #e5eaf1; --bg: #f7f9fc;
+    --card: #ffffff; --code-bg: #0f172a; --code-ink: #e2e8f0; --en-soft: #fafbfd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.7; font-size: 14.5px;
+    max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+  header { border-bottom: 3px solid var(--accent); padding-bottom: 22px; margin-bottom: 28px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; }
+  h1 { font-size: 28px; margin: 6px 0 4px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 13px; }
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); margin: 14px 0; }
+  .bi > div { padding: 14px 18px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 13.5px; color: #3b4a61; }
+  .bi .head { font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+  h2 { font-size: 19px; margin: 36px 0 6px; padding-left: 12px; border-left: 4px solid var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 16px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .stat .num { font-size: 26px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 12px; color: var(--ink-soft); }
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; color: var(--code-ink); background: var(--code-bg); padding: 6px 9px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 3px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; background: var(--accent-soft); color: var(--accent); padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+  .note { background: var(--accent-soft); border-radius: 8px; padding: 12px 16px; font-size: 13px; margin: 14px 0; }
+  table { border-collapse: collapse; width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 13px; margin: 12px 0; }
+  th { background: var(--accent-soft); color: var(--ink); text-align: left; padding: 8px 12px; font-size: 12px; }
+  td { padding: 8px 12px; border-top: 1px solid var(--line); }
+  footer { margin-top: 50px; color: var(--ink-soft); font-size: 12px; text-align: center; border-top: 1px solid var(--line); padding-top: 18px; }
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: #fff7e6 !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Agent Full-Stack Track · Session 6</div>
+  <h1>学习报告 Study Report — 2026-11-10</h1>
+  <div class="meta">0005 Step B 接线 · 七案调试编年史 · 第一次真身审计</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">2/3 + 0</div><div class="lbl">真身 EA 审计:命中 2 条 + 误报 0 条<br>real-EA audit: 2 hits, 0 false positives</div></div>
+  <div class="stat"><div class="num">7</div><div class="lbl">自己代码里的 bug,全自己修掉<br>bugs in my own code, self-fixed</div></div>
+  <div class="stat"><div class="num">206K</div><div class="lbl">一次审计的输入 token(成本警钟)<br>input tokens per audit</div></div>
+  <div class="stat"><div class="num">1</div><div class="lbl">第一个"真 agent"交付<br>first real agent delivered</div></div>
+</div>
+
+<h2>一、Step B 加了什么</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">三块新骨头</div>
+    SYSTEM_PROMPT(审查员人设)、execute_tool(调度层)、run_agent(带 system 的循环)+ main(接收 .mq4 路径)。<br>
+    核心认知:bug 清单是我的领域经验,写进 prompt,模型从"通用助手"变成"带着检查表的审查员"。<strong>领域知识进 prompt,通用能力靠模型。</strong>
+  </div>
+  <div class="en">
+    <div class="head">THREE NEW BONES</div>
+    SYSTEM_PROMPT (reviewer persona), execute_tool (dispatcher), run_agent (loop with system=) + main (takes a .mq4 path).<br>
+    Core idea: the bug checklist is MY domain experience, written into the prompt — <strong>domain knowledge goes into the prompt; general capability comes from the model.</strong>
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">我的考点表(三条,全部来自实战)</div>
+    ① 手数控制:未按 MODE_LOTSTEP 归一化 / 不查 MINLOT..MAXLOT —— broker 拒单(error 131)。<br>
+    ② 同 bar 堆单:无新 bar 门槛 + 不查已持仓 —— 一个信号变 N 笔仓位。<br>
+    ③ 无止损:OrderSend 不带 SL 且无 OrderModify 补 —— 一笔坏单亏穿账户。
+  </div>
+  <div class="en">
+    <div class="head">MY CHECKLIST (3 ITEMS, ALL FROM LIVE TRADING)</div>
+    1. Lot control: not normalized to MODE_LOTSTEP / no MINLOT..MAXLOT check — broker rejects (error 131).<br>
+    2. Same-bar stacking: no new-bar guard + no open-order check — one signal becomes N positions.<br>
+    3. Missing SL: OrderSend without SL and no OrderModify later — one bad trade wipes the account.
+  </div>
+</div>
+
+<h2>二、七案调试编年史</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">案 1-3:入口、过滤器、括号</div>
+    ① 零输出零报错 = 缺 <code>if __name__</code> 发令枪,Python 把文件当字典读完了。<br>
+    ② stop=tool_use 但 tools=[] —— 过滤器手滑。数据(block types)和假设(过滤器)打架时,看原始数据。<br>
+    ③ <code>resp.content()</code> 报 'list' is not callable:括号是"调用",属性直接用。
+  </div>
+  <div class="en">
+    <div class="head">CASES 1-3: ENTRY, FILTER, PARENS</div>
+    1. Zero output + exit 0 = missing <code>if __name__</code> guard; Python read the file as a dictionary.<br>
+    2. stop=tool_use but tools=[] — a typo in MY filter. When data (block types) contradicts the assumption (filter), trust the raw dump.<br>
+    3. <code>resp.content()</code> → 'list' is not callable: parens mean CALL; attributes are taken, not called.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">案 4-6:结构三连</div>
+    ④ return None 缩进进了 for 循环 → 永远只跑一轮。缩进 = 归属,和 YAML/compose 同病。<br>
+    ⑤ 结果块类型三连错:tool_call(不存在)→ tool_use(方向反了,上游报中文错误 [1213])→ tool_result(对)。<strong>协议方向:assistant 发 tool_use,user 回 tool_result。</strong><br>
+    ⑥ content 塞了裸字典 output,应为块列表 results —— 报错里 messages.2 直接点名第几条消息。
+  </div>
+  <div class="en">
+    <div class="head">CASES 4-6: THE STRUCTURE TRIPLE</div>
+    4. return None indented inside the for loop → exactly one round per run. Indentation = membership.<br>
+    5. Result-block type saga: tool_call (nonexistent) → tool_use (wrong direction, upstream Chinese error [1213]) → tool_result (correct). <strong>Direction: assistant sends tool_use; user replies tool_result.</strong><br>
+    6. content held a bare dict (output) instead of the list (results) — the error named messages.2 exactly.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">案 7:max_tokens 算术断案 + 半套修复定律</div>
+    两次空报告,stop=max_tokens:分析全憋在 thinking 块里,2000 预算烧完没轮到说话。<br>
+    算账实锤:总输出 4408 ≈ 400 + 2000 + 2000,每轮精确死在 2000。<br>
+    元教训:<strong>半套修复 = 换一种方式失败。</strong>每次只改一半,下一轮就冒出新错。修复要成套提交。
+  </div>
+  <div class="en">
+    <div class="head">CASE 7: MAX_TOKENS ARITHMETIC + THE HALF-FIX LAW</div>
+    Two empty reports with stop=max_tokens: the whole analysis sat in the thinking block; the 2000 budget burned before any text.<br>
+    Arithmetic proof: total out 4408 ≈ 400 + 2000 + 2000 — every round died exactly at the cap.<br>
+    Meta-lesson: <strong>a half-applied fix is just a new way to fail.</strong> Fixes ship as a set.
+  </div>
+</div>
+
+<h2>三、三个新现象</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① thinking 块</div>
+    glm 每轮先吐一个思考块,再吐工具调用。无害:我们把 resp.content 整包存回历史,思考块随行。<br>
+    代价:thinking 计入输出预算,max_tokens 要按"思考+说话"之和留(最终 16000,实用 7828)。
+  </div>
+  <div class="en">
+    <div class="head">① THINKING BLOCKS</div>
+    Each round glm emits a thinking block before the tool call. Harmless: we store resp.content wholesale, thinking rides along.<br>
+    Cost: thinking counts against max_tokens — budget for think + speak (final cap 16000, actually used 7828).
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② 幻觉自纠(errors-as-data 实战)</div>
+    模型臆断文件 1200 行,拉了越界 chunk,撞上我们的错误字典,下一轮自我纠正 —— 措辞是"according to the user's correction"(工具结果骑在 user 角色上)。<br>
+    Step A 设计的错误返回,在今天救了 Step B 一命。
+  </div>
+  <div class="en">
+    <div class="head">② HALLUCINATION, SELF-CORRECTED</div>
+    The model asserted 1200 lines, requested out-of-range chunks, hit our error dicts, and corrected itself next round — phrasing: "according to the user's correction" (tool results ride the user role).<br>
+    The error-as-data design from Step A saved Step B's run today.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ UTF-16LE + 成本警钟</div>
+    MetaEditor 默认存 UTF-16:.mq4 按 UTF-8 读,每字符夹一个空字节,行数翻倍(2475 vs 1228)。模型自己适应了;工具层该做 BOM 嗅探(排队中)。<br>
+    一次审计 in=206,020:每轮重发全部历史,输入随轮数平方级膨胀 —— 工具粒度和 prompt caching 因此值钱。
+  </div>
+  <div class="en">
+    <div class="head">③ UTF-16LE + THE COST BELL</div>
+    MetaEditor saves UTF-16 by default: reading it as UTF-8 interleaves null bytes and doubles the line count (2475 vs 1228). The model adapted; the tool layer should BOM-sniff (queued).<br>
+    One audit cost in=206,020: full history re-sent every round → quadratic input growth. This is why tool granularity and prompt caching pay.
+  </div>
+</div>
+
+<h2>四、真身审计:结果与质量</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">VERDICT: 2 命中 + 1 正确豁免</div>
+    [HIGH] 无止损:全线 SL=0;还挖出清单外的实现漏洞 —— line 1710 因 mSymbol=="" 直接无视 SL 参数发单。<br>
+    [HIGH] 手数:NormalizeDouble(x,2) 而非 MODE_LOTSTEP,全文零次 MINLOT/MAXLOT 查询。<br>
+    第 2 条(同 bar 堆单)正确判定"不适用":它逐行验证了新 bar 门槛(line 443)、空仓要求、pipstep 距离闸。<strong>报对 2 + 不冤枉 1,比报 3 个更值钱。</strong>
+  </div>
+  <div class="en">
+    <div class="head">VERDICT: 2 HITS + 1 CORRECT EXEMPTION</div>
+    [HIGH] Missing SL everywhere; it even dug past the checklist — line 1710 ignores the SL parameter entirely because mSymbol=="".<br>
+    [HIGH] Lots: NormalizeDouble(x,2) instead of MODE_LOTSTEP; zero MINLOT/MAXLOT queries in the whole file.<br>
+    Item 2 (same-bar stacking) correctly ruled "DOES NOT APPLY" after verifying the new-bar guard (line 443), empty-basket requirement, and pipstep gates. <strong>2 hits + 0 false positives beats 3 sloppy hits.</strong>
+  </div>
+</div>
+
+<h2>五、词汇表 Vocabulary</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">协议与循环</div>
+    <strong>tool_use / tool_result</strong> — 方向协议:assistant 发起,user 回执,靠 id 配对<br>
+    <strong>stop_reason 三分类</strong> — end_turn 说完了 / tool_use 要工具 / max_tokens 预算耗尽<br>
+    <strong>errors-as-data</strong> — 错误以数据流回模型,模型自纠;异常只杀死程序<br>
+    <strong>半套修复定律</strong> — 修一半等于换种方式失败,修复成套提交
+  </div>
+  <div class="en">
+    <div class="head">PROTOCOL &amp; LOOP</div>
+    <strong>tool_use / tool_result</strong> — direction protocol: assistant initiates, user receipts, matched by id<br>
+    <strong>stop_reason taxonomy</strong> — end_turn done / tool_use wants tools / max_tokens out of budget<br>
+    <strong>errors-as-data</strong> — errors flow back as data and the model self-corrects; exceptions only kill the program<br>
+    <strong>half-fix law</strong> — a half-applied fix is a new failure; fixes ship as a set
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">模型与数据</div>
+    <strong>thinking 块</strong> — 思考输出,计入 max_tokens,随历史回传<br>
+    <strong>prompt caching</strong> — 重复请求只按未缓存部分计费(实测重跑 in=28)<br>
+    <strong>UTF-16LE / BOM</strong> — MetaEditor 默认编码;文件头两字节 ff fe 即可识别<br>
+    <strong>输入膨胀律</strong> — 每轮重发全部历史,轮数×文件大小近似平方增长
+  </div>
+  <div class="en">
+    <div class="head">MODEL &amp; DATA</div>
+    <strong>thinking block</strong> — reasoning output; counts against max_tokens; rides along in history<br>
+    <strong>prompt caching</strong> — repeated requests billed on the uncached part only (observed in=28 on a rerun)<br>
+    <strong>UTF-16LE / BOM</strong> — MetaEditor's default encoding; first two bytes ff fe identify it<br>
+    <strong>input growth law</strong> — full history re-sent per round → roughly quadratic in rounds × file size
+  </div>
+</div>
+
+<h2>六、下次做什么 Next</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    ① 开场先答两道欠账题:(Q1) 审查 agent 为什么禁止"编清单外的 bug"——风控角度;(Q2) 8 轮为何烧出 20.6 万输入 token,对审大文件意味着什么<br>
+    ② B1:read_file_chunk 加 UTF-16 BOM 嗅探(≤10 行)<br>
+    ③ Step C:evals/ 埋已知 bug 的靶子,量命中率与误报率 —— Phase 0 用数字关门<br>
+    ④ 安全欠账:relay key 仍待轮换(2026-11-07 起)
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    1. Opening recap owes two answers: (Q1) why a reviewer agent must not invent bugs beyond its checklist — the risk-control angle; (Q2) why 8 rounds burned 206K input tokens, and what that means for large files<br>
+    2. B1: BOM sniffing in read_file_chunk (≤10 lines)<br>
+    3. Step C: seeded-bug samples in evals/, measure hit rate and false positives — Phase 0 closes on numbers<br>
+    4. Security debt: relay key rotation still pending since 2026-11-07
+  </div>
+</div>
+
+<div class="note">
+  <strong>Session 6 · 第一个真 agent 落地。</strong>今天最重要的一条:调试自己的代码花的功夫不比写少 —— 七个案子全靠"读报错 → 看原始数据 → 算术验证"三板斧破的。agent 审你的 EA 报了 2 个 HIGH,而它放过的那 1 条,证明它不是逢码就咬。
+</div>
+
+<footer>
+  Generated 2026-11-10 · ~/growth-plan/agent-fullstack/reports/0004-report-2026-11-10.html<br>
+  中英对照 · 点右侧英文块朗读
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) { return v.lang && v.lang.indexOf("en") === 0; });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+    el.classList.add("speaking");
+    current = el;
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+  speechSynthesis.getVoices();
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>

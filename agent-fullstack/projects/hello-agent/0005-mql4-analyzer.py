@@ -8,6 +8,7 @@
 import argparse
 import json
 import os
+import sys
 
 from dotenv import load_dotenv
 from anthropic import Anthropic
@@ -23,9 +24,9 @@ TOOLS = [
         "description":"Get line count and byte size of a file on disk."
                         "Use this FIRST to learn a file's total lines before reading chunks",
         "input_schema":{
-            "type":"onject",
+            "type":"object",
             "properties":{
-                "path":{"type":"string","description":"Relative or obsolute path to a file"},
+                "path":{"type":"string","description":"Relative or absolute path to a file"},
             },
             "required":["path"]
         }
@@ -36,9 +37,9 @@ TOOLS = [
                         "Each returned line is prefixed with its global line number like[42]"
                         "Call get_file_info first to learn total_lines,then patrol the file in chunks",
         "input_schema":{
-            "type":"onject",
+            "type":"object",
             "properties":{
-                "path":{"type":"string","description":"Relative or obsolute path to file"},
+                "path":{"type":"string","description":"Relative or absolute path to file"},
                 "start_line":{"type":"integer","description":"First line to read, >=1"},
                 "end_line":{"type":"integer","description":"Last line to read, inclusive"},
             },
@@ -95,26 +96,100 @@ def read_file_chunk(path:str,start_line:int,end_line:int) -> dict:
         "content":"\n".join(chunk),
     }
 
+SYSTEM_PROMPT = """You are s senior MQL4 (MetaTrader 4 Expert Advisor) code reviewer.
+
+workflow 
+1.Call get_file_info FIRST to learn the file's total lines.
+2.Read the WHOLE file with read_file_chuck in ordered chunks (e.g. 1-120 ,121-240, ...).Never skip lines.
+3.Only then report findings.
+
+Bug checklist (the exam syllabus):
+1.LOT SIZE CONTROL - lot not normalized to MODE_LOTSTEP, or outside MINLOT ..MAXLOT,or hardcoded fixed lots with no risk-based sizing. Fatal:broker rejects the order, or position size mismatches risk.
+2.SAME-BAR REPEATED ENTRIES - no new-bar guard AND no check for already-open orders,so an entry signal fires on every tick of the same bar. Fatal: one signal becomes N stacked positions.
+3.MISSING STOP LOSS - OrderSend without SL, and no OrderModify adding one later.Fatal:one bad trade can wipe the account.
+
+Report rules:
+- Cite the exact line number(s) for every finding.
+- If a checklist item does not apply to this file, say so explicitly.
+- Do NOT invent bugs beyond the checklist .
+
+Output format:
+VERDICT:BUGS FOUND <n> | NO BUGS FOUND
+Then per finding:
+[SERVERITY HIGH/MED/LOW] checklist item | lines:<n>
+    code: <quoted line(s)>
+    why fatal: <one sentence>
+    fix :<one sentence>
+"""
+def execute_tool(name:str,tool_input:dict) -> dict:
+    """Dispatch a model tool call to its implementation.Error as data,never raised"""
+    if name == "get_file_info":
+        return get_file_info(**tool_input)
+    elif name == "read_file_chunk":
+        return read_file_chunk(**tool_input)
+    return {"error":f"unknown tool : {name}"}
+
+def run_agent(file_path:str ,max_rounds:int) -> tuple[str | None , int , int]:
+    """Agent loop:reviewer reads the file in chunks ,then reports bugs."""
+    messages=[{
+        "role":"user",
+        "content":f"Analyze this MQL4 file for bugs:{file_path}",
+    }]
+    total_in = total_out = 0
+
+    for round_on in range(1,max_rounds+1):
+        resp = client.messages.create(
+            model="glm-5.3",
+            system=SYSTEM_PROMPT,
+            max_tokens=20000,
+            tools=TOOLS,
+            messages=messages,
+        )
+        total_in += resp.usage.input_tokens
+        total_out += resp.usage.output_tokens
+
+        print("RAW content:",[b.model_dump() for b in resp.content])
+        print("block types:",[b.type for b in resp.content])
+
+        tool_calls = [b for b in resp.content if b.type=="tool_use"]
+        print(f"-----round {round_on} : stop={resp.stop_reason}, tools={[t.name for t in tool_calls]}-----")
+
+        if not tool_calls:
+            text = next((b.text for b in resp.content if b.type=="text"),"")
+            return text,total_in,total_out
+
+        messages.append({"role":"assistant","content": resp.content})
+
+        results = []
+        for tc in tool_calls:
+            try:
+                output = execute_tool(tc.name, tc.input)
+            except Exception as e:
+                output = {"error" : f"{type(e).__name__}:{e}"}
+            print(f"tool {tc.name} ({tc.input}) --> lines {output.get('start','?')}..{output.get('end','?')} ")
+            results.append({
+                "type":"tool_result",
+                "tool_use_id": tc.id,
+                "content":json.dumps(output),
+            })
+
+        messages.append({"role":"user","content": results})
+    return None,total_in,total_out
+
+def main():
+    parser = argparse.ArgumentParser(description="MQL4 bug analyzer agent")
+    parser.add_argument("mql4file",help="Path to the.mq4 file to review ")
+    parser.add_argument("--max-rounds",type=int,default=15,help="agent loop hard cap")
+    args = parser.parse_args()
+
+    answer, total_in,total_out = run_agent(args.mql4file,args.max_rounds)
+
+    if answer is None:
+        print("ERROR: hit rount cap without a final answer", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"\n FINAL REPORT:\n {answer}")
+    print(f"usage: in={total_in} out={total_out}")
 
 if __name__ == "__main__":
-    # Smoke test - ZERO API calls, deterministic layer only.
-    target = "0004-cli-agent.py"
-
-    print("=== 1.get_file_info ===")
-    print(get_file_info(target))
-
-    print("=== 2.normal chunk (lines 30-38) ===")
-    r = read_file_chunk(target,start_line=30,end_line=38)
-    print(f"meta:start{r['start']}end{r['end']} total={r['total_lines']}")
-    print(r["content"])
-
-    print("=== 3.clamp: end_line=9999 beyond EOF ===")
-    r = read_file_chunk(target,1,9999)
-    print(f"clamped end={r['end']} (total={r['total_lines']})")
-
-    print("=== 4.rejections ===")
-    print("start=0:",read_file_chunk(target,0,0))
-    print("end<start:",read_file_chunk(target,10,3))
-    print("start>EOF:",read_file_chunk(target,100000,499999))
-    print("no file",read_file_chunk("no-such-file.mq4",20,100))
-
+    main()

@@ -28,14 +28,15 @@
 
 - [x] 0004-cli-agent.py: argparse + run_agent + exit codes 0/1/2 + stderr (PASSED all 4 acceptance checks 2026-11-08)
 
-### Step 4 — Ship first CLI agent ← **断点(2026-11-08)**
+### Step 4 — Ship first CLI agent
 
 **DECIDED 2026-11-08: Candidate A — MQL4 code analyzer** (rationale: 0004 already IS candidate B; A = domain edge × new learning; natural eval set with seeded-bug samples).
 
-- [ ] 0005-mql4-analyzer.py: new tool `read_file_chunk` (context budget + tool granularity lesson)
-- [ ] Wire both tools + analyzer prompt; findings output (bug type / line / severity / note)
-- [ ] Evals: 2-3 seeded-bug .mq4 samples in `evals/`, measure hit rate / false positives
+- [x] 0005-mql4-analyzer.py: new tool `read_file_chunk` (context budget + tool granularity lesson)
+- [x] Wire both tools + analyzer prompt; findings output (2026-11-10 PASSED: audited real EA 悦鹤_均线逆势马丁_双边对冲_v2.mq4 — VERDICT 2/3 hits + 0 false positives, in=206020 out=7828; 7-bug debug saga + thinking/max_tokens/UTF-16 lessons in log 0006)
+- [ ] Evals: 2-3 seeded-bug .mq4 samples in `evals/`, measure hit rate / false positives ← **断点**
 - [ ] Ship + final review
+- [ ] (queued) B1 tool hardening: UTF-16 BOM sniffing; prompt caching catch-up
 
 ### Notes
 
