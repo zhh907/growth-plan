@@ -5,7 +5,7 @@
 ## Task: 启动本地 k8s 集群并跑通第一个应用 [阶段 0]
 
 **Status: IN PROGRESS**
-**Started: 2026-11-07 · 断点:第 4 条收尾(自愈演示 + 浏览器验证)+ 第 5 条**
+**Started: 2026-11-07 · 断点:阶段 0 收尾(ConfigMap/Ingress + 多服务应用)前先复习 Docker 单元错题**
 
 ### Checklist
 
@@ -15,10 +15,10 @@
   - [x] 附:3 个追问对答案 CLOSED(2026-11-08:容器住在 OrbStack 的 k3s VM / Events=追加式事件日志 / Pod IP=cni0 内网,Mac curl 超时不可达)
 - [x] 4. 部署第一个 Deployment + Service,浏览器访问(2026-11-08 完成:自愈演示验证 endpoints .15→.16 替换;localhost:30080 通;附带破案 .orbholder = kubernetes service .129)
 - [x] 5. 滚动更新与回滚练习(2026-11-08 完成:watch 抓到"先 Ready 再杀旧"全程;坏镜像发布 44s 卡死期间 curl 不断流;undo 后 AGE 证明旧 RS 零牺牲;发现 config drift:undo 不回滚 yaml 文件)
-- [ ] 5. 滚动更新与回滚练习
-- [ ] 6.(新增 2026-11-08)Docker 基础单元,见 00-roadmap.md 阶段 0 新条目;拿现成 Tomcat 容器当教材
+- [x] 6.(新增 2026-11-08)Docker 基础单元,见 00-roadmap.md 阶段 0 新条目;拿现成 Tomcat 容器当教材
   - [x] L1 镜像分层 + 容器=进程(2026-11-09:smartpeak 581MB 千层饼考古;PID 381 vs PID 1 双视角;k8s Pod 在 docker ps 同框;开场抽考 2.5/4 创新高)
-  - [ ] L2 容器网络(-p 背后的 pstub 真相)+ volume(数据活过容器死亡)+ Compose ← **断点**
+  - [x] L2 容器网络 + volume + Compose(2026-11-09 完成:bridge=vswitch/192.168.215 段;OrbStack 主进程持有全部 -p 端口,非 pstub;容器 IP 秒通而 Pod IP 被 VPN 大路由截胡进黑洞——netstat 验尸;volume 三部曲生死对照;compose 自动建网+按名 DNS;depends_on 顺序≠就绪;3 个报错全自修。开场抽考 1.5/4,错题 4 道待重抽。实验现场保留:compose 栈 18095 + l2-web 18080 + l2-data)
+- [ ] 7. 阶段 0 收尾:ConfigMap/Ingress + 多服务应用部署 ← **断点**
 
 ### Notes
 

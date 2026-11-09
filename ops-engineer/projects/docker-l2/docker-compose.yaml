@@ -1,0 +1,12 @@
+services:
+  web:
+    image: nginx:1.27-alpine
+    ports:
+      - "18095:80"
+    volumes:
+      - "./site:/usr/share/nginx/html:ro"
+  probe:
+    image: alpine
+    command: sh -c 'sleep 2 && wget -qO- http://web'
+    depends_on:
+      - web

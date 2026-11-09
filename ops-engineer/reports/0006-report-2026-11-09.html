@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-09 · Ops Engineer</title>
+<style>
+  :root {
+    --ink: #1a2332; --ink-soft: #5a6a80; --accent: #2563eb; --accent-soft: #eff4ff;
+    --warn: #d97706; --ok: #059669; --err: #dc2626; --line: #e5eaf1; --bg: #f7f9fc;
+    --card: #ffffff; --code-bg: #0f172a; --code-ink: #e2e8f0; --en-soft: #fafbfd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.7; font-size: 14.5px;
+    max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+  header { border-bottom: 3px solid var(--accent); padding-bottom: 22px; margin-bottom: 28px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 12px; text-transform: uppercase; }
+  h1 { font-size: 28px; margin: 6px 0 4px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 13px; }
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); margin: 14px 0; }
+  .bi > div { padding: 14px 18px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 13.5px; color: #3b4a61; }
+  .bi .head { font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+  h2 { font-size: 19px; margin: 36px 0 6px; padding-left: 12px; border-left: 4px solid var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 16px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .stat .num { font-size: 26px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 12px; color: var(--ink-soft); }
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; color: var(--code-ink); background: var(--code-bg); padding: 6px 9px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 3px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; background: var(--accent-soft); color: var(--accent); padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 10px; }
+  .tag.ok { background: #ecfdf5; color: var(--ok); }
+  .tag.warn { background: #fffbeb; color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 8px; padding: 12px 16px; font-size: 13px; margin: 14px 0; }
+  table { border-collapse: collapse; width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 13px; margin: 12px 0; }
+  th { background: var(--accent-soft); color: var(--ink); text-align: left; padding: 8px 12px; font-size: 12px; }
+  td { padding: 8px 12px; border-top: 1px solid var(--line); }
+  footer { margin-top: 50px; color: var(--ink-soft); font-size: 12px; text-align: center; border-top: 1px solid var(--line); padding-top: 18px; }
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: #fff7e6 !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Ops Engineer Track · Session 6</div>
+  <h1>学习报告 Study Report — 2026-11-09</h1>
+  <div class="meta">开场抽考 + Docker L2:容器网络 / volume / Compose</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">1.5/4</div><div class="lbl">开场抽考(回落,错题入册)<br>opening quiz, wrong ones logged</div></div>
+  <div class="stat"><div class="num">4</div><div class="lbl">报错自己读、自己修<br>errors self-diagnosed &amp; fixed</div></div>
+  <div class="stat"><div class="num">2</div><div class="lbl">悬案破案:18080 监听者 + Pod IP 超时死因<br>mysteries solved</div></div>
+  <div class="stat"><div class="num">3/3</div><div class="lbl">L2 三部曲:网络 / volume / Compose<br>Docker L2 complete</div></div>
+</div>
+
+<h2>一、开场抽考 1.5/4</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">得分与错题</div>
+    1.5/4,比上次 2.5/4 低。错的都是原理题,已当场讲透。<br>
+    ① 缓存失效:从第一处变化的层起,后面全部重跑(前缀匹配),所以 requirements 要放在业务代码前。<br>
+    ② PID namespace:容器有独立进程号表,主进程是 1 号;PID 1 没有默认信号兜底,还负责回收孤儿进程。<br>
+    ③ filebeat 烧进镜像 = 耦合(升级一次全量重 build)+ 进程模型错;k8s 解法是 sidecar(同 Pod 第二个容器,独立升级)。<br>
+    ④ errors-as-data:工具层返回错误字典,错误流回模型上下文,模型下一轮自己改参数重试;抛异常会杀死整个 agent 程序。
+  </div>
+  <div class="en">
+    <div class="head">SCORE &amp; WRONG ANSWERS</div>
+    1.5/4, down from 2.5/4. All misses were principle-level; corrected on the spot.<br>
+    ① Cache: from the FIRST changed layer onward, everything re-runs (prefix matching) — that's why requirements.txt comes before code.<br>
+    ② PID namespace: each container has its own PID table; the main process is #1. PID 1 has no default signal handlers and must reap orphans.<br>
+    ③ filebeat baked into an image = coupling (one upgrade = rebuild all images) + wrong process model; k8s cure = sidecar (second container in the same Pod, upgraded independently).<br>
+    ④ Errors-as-data: the tool returns an error dict; it flows back into model context and the model self-corrects next round. An exception would kill the whole agent program.
+  </div>
+</div>
+
+<h2>二、容器网络:四个实验</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① bridge = 虚拟交换机</div>
+    每个容器用一对虚拟网线(veth)插进一台虚拟交换机(bridge)。同网桥的容器直接互访,不需要 -p。<br>
+    本机实测网段 <code>192.168.215.0/24</code>(网关 .1),不是教科书的 172.17 —— OrbStack 自己划的段。
+  </div>
+  <div class="en">
+    <div class="head">① BRIDGE = A VIRTUAL SWITCH</div>
+    Each container plugs into a virtual switch via a veth pair. Containers on the same bridge reach each other directly — no <code>-p</code> needed.<br>
+    Actual subnet here: <code>192.168.215.0/24</code> (gateway .1), not the textbook 172.17 — OrbStack allocates its own.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② -p 的守门人:OrbStack 主进程</div>
+    用 lsof 抓 18080 的监听者:不是 pstub,是 OrbStack 主进程(PID 52836)。它一个进程持有所有转发端口,统一收口。<br>
+    完整路径:Mac curl → OrbStack 进程 → VM → bridge → veth → 容器 eth0 → nginx。和 k8s NodePort 是同一个守门人模式。
+  </div>
+  <div class="en">
+    <div class="head">② WHO HOLDS -p PORTS: THE ORBSTACK PROCESS</div>
+    lsof on 18080: the listener is the OrbStack main process (PID 52836), not pstub. One process owns ALL forwarded ports.<br>
+    Full path: Mac curl → OrbStack process → VM → bridge → veth → container eth0 → nginx. Same gatekeeper pattern as k8s NodePort.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ 破案:容器 IP 秒通,Pod IP 超时</div>
+    Mac curl 容器 IP(192.168.215.2)秒回 200:路由表里有 <code>bridge102</code> 直连路由,还登记了容器的 MAC —— Mac 和容器是二层邻居。<br>
+    Mac curl Pod IP 超时:没有 194 段的专属路由,包掉进 <code>192.168.0/16</code> 大路由(utun4,VPN 隧道),进了黑洞。<br>
+    结论:超时两种死法 —— 没路由被丢 / 有路但进了黑洞。路由表(netstat -rn)是判尸第一现场。
+  </div>
+  <div class="en">
+    <div class="head">③ CASE SOLVED: CONTAINER IP FAST, POD IP TIMEOUT</div>
+    curl from Mac to container IP 192.168.215.2 returns 200 instantly: the routing table has a direct <code>bridge102</code> route, even listing the container's MAC — Mac and container are L2 neighbors.<br>
+    curl to a Pod IP times out: no specific route for the 194 subnet, so packets fall into the broad <code>192.168.0/16</code> route (utun4, a VPN tunnel) and vanish.<br>
+    Lesson: timeout has two causes — no route (dropped) or a route into a black hole. The routing table (<code>netstat -rn</code>) is the first crime scene.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">④ inspect 结构变迁</div>
+    <span class="en-code">template: ... map has no entry for key "IPAddress"</span>
+    老写法 <code>.NetworkSettings.IPAddress</code> 在新版 Docker 报上面的错。IP 挪到了按网络分组的子结构:<code>.NetworkSettings.Networks.bridge.IPAddress</code>。<br>
+    原因:容器可以同时接多个网络,IP 是"连接属性",不再是"容器属性"。
+  </div>
+  <div class="en">
+    <div class="head">④ INSPECT SCHEMA CHANGE</div>
+    <span class="en-code">template: ... map has no entry for key "IPAddress"</span>
+    The old <code>.NetworkSettings.IPAddress</code> fails on new Docker (OrbStack included). The IP now lives under per-network submaps: <code>.NetworkSettings.Networks.bridge.IPAddress</code>.<br>
+    Why: a container can join several networks at once, so an IP is a property of the CONNECTION, not of the container.
+  </div>
+</div>
+
+<h2>三、volume:数据的生死实验</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">Demo 1:可写层陪葬</div>
+    往容器 /tmp 写一个文件 → <code>docker rm -f</code> → 同镜像重建 → 文件 No such file。<br>
+    镜像(只读千层饼)没变,变的是顶上那层可写黏土 —— 容器死了它陪葬。
+  </div>
+  <div class="en">
+    <div class="head">DEMO 1: THE WRITABLE LAYER DIES WITH THE CONTAINER</div>
+    Write a file to /tmp inside → <code>docker rm -f</code> → recreate from the same image → file gone.<br>
+    The read-only image is untouched; only the writable clay layer on top was replaced — and it took the data with it.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">Demo 2:named volume 幸存</div>
+    <code>docker volume create l2-data</code> 建一块 Docker 托管的存储区(真身在 VM 的 /var/lib/docker/volumes/)。<br>
+    挂到 nginx 网页根目录,写 alive.html → rm 重建 → curl 依然 200。同一套火化流程,数据活了。<br>
+    附:首次挂到非空目录,Docker 会把镜像里的原内容拷进 volume,所以默认首页还在。
+  </div>
+  <div class="en">
+    <div class="head">DEMO 2: NAMED VOLUME SURVIVES</div>
+    <code>docker volume create l2-data</code> creates a Docker-managed storage area (real path inside the VM: /var/lib/docker/volumes/).<br>
+    Mount it at nginx's docroot, write alive.html → rm &amp; recreate → curl still 200. Same cremation, survivor this time.<br>
+    Note: on first mount over a non-empty dir, Docker copies the image's content INTO the volume — that's why the default page survives too.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">Demo 3:bind mount = 路径别名</div>
+    把 Mac 的目录直接映射进容器(<code>-v ~/.../site:/usr/share/nginx/html:ro</code>)。<br>
+    挂上后默认首页消失:bind mount 直接盖住目录,不拷贝 —— 和 Demo 2 行为相反。<br>
+    Mac 上追加一行,curl 秒见新内容:不是同步,是同一份文件的两个名字。:ro = 容器内只读,防污染源码。
+  </div>
+  <div class="en">
+    <div class="head">DEMO 3: BIND MOUNT = A PATH ALIAS</div>
+    Map a Mac directory straight into the container (<code>-v ~/.../site:/usr/share/nginx/html:ro</code>).<br>
+    The default page disappears: a bind mount COVERS the directory with zero copying — the exact opposite of Demo 2.<br>
+    Append a line on the Mac and curl sees it instantly: not syncing — one file with two names. <code>:ro</code> = read-only inside, protecting source code.
+  </div>
+</div>
+
+<h2>四、Compose:声明式编排</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">从命令式到声明式</div>
+    一天敲了 N 条 docker run;compose 把"要什么容器、什么网、什么卷"写进一个 yaml,一条 <code>up -d</code> 全拉起,一条 <code>down</code> 全拆光。<br>
+    compose 还自动建了网络 <code>docker-l2_default</code> —— 我从没敲过建网命令。<br>
+    这是 k8s 的预演:compose 管单机,k8s 管集群,思想同源。
+  </div>
+  <div class="en">
+    <div class="head">IMPERATIVE → DECLARATIVE</div>
+    A day of N <code>docker run</code> commands; compose writes "which containers, networks, volumes" into one yaml — one <code>up -d</code> builds all, one <code>down</code> removes all.<br>
+    It also auto-created the network <code>docker-l2_default</code> — I never ran a network command.<br>
+    This rehearses k8s: compose = one machine, k8s = a cluster; same idea.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">按名寻址:compose 自带 DNS</div>
+    probe 容器只带一个 wget,<code>wget -qO- http://web</code> 直接成功 —— 不用 IP,服务名就是地址。<br>
+    抓回来的还是我 Mac 硬盘上的 index.html:bind mount 在 compose 里照样生效。k8s 的 Service DNS 同宗同源。
+  </div>
+  <div class="en">
+    <div class="head">DNS BY NAME, FREE OF CHARGE</div>
+    A bare alpine probe ran <code>wget -qO- http://web</code> and succeeded — the SERVICE NAME is the address, no IP needed.<br>
+    What it fetched was the index.html on my Mac's disk: the bind mount works inside compose unchanged. k8s Service DNS is the same bloodline.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">depends_on:顺序 ≠ 就绪</div>
+    depends_on 只保证"先启动谁",不保证"web 端口已经在听"。probe 里 sleep 2 是土办法。<br>
+    生产级的解法在 k8s 里叫 readinessProbe。这句话先背住,以后会反复遇到。
+  </div>
+  <div class="en">
+    <div class="head">depends_on: ORDER ≠ READY</div>
+    <code>depends_on</code> guarantees START ORDER, not that web's port is actually listening. <code>sleep 2</code> is the duct-tape fix.<br>
+    The production-grade cure in k8s is the readinessProbe. Memorize the slogan now; it returns.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">三个真实报错,全自己修掉</div>
+    ① probe 缩进多 4 格,掉进 web 的肚子:报错 <code>services.web additional properties 'probe' not allowed</code> —— 报错直接指认了谁家门里多了谁。<br>
+    ② 18090 端口被 smartpeak-apollo-adminservice(工作服务)占用:不动别人,改自己 → 18095。<br>
+    ③ <code>.Name</code> → <code>.Names</code>:docker ps 的格式字段是复数。三错共一个套路:读报错 → 定位 → 修。
+  </div>
+  <div class="en">
+    <div class="head">THREE REAL ERRORS, ALL SELF-FIXED</div>
+    ① probe indented 4 spaces too deep, landing inside web: <code>services.web additional properties 'probe' not allowed</code> — the error names whose door the stranger walked into.<br>
+    ② Port 18090 taken by smartpeak-apollo-adminservice (a work service): don't touch others — change mine → 18095.<br>
+    ③ <code>.Name</code> → <code>.Names</code>: docker ps format fields are plural. One shared routine: read the error → locate → fix.
+  </div>
+</div>
+
+<h2>五、词汇表 Vocabulary</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">网络</div>
+    <strong>bridge</strong> — 虚拟交换机,容器组网的基本盘<br>
+    <strong>veth pair</strong> — 一对虚拟网线,一头在容器一头在网桥<br>
+    <strong>最长前缀匹配</strong> — 路由选路规则:最具体的路由赢,宽路由兜底<br>
+    <strong>utun4</strong> — macOS 上 VPN 隧道的虚拟接口,本机 192.168.0/16 大路由的主人
+  </div>
+  <div class="en">
+    <div class="head">NETWORKING</div>
+    <strong>bridge</strong> — a virtual switch; the base of container networking<br>
+    <strong>veth pair</strong> — a pair of virtual cables: one end in the container, one on the bridge<br>
+    <strong>longest-prefix match</strong> — routing rule: the most specific route wins; broad routes are fallbacks<br>
+    <strong>utun4</strong> — macOS virtual interface for a VPN tunnel; owner of this machine's broad 192.168.0/16 route
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">存储</div>
+    <strong>named volume</strong> — Docker 托管的存储区,数据活过容器死亡<br>
+    <strong>bind mount</strong> — 宿主目录映射进容器,路径别名非复制<br>
+    <strong>首挂拷贝</strong> — named volume 挂非空目录时,镜像内容先拷入;bind mount 不拷<br>
+    <strong>:ro</strong> — 只读挂载,容器内不可写
+  </div>
+  <div class="en">
+    <div class="head">STORAGE</div>
+    <strong>named volume</strong> — Docker-managed storage; data outlives the container<br>
+    <strong>bind mount</strong> — host directory mapped into the container; an alias, not a copy<br>
+    <strong>copy-on-first-mount</strong> — a named volume over a non-empty dir copies image content in first; bind mounts never copy<br>
+    <strong>:ro</strong> — read-only mount
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">编排</div>
+    <strong>compose service</strong> — yaml 里的一等公民,≈ 简化版 Deployment<br>
+    <strong>depends_on</strong> — 只管启动顺序,不管就绪<br>
+    <strong>compose DNS</strong> — 自动网络里按服务名寻址<br>
+    <strong>readinessProbe</strong> — k8s 的"真就绪"检查,治 depends_on 的病
+  </div>
+  <div class="en">
+    <div class="head">ORCHESTRATION</div>
+    <strong>compose service</strong> — first-class citizen in the yaml ≈ a simplified Deployment<br>
+    <strong>depends_on</strong> — start order only; says nothing about readiness<br>
+    <strong>compose DNS</strong> — address services BY NAME on the auto-created network<br>
+    <strong>readinessProbe</strong> — k8s' real readiness check; cures depends_on's disease
+  </div>
+</div>
+
+<h2>六、下次做什么 Next</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    ① 复习 4 道错题(缓存前缀失效 / PID 1 职责 / sidecar / errors-as-data),下次开场再抽<br>
+    ② ops Phase 0 收尾:ConfigMap/Ingress + 多服务应用部署<br>
+    ③ 今天转 agent track:0005 Step B(run_agent 接线 + MQL4 bug 清单)
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    ① Review the 4 misses (cache prefix invalidation / PID 1 duties / sidecar / errors-as-data) — they WILL be re-quiz'd<br>
+    ② Close ops Phase 0: ConfigMap/Ingress + deploy a multi-service app<br>
+    ③ Today: switch to agent track — 0005 Step B (wire run_agent + MQL4 bug checklist)
+  </div>
+</div>
+
+<div class="note">
+  <strong>Session 6 · Docker 单元(L1+L2)完成。</strong>今天最重要的一条:网络通了不神秘 —— 每条路都能在路由表里找到依据;数据活了不神奇 —— 它根本就不住在容器里。两个"魔法",两张底层图纸。
+</div>
+
+<footer>
+  Generated 2026-11-09 · ~/growth-plan/ops-engineer/reports/0006-report-2026-11-09.html<br>
+  中英对照 · 点右侧英文块朗读
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) { return v.lang && v.lang.indexOf("en") === 0; });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+    el.classList.add("speaking");
+    current = el;
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+  speechSynthesis.getVoices();
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>
