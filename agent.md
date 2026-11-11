@@ -48,6 +48,12 @@ Every study report is a **single self-contained HTML file** (no external deps, w
 2. **Read-aloud (TTS) on the ENGLISH column ONLY** (`.bi .en`): Web Speech API; click → speak (yellow highlight), click again → stop. Chinese column is NOT clickable. **No visible UI** (no hint bar, no voice selector) — best English voice auto-picked (Google > Premium/Enhanced > Samantha etc., novelty voices excluded), fixed rate 0.95.
 3. **Speech text hygiene**: strip symbols TTS would read aloud (①②③, ·, →, =, *, #, backticks, brackets), dashes → comma pause; then **split into sentences** (at .!?; and line breaks) and queue one utterance per sentence for natural phrasing — never dump raw innerText into a single utterance.
 4. **Naming**: `NNNN-report-YYYY-MM-DD.html` under the track's `reports/` folder, sequence number = session order.
-5. **Content**: progress stats, error messages verbatim with translation + grammar notes, vocabulary by theme, break point for next session. Detail level: a stranger could re-learn from it (personal IP raw material, 悦鹤 brand).
+5. **Content = one-page daily digest, NOT a log reprint** (revised 2026-11-11 after "too bloated, English buried" feedback). Division of labor: `logs/NNNN-slug.md` is the FULL stranger-relearnable archive; the report is the day's digest + English practice material. Skeleton:
+   - **今日核心概念** — flexible count, target ≤5 (more than 5 → content was too much for one day, say so); each = one plain-Chinese sentence + one English sentence
+   - **今日一战** — exactly ONE debug case told with numbers (symptom → root cause → lesson)
+   - **Today's English** — 3~5 items drawn ONLY from today's real encounters (an error message verbatim, a key prompt sentence, a recurring verb), each with plain translation + one grammar/usage note. This section IS the English track's daily practice.
+   - **明日断点** — one line.
+   Recommended ritual: bedtime, TTS-play the English column (3 min, day's own content only).
+   **Voice (mandated 2026-11-11): a gentle teacher who explains through examples** — warm, encouraging, each concept carried by an example the user already knows (trading signals, EA habits, exams, orchestras, letters to future self). NOT a cold bullet-point register; ALSO NOT the old flowery-rhetoric register (see feedback memory #1-4). English column mirrors the same warmth.
 
-Implementation reference: `agent-fullstack/reports/0001-report-2026-11-07.html` (copy its `<style>` and TTS `<script>` as the template).
+Implementation reference: `agent-fullstack/reports/0005-report-2026-11-11.html` — the locked template (chosen 2026-11-11 after A/B preview): **ink-green dark theme** (deep-green bg `#12241c`, mint accent `#2dd4a7`, sans headings; full palette in its `:root`), **full-width layout** (no max-width), **large type scale** (base 17px / EN column 15.5px / h1 34 / h2 25 / stat num 34 / line-height 1.9). Copy its `<style>` and TTS `<script>` verbatim; only content changes between reports.

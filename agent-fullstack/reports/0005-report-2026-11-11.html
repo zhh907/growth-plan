@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-11 · Agent Full-Stack</title>
+<style>
+  :root {
+    --ink: #1a2332;
+    --ink-soft: #5a6a80;
+    --accent: #2563eb;
+    --accent-soft: #eff4ff;
+    --warn: #d97706;
+    --ok: #059669;
+    --line: #e5eaf1;
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --code-bg: #0f172a;
+    --code-ink: #e2e8f0;
+    --en-soft: #fafbfd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+    line-height: 1.9; font-size: 17px;
+    max-width: 1080px; margin: 0 auto; padding: 48px 28px 90px;
+  }
+  header { border-bottom: 4px solid var(--accent); padding-bottom: 26px; margin-bottom: 36px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; }
+  h1 { font-size: 34px; margin: 8px 0 6px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 15px; }
+
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); margin: 18px 0; }
+  .bi > div { padding: 20px 24px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 15.5px; color: #3b4a61; }
+  .bi .head { font-weight: 800; font-size: 16.5px; margin-bottom: 10px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+
+  h2 { font-size: 25px; margin: 48px 0 8px; padding-left: 14px; border-left: 5px solid var(--accent); }
+  .h2sub { color: var(--ink-soft); font-size: 15px; margin-bottom: 14px; padding-left: 19px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 20px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .stat .num { font-size: 34px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 14px; color: var(--ink-soft); }
+
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; color: var(--code-ink); background: var(--code-bg); padding: 8px 11px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 4px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; background: var(--accent-soft); color: var(--accent); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+  .tag.ok { background: #ecfdf5; color: var(--ok); }
+  .tag.warn { background: #fffbeb; color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; font-size: 15.5px; margin: 18px 0; }
+  footer { margin-top: 56px; color: var(--ink-soft); font-size: 14px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
+
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: #fff7e6 !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Agent Full-Stack Track · Day 5</div>
+  <h1>学习报告 Study Report — 2026-11-11</h1>
+  <div class="meta">Session 7 · 今天你的 agent 第一次走进考场,还把 Phase 0 提前七周关了门 · Your agent took its first exam today, and Phase 0 closed seven weeks early</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">4/4</div><div class="lbl">种下的 bug 全被抓到<br>Every seeded bug caught</div></div>
+  <div class="stat"><div class="num">1</div><div class="lbl">一起误报(而且很有价值)<br>One false positive (a valuable one)</div></div>
+  <div class="stat"><div class="num">-7w</div><div class="lbl">Phase 0 提前关门<br>Weeks ahead of schedule</div></div>
+  <div class="stat"><div class="num">5</div><div class="lbl">今天真实遇到的英语<br>English met in the wild today</div></div>
+</div>
+
+<h2>一、今天的五个概念 Five Ideas, Told with Examples</h2>
+<div class="h2sub">每个概念配一个你熟悉的例子 · Each idea comes with an example you already know</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">1 · 对照组:干净卷是干什么用的</div>
+    想象你雇了个审单员,他说"我今天审出 3 个问题"。你信吗?先别急——有一种审单员是逢单必挑的,凑巧也能蒙对几个。<br>
+    怎么戳穿他?递一张<strong>你确定没有问题的单子</strong>。他还挑,就是凑数;他不挑了,前面那 3 个才可信。<br>
+    B 卷(干净卷)就是这张单子。今天它交了白卷——一个都没挑。你的审单员,是真有本事的。
+  </div>
+  <div class="en">
+    <div class="head">1 · THE CONTROL GROUP: WHAT A CLEAN PAPER IS FOR</div>
+    Imagine hiring a reviewer who says "I found 3 problems today." Believe him? Not yet — some reviewers flag everything, and get a few right by luck.<br>
+    How do you expose that? Hand him a paper you KNOW is clean. If he still flags it, he is padding. If he stays silent, those 3 findings become trustworthy.<br>
+    Paper B was that clean paper. Today it stayed silent — zero findings. Your reviewer is the real deal.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">2 · 评测的三件套词汇</div>
+    考试你熟悉,那就用考试来记:<strong>ground truth</strong> = 出题人提前锁进保险柜的标准答案,考试前谁也不能改;<strong>hit rate</strong> = 押中了几题;<strong>false positive</strong> = 把本来对的硬判成错的——阅卷事故。<br>
+    今天你的成绩:押中 4/4,阅卷事故 1 起。有了这三个词,以后说"我的 agent 好像不错"就能换成"hit rate 100%,FP 1"——从感觉变成数字。
+  </div>
+  <div class="en">
+    <div class="head">2 · THE THREE WORDS OF EVALUATION</div>
+    You know exams, so learn these through one: <strong>ground truth</strong> = the answer key locked away BEFORE the test, untouchable during it. <strong>hit rate</strong> = how many you actually caught. <strong>false positive</strong> = marking a correct answer wrong — a grading accident.<br>
+    Today's scorecard: 4/4 caught, one grading accident. With these three words, "my agent seems good" becomes "hit rate 100%, one false positive" — a feeling turned into a number.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">3 · 判卷漂移:秤的问题,不是砝码的问题</div>
+    同一颗砝码,早上称是 100 克,下午称变成 102 克——你会怀疑砝码吗?不会,你会看秤。<br>
+    今天就发生了这一幕:同一段 <code>NormalizeLots</code> 代码,B 卷上判"干净",C 卷上判"有病"。代码没变,变的是它的判卷刻度。这个词叫 <strong>calibration drift</strong>(刻度漂移)。<br>
+    而刻度是谁定的?是我们写在 checklist 里的措辞——"手数控制"这个词同时装了两层意思(客观的"有没有归一化"和主观的"仓位该不该这么大"),它自己就含糊。所以这一次,该修的是题,不是考生。
+  </div>
+  <div class="en">
+    <div class="head">3 · CALIBRATION DRIFT: BLAME THE SCALE, NOT THE WEIGHT</div>
+    Same weight, 100 g in the morning, 102 g in the afternoon. Do you suspect the weight? No — you look at the scale.<br>
+    That happened today: the same <code>NormalizeLots</code> code, ruled clean on paper B, flagged on paper C. The code never changed; the grading scale did. The word is <strong>calibration drift</strong>.<br>
+    And who set that scale? We did, in the checklist wording — "lot control" quietly holds two meanings at once (the objective "is it normalized" and the subjective "should positions be this big"). The rubric was ambiguous, so this time we fix the exam, not the student.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">4 · README:写给半年后的你的一封信</div>
+    半年后的某天,你翻出 0005 想再用一次——你会发现今天的记忆已经模糊了。那时候能救你的,只有一封信:它干什么用、怎么跑、退出码 0/1/2 各是什么意思、跑一次花多少钱、有什么已知毛病。<br>
+    这封信就是 README。"跑得通"和"shipped"之间,差的正是这一封信。今天它寄出了。
+  </div>
+  <div class="en">
+    <div class="head">4 · README: A LETTER TO YOURSELF, SIX MONTHS FROM NOW</div>
+    Someday you will pull 0005 out again — and find today's memory has faded. The only thing that can save you then is a letter: what it does, how to run it, what exit codes 0/1/2 mean, what a run costs, which flaws are known.<br>
+    That letter is the README. The distance between "it works" and "it shipped" is exactly this letter. It went out today.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">5 · 乐队指挥不演奏乐器</div>
+    明天要搭的双 agent 系统,像一支小型乐队:auditor 是主审,critic 是复核,两位都是好手。但还有第三个角色——指挥。他不演奏一个音符,可是先谁后谁、什么时候停、哪段跳过去,全是他说了算。<br>
+    关键在于:这位指挥<strong>不是又一个 LLM</strong>,就是一段普通的 Python。确定的事交给确定的代码,不确定的事才交给概率的模型——这个分工,是明天整堂课的地基。
+  </div>
+  <div class="en">
+    <div class="head">5 · THE CONDUCTOR PLAYS NO INSTRUMENT</div>
+    Tomorrow's two-agent system is a small orchestra: the auditor plays first, the critic double-checks — both fine musicians. But there is a third role, the conductor. He plays not a single note, yet who goes first, when to stop, which passage to skip — all his call.<br>
+    The key insight: this conductor is <strong>NOT another LLM</strong>. It is plain Python. Deterministic things go to deterministic code; only the uncertain parts go to the probabilistic model. That division of labor is tomorrow's foundation.
+  </div>
+</div>
+
+<h2>二、今天的一战 Today's Story (one case)</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">C 卷上那起"聪明"的误报</div>
+    事情是这样的:C 卷只种了一个 bug(止损缺失),你的 agent 却交回来两条。第二条报"手数控制",而且说得头头是道——它甚至自己承认"归一化那部分代码是对的",却仍把"固定手数 + 马丁倍投"当成设计缺陷,标了个 MED。<br>
+    单看这一条,像高水平的额外洞察,你会想夸它。但把 B 卷拿过来一对比,味道就变了:<strong>一模一样的结构,B 卷上它亲口判过"这是有文档的马丁设计,不适用"</strong>。同一件事,两次考试,两种判法。<br>
+    这时候你该做什么?不是骂模型,是检查自己的题——果然,"手数控制"这个词本身含糊。处置:接受这 1 起误报,记录在案;修法已排期,而且今天的 0006 prompt 里已经顺手把歧义措辞删掉了。<br>
+    这一战教的东西,比 4 个命中加起来还值钱:<strong>误报比漏报更贵</strong>——就像假信号亏的是真金白银,错过只是少赚。而你手里的对照组,就是专抓这种漂移的仪器。
+  </div>
+  <div class="en">
+    <div class="head">THE "CLEVER" FALSE POSITIVE ON PAPER C</div>
+    Here is how it went. Paper C had exactly one seeded bug (the missing stop loss), but your agent handed back two findings. The second one flagged "lot control" — and argued it beautifully: it even admitted "the normalization half is correctly implemented", then escalated "fixed base lot + martingale" to a MED finding.<br>
+    Read alone, it looks like high-level insight; you want to praise it. Then you pull up paper B, and the taste changes: <strong>the identical pattern, which the agent itself ruled "documented martingale design, does not apply"</strong>. Same thing, two exams, two verdicts.<br>
+    What do you do? Not scold the model — audit your own exam. Sure enough, "lot control" was ambiguous wording. Action: accept the one false positive, record it; the fix is queued, and today's 0006 prompt already deleted the ambiguous phrase.<br>
+    This one case taught more than all four hits combined: <strong>false positives cost more than misses</strong> — a fake signal loses real money, a missed one only skips profit. And the control group in your hand is the instrument built to catch exactly this.
+  </div>
+</div>
+
+<h2>三、Today's English 今天遇到的英语 (5)</h2>
+<div class="h2sub">全部来自今天的真实场景,每条讲一个点 · All met in the wild today, one note each</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① fabricate — 你的 agent 今天亲口用的词</div>
+    你敲错文件名的时候,它说:<em>"I will not fabricate findings for a file I cannot read."</em>(我不会为一个读不到的文件编造结论)<br>
+    fabricate = 编造,比 make up 正式,报错、拒答、正式声明里都常见。顺带看一眼语法:"a file I cannot read" 是个省掉了 that 的定语从句——"一个我读不到的文件"。
+  </div>
+  <div class="en">
+    <div class="head">① FABRICATE — YOUR AGENT'S OWN WORD TODAY</div>
+    When you typed the wrong filename, it said: <em>"I will not fabricate findings for a file I cannot read."</em><br>
+    "fabricate" = to make up, but formal — common in errors, refusals, official statements. One grammar note: "a file I cannot read" is a relative clause with "that" omitted — "a file that I cannot read".
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② refute — 驳倒,要拿证据的那种</div>
+    明天 critic 的裁决词就这两个:VERIFIED(核实通过)/ REFUTED(被驳倒)。<br>
+    refute 和 deny 的区别值得记:deny 是嘴上说"不是我不是",refute 是把证据摆桌上"你看,这行代码明明做了防护"。一个是态度,一个是论证。
+  </div>
+  <div class="en">
+    <div class="head">② REFUTE — TO DISPROVE, WITH EVIDENCE</div>
+    Tomorrow the critic speaks in exactly two verdicts: VERIFIED / REFUTED.<br>
+    Worth remembering: "deny" vs "refute". To deny is to say "not me" — an attitude. To refute is to lay the evidence on the table — "look, line 35 clearly normalizes the lots." One is a stance, the other an argument.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ control group — 这里的 control 不是"控制"</div>
+    别被字面骗了:control group 里的 control 是"对照、基准"的意思,不是控制谁。就像 controlled experiment 叫"对照实验",不叫"控制实验"。<br>
+    用法示例:Without a control group, you cannot tell signal from noise.(没有对照组,你分不清信号和噪音。)
+  </div>
+  <div class="en">
+    <div class="head">③ CONTROL GROUP — "CONTROL" HERE MEANS BASELINE</div>
+    Do not be fooled by the word: in "control group", control means a baseline for comparison, not commanding anyone. Same as "controlled experiment" — you compare against it.<br>
+    Example in the wild: "Without a control group, you cannot tell signal from noise."
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">④ calibration — 给秤定刻度</div>
+    calibrate 本义是"给仪器标刻度":体重秤用标准砝码调准,温度计用冰水混合物校零。引申出来,calibration 就是"判断标准的一致性"。<br>
+    今天你的例子就是教材:Same code, opposite verdicts — that is calibration drift.(同样的代码,相反的判决——这就是刻度漂移。)
+  </div>
+  <div class="en">
+    <div class="head">④ CALIBRATION — SETTING THE SCALE MARKS</div>
+    "calibrate" originally means marking the scale on an instrument: tuning a scale with standard weights, zeroing a thermometer in ice water. Extended, calibration = the consistency of your judgment.<br>
+    Today gave you the textbook example: "Same code, opposite verdicts — that is calibration drift."
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">⑤ severity — 严重度,和 security 是亲戚</div>
+    severe(严重的)+ ity(名词后缀)= severity。同一家的还有 security(安全)、simplicity(简单)——见到 -ity 结尾,八成是名词。<br>
+    你的报告里它天天上岗:[SEVERITY HIGH] = 高严重度。分级就是 HIGH / MED / LOW。
+  </div>
+  <div class="en">
+    <div class="head">⑤ SEVERITY — A COUSIN OF "SECURITY"</div>
+    severe + the noun suffix -ity = severity. Same family: security, simplicity — see -ity at the end, almost certainly a noun.<br>
+    It reports for duty in every one of your reports: [SEVERITY HIGH]. The ladder is HIGH / MED / LOW.
+  </div>
+</div>
+
+<h2>四、明天见 Tomorrow</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    明天进门先别怕那道已经问了三次的协议题——问第四次,是因为它真的重要,也是因为我知道你这次能答上来了。然后手敲 <code>0006-orchestrator-critic.py</code>,三卷验收:A 卷三条全 VERIFIED,B 卷短路省一笔,C 卷那起误报被 REFUTED——就是今天这个故事的大结局。
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    Tomorrow, don't dread that protocol question — the fourth time it is asked. It comes back because it matters, and because I believe this time you will land it. Then hand-type <code>0006-orchestrator-critic.py</code>. Acceptance on three papers: all three findings VERIFIED on A; B short-circuits and saves a few tokens; and on C, today's false positive gets REFUTED — the ending this story deserves.
+  </div>
+</div>
+
+<div class="note">
+  <strong>Day 5/730</strong> — 今天你同时做成了三件事:让 agent 通过考试、提前七周关掉 Phase 0、还顺手升级了报告的写法。完整的档案在 logs/0007-evals-stepc.md 里等你。睡前点一点右边的英文列,听三分钟今天的自己。
+</div>
+
+<footer>
+  Generated 2026-11-11 · ~/growth-plan/agent-fullstack/reports/0005-report-2026-11-11.html<br>
+  Mirror bilingual: 中文 | English · One-page digest v2 · Voice: warm teacher, example-first
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) {
+      return v.lang && v.lang.indexOf("en") === 0;
+    });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+
+    el.classList.add("speaking");
+    current = el;
+
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function () {};
+
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>
