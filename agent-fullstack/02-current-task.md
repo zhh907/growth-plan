@@ -34,9 +34,9 @@
 
 - [x] 0005-mql4-analyzer.py: new tool `read_file_chunk` (context budget + tool granularity lesson)
 - [x] Wire both tools + analyzer prompt; findings output (2026-11-10 PASSED: audited real EA 悦鹤_均线逆势马丁_双边对冲_v2.mq4 — VERDICT 2/3 hits + 0 false positives, in=206020 out=7828; 7-bug debug saga + thinking/max_tokens/UTF-16 lessons in log 0006)
-- [ ] Evals: 2-3 seeded-bug .mq4 samples in `evals/`, measure hit rate / false positives ← **断点**
-- [ ] Ship + final review
-- [ ] (queued) B1 tool hardening: UTF-16 BOM sniffing; prompt caching catch-up
+- [x] Evals (2026-11-11 PASSED: 3 papers + answer key; **hit rate 4/4, FP 1 known-issue** — lot-control rubric ambiguity (objective normalize vs subjective risk-sizing); control group B = 0 FP; error-input robustness ×2; decision: accept & record)
+- [ ] Ship + final review ← **断点** (last Phase 0 item: usage note / README for 0005 + closing review)
+- [ ] (queued) B1 tool hardening: UTF-16 BOM sniffing; prompt caching catch-up; lot-control rubric tightening + B/C regression re-run
 
 ### Notes
 
