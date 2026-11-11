@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cm-dome
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27-alpine
+      env:
+      - name: APP_ENV             # 容器里看到的环境变量名
+        valueFrom:
+          configMapKeyRef:
+            name: demo-config     # 从哪个 ConfigMap
+            key: ENV              # 取哪个 key
+      volumeMounts:
+      - name: config-vol
+        mountPath: /etc/app      # 遮盖警告: 这个目录原来的内容会被盖住
+  volumes:
+  - name: config-vol
+    configMap:
+      name: demo-config       # 整个 ConfigMap 投影成 /etc/app/ 下的一组文件
