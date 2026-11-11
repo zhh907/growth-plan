@@ -6,25 +6,28 @@
 <title>Study Report · 2026-11-11 · Agent Full-Stack</title>
 <style>
   :root {
-    --ink: #1a2332;
-    --ink-soft: #5a6a80;
-    --accent: #2563eb;
-    --accent-soft: #eff4ff;
-    --warn: #d97706;
-    --ok: #059669;
-    --line: #e5eaf1;
-    --bg: #f7f9fc;
-    --card: #ffffff;
-    --code-bg: #0f172a;
-    --code-ink: #e2e8f0;
-    --en-soft: #fafbfd;
+    --ink: #e8f2ec;
+    --ink-soft: #9dbcab;
+    --accent: #2dd4a7;
+    --accent-soft: #1f3a2f;
+    --warn: #fbbf24;
+    --ok: #34d399;
+    --line: #2a4a3c;
+    --bg: #12241c;
+    --card: #1a3328;
+    --code-bg: #0b1712;
+    --code-ink: #d7efe4;
+    --en-soft: #172e25;
+    --en-ink: #c4dccc;
+    --ok-bg: #14352a;
+    --speak-bg: #2a4636;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     background: var(--bg); color: var(--ink);
     line-height: 1.9; font-size: 17px;
-    max-width: 1080px; margin: 0 auto; padding: 48px 28px 90px;
+    padding: 48px 40px 90px;
   }
   header { border-bottom: 4px solid var(--accent); padding-bottom: 26px; margin-bottom: 36px; }
   .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; }
@@ -34,7 +37,7 @@
   .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); margin: 18px 0; }
   .bi > div { padding: 20px 24px; }
   .bi .cn { border-right: 1px dashed var(--line); }
-  .bi .en { background: var(--en-soft); font-size: 15.5px; color: #3b4a61; }
+  .bi .en { background: var(--en-soft); font-size: 15.5px; color: var(--en-ink); }
   .bi .head { font-weight: 800; font-size: 16.5px; margin-bottom: 10px; }
   .bi .cn .head { color: var(--accent); }
   .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
@@ -50,20 +53,20 @@
   .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; color: var(--code-ink); background: var(--code-bg); padding: 8px 11px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 4px; }
   code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; background: var(--accent-soft); color: var(--accent); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
   .tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
-  .tag.ok { background: #ecfdf5; color: var(--ok); }
-  .tag.warn { background: #fffbeb; color: var(--warn); }
+  .tag.ok { background: var(--ok-bg); color: var(--ok); }
+  .tag.warn { background: var(--speak-bg); color: var(--warn); }
   .note { background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; font-size: 15.5px; margin: 18px 0; }
   footer { margin-top: 56px; color: var(--ink-soft); font-size: 14px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
 
   .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
   .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
-  .speakable.speaking { background: #fff7e6 !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable.speaking { background: var(--speak-bg) !important; box-shadow: inset 0 0 0 2px var(--warn); }
   .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
   .speakable:hover::after { opacity: .55; }
   .speakable.speaking::after { opacity: 1; }
 
   @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
-  @media print { body { background: #fff; } }
+  @media print { body { background: #fff; color: #222; } }
 </style>
 </head>
 <body>
