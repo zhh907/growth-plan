@@ -52,6 +52,17 @@ Root cause is on OUR side: the checklist term "手数控制" is ambiguous — (a
 - `evals/answer-key.md` — ground truth + scoring rules
 - Phase 0 scoreboard: **4/4 hits, 1 FP, control group clean**
 
+## Final review (teach-back, session close) — Phase 0 verdict
+
+| Q | Score | Gap |
+|---|---|---|
+| T1 architecture (6 blocks) | 4/6 | execute_tool dispatcher, resolve_path — the "boundary" components (accident-born) missed while "trunk" components (data flow) retained |
+| T2 one round lifecycle | 3/6 | tool_use_id pairing (third blank in a row), list assembly, stop_reason check |
+| T3 fuses | 1.5/3 | max_tokens budgets thinking+text TOGETHER (the 2000-starvation arithmetic); max_tokens stop = ERROR |
+| T4 artifact inventory | 0 | retention blank — output outran reflection; prescription: weekly 10-min log-index re-read |
+
+**Verdict: Phase 0 PASS** — checkpoint (CLI agent shipped) exceeded: eval suite 4/4 + production EA audit + README. Gaps carried into Phase 1 remediation list. README shipped at projects/hello-agent/README.md.
+
 ## Next step
 - **Ship + final review** = the last Phase 0 checkbox (README/usage note for 0005 + closing review).
 - Queued: B1 UTF-16 BOM sniffing; prompt caching catch-up; lot-control rubric tightening + B/C regression re-run (whenever user opts in).

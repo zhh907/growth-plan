@@ -1,12 +1,12 @@
 # Current Task — Agent Full-Stack [ACTIVE TRACK]
 
 > Promoted to primary track on 2026-11-07 (priority: agent → ops → languages).
-> ops-engineer track paused at Phase 0 step 1 (`orbctl start k8s` still pending — can resume anytime).
+> ops-engineer track: Phase 0 closes on Ingress (final curl + Ingress = the two leftovers).
 
-## Task: Pick stack & ship first agent CLI [Phase 0]
+## Task: Phase 1 — Agent engineering [Phase 1]
 
-**Status: IN PROGRESS (start here)**
-**Started: 2026-11-07**
+**Status: NOT STARTED (entry decisions pending)**
+**Phase 0: DONE 2026-11-11 (7 weeks early; see below)**
 
 ### Step 1 — Language: **Python (decided 2026-11-07)**
 
@@ -35,8 +35,14 @@
 - [x] 0005-mql4-analyzer.py: new tool `read_file_chunk` (context budget + tool granularity lesson)
 - [x] Wire both tools + analyzer prompt; findings output (2026-11-10 PASSED: audited real EA 悦鹤_均线逆势马丁_双边对冲_v2.mq4 — VERDICT 2/3 hits + 0 false positives, in=206020 out=7828; 7-bug debug saga + thinking/max_tokens/UTF-16 lessons in log 0006)
 - [x] Evals (2026-11-11 PASSED: 3 papers + answer key; **hit rate 4/4, FP 1 known-issue** — lot-control rubric ambiguity (objective normalize vs subjective risk-sizing); control group B = 0 FP; error-input robustness ×2; decision: accept & record)
-- [ ] Ship + final review ← **断点** (last Phase 0 item: usage note / README for 0005 + closing review)
-- [ ] (queued) B1 tool hardening: UTF-16 BOM sniffing; prompt caching catch-up; lot-control rubric tightening + B/C regression re-run
+- [x] Ship + final review (2026-11-11: README.md shipped; final review teach-back — deliverables PASS, 4 cognitive gaps logged → Phase 1 remediation)
+- [x] (queued) B1 tool hardening: UTF-16 BOM sniffing; prompt caching catch-up; lot-control rubric tightening + B/C regression re-run → carried into Phase 1 polish queue
+
+### Phase 0 CLOSED 2026-11-11 (~7 weeks ahead of 2026-12-31 checkpoint)
+
+**NEXT: Phase 1 — Agent engineering (roadmap 2027 Q1~Q2, starting ~7 weeks early)**
+Entry decisions pending: first unit pick (multi-agent patterns vs RAG vs evals-first), framework choice (LangGraph vs Claude Agent SDK).
+Phase 1 remediation list (from final review): tool_use_id pairing · execute_tool/resolve_path boundary layers · max_tokens thinking+text pool · weekly 10-min log re-read.
 
 ### Notes
 

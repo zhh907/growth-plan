@@ -13,11 +13,12 @@ The moat is not calling APIs — it's designing reliable agent systems (context 
 
 ## Phases
 
-### Phase 0: Agent fundamentals (2026-11 ~ 2027-01)
-- [ ] LLM API basics: chat completions, streaming, structured output, prompt caching
-- [ ] Tool use / function calling from first principles
-- [ ] Build a single-agent CLI tool (e.g. an EA code analyzer)
-- [ ] Understand context window economics: tokens, caching, cost control
+### Phase 0: Agent fundamentals (2026-11 ~ 2027-01) — **DONE 2026-11-11, ~7 weeks early**
+- [x] LLM API basics: chat completions, streaming, structured output (prompt caching OBSERVED live in=28; systematic catch-up queued to Phase 1)
+- [x] Tool use / function calling from first principles (0003 saga + 0005 wired loop)
+- [x] Build a single-agent CLI tool: MQL4 analyzer (0005) — audited a production EA + eval suite 4/4 hits (evals/, session 0007)
+- [x] Understand context window economics: 206K-token audit post-mortem, thinking+text budget pool, cost ∝ file size × rounds
+- Final review 2026-11-11: deliverables PASS (checkpoint exceeded); cognitive gaps logged for Phase 1 remediation: execute_tool/resolve_path boundary layers, tool_use_id pairing (3× blank), max_tokens budget pool, artifact retention (weekly 10-min log re-read prescribed).
 
 ### Phase 1: Agent engineering (2027 Q1 ~ Q2)
 - [ ] Multi-agent patterns: orchestrator, handoff, critic loops
