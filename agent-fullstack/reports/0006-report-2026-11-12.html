@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-12 · Agent Full-Stack</title>
+<style>
+  :root {
+    --ink: #e8f2ec;
+    --ink-soft: #9dbcab;
+    --accent: #2dd4a7;
+    --accent-soft: #1f3a2f;
+    --warn: #fbbf24;
+    --ok: #34d399;
+    --line: #2a4a3c;
+    --bg: #12241c;
+    --card: #1a3328;
+    --code-bg: #0b1712;
+    --code-ink: #d7efe4;
+    --en-soft: #172e25;
+    --en-ink: #c4dccc;
+    --ok-bg: #14352a;
+    --speak-bg: #2a4636;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+    line-height: 1.9; font-size: 17px;
+    padding: 48px 40px 90px;
+  }
+  header { border-bottom: 4px solid var(--accent); padding-bottom: 26px; margin-bottom: 36px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; }
+  h1 { font-size: 34px; margin: 8px 0 6px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 15px; }
+
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); margin: 18px 0; }
+  .bi > div { padding: 20px 24px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 15.5px; color: var(--en-ink); }
+  .bi .head { font-weight: 800; font-size: 16.5px; margin-bottom: 10px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+
+  h2 { font-size: 25px; margin: 48px 0 8px; padding-left: 14px; border-left: 5px solid var(--accent); }
+  .h2sub { color: var(--ink-soft); font-size: 15px; margin-bottom: 14px; padding-left: 19px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 20px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .stat .num { font-size: 34px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 14px; color: var(--ink-soft); }
+
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; color: var(--code-ink); background: var(--code-bg); padding: 8px 11px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 4px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; background: var(--accent-soft); color: var(--accent); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+  .tag.ok { background: var(--ok-bg); color: var(--ok); }
+  .tag.warn { background: var(--speak-bg); color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; font-size: 15.5px; margin: 18px 0; }
+  footer { margin-top: 56px; color: var(--ink-soft); font-size: 14px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
+
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: var(--speak-bg) !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; color: #222; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Agent Full-Stack Track · Day 6</div>
+  <h1>学习报告 Study Report — 2026-11-12</h1>
+  <div class="meta">Session 8 · 你的 agent 今天带上了第二双眼睛,三张卷子全过 · Your agent grew a second pair of eyes today, and passed all three papers</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">3/3</div><div class="lbl">三张卷子全部通过<br>All three papers accepted</div></div>
+  <div class="stat"><div class="num">1.4×</div><div class="lbl">双 agent 的账单倍数<br>Cost of running two agents</div></div>
+  <div class="stat"><div class="num">1179</div><div class="lbl">B 卷短路的 token 账单<br>Tokens on the short-circuit path</div></div>
+  <div class="stat"><div class="num">4</div><div class="lbl">今天真实遇到的英语<br>English met in the wild today</div></div>
+</div>
+
+<h2>一、今天的四个概念 Four Ideas, Told with Examples</h2>
+<div class="h2sub">每个概念配一个你熟悉的例子 · Each idea comes with an example you already know</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">1 · 多智能体:同一台机器,演两个角色</div>
+    你今天的直觉其实很准——0006 比 0005 只多了约 20 行。这不是偷工减料,是真相:<strong>agent 循环还是那一台,只是提示词从焊死在函数里,变成了参数</strong>。同一台机器,今天演审计员,明天演校验官。<br>
+    就像你在 MT4 里写过一个下单函数:参数是 magic number 它就是这套 EA,参数一换它就是另一套。多智能体 L1 的增量在<strong>拓扑</strong>(谁先谁后、谁的结果喂给谁),不在代码量。
+  </div>
+  <div class="en">
+    <div class="head">1 · MULTI-AGENT: ONE MACHINE, TWO ROLES</div>
+    Your instinct was right — 0006 adds only ~20 lines over 0005. That is not cutting corners; it is the truth: <strong>the agent loop stays the same machine, only the prompt stops being welded inside the function and becomes a parameter</strong>. Same machine plays the auditor today, the critic tomorrow.<br>
+    Like your order-sending function in MT4: with one magic number it belongs to this EA; change the parameter, it serves another. The L1 delta lives in <strong>topology</strong> — who runs first, whose output feeds whom — not in lines of code.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">2 · 编排器:确定性 Python,不是 LLM</div>
+    0006 的 main() 自己一个模型都没调。它做的事是:先审计 → 看报告里有没有"NO BUGS FOUND" → 没有才让校验官出场 → 最后按存活数定退出码。<strong>控制流在代码里,概率只在角色内部</strong>。<br>
+    这和你的交易习惯是同一条纪律:信号可以来自指标(有概率),但"信号要不要过风控、仓位超没超限"这种流程判断,永远写在确定性的代码里,绝不交给模型即兴发挥。
+  </div>
+  <div class="en">
+    <div class="head">2 · THE ORCHESTRATOR: DETERMINISTIC PYTHON, NOT AN LLM</div>
+    main() in 0006 never calls a model itself. It does this: run the audit → check whether the report says "NO BUGS FOUND" → only then wake the critic → set the exit code by survivor count. <strong>Control flow lives in code; probability lives only inside the roles.</strong><br>
+    It is the same discipline as your trading habit: signals may come from indicators (probabilistic), but "does this signal pass risk control, is the position within limits" is always written in deterministic code — never improvised by a model.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">3 · 校验官的边界:真话审不出越界</div>
+    今天最有价值的发现是个负结果:C 卷那条误报(固定手数被当成立案)<strong>穿过了校验官</strong>。不是它失职——它给的证据句句属实:BaseLots 确实是 0.01,全文件确实没有 AccountBalance。<br>
+    问题在于:这条 finding <strong>事实全对,判罚越界</strong>。事实核查员只会问"引文是真的吗",不会问"这该不该立案"。所以修的是上游的评分标准(rubric),删掉提示词里那半句主观条款——C 卷立刻从 2 条降到 1 条,B 卷复跑无伤。两道防线,各管一段。
+  </div>
+  <div class="en">
+    <div class="head">3 · THE CRITIC'S LIMIT: TRUE FACTS PASS AN OVERREACHING VERDICT</div>
+    Today's most valuable finding was a negative result: the C-paper false positive (fixed-lot design prosecuted as a bug) <strong>survived the critic</strong>. Not because it failed — every piece of its evidence was true: BaseLots really is 0.01, the file really has no AccountBalance.<br>
+    The problem: the finding's <strong>facts were all correct, but the verdict stepped outside the rubric</strong>. A fact-checker asks "is the citation real", never "should this have been filed at all". So the fix belongs upstream — delete the subjective clause from the prompt. C dropped from 2 findings to 1 instantly, and B re-ran unharmed. Two defense lines, each guarding its own section.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">4 · 改完就回归:提示词也能做回归测试</div>
+    "删半句话"听起来很小,但今天它走的是完整流程:改 rubric → 只重跑目标卷 C 和对照卷 B → C 的误报消失、B 零误伤,验收关账。<br>
+    这就是 eval 的复利:没有那三张卷子,改提示词只能靠感觉;有了它们,<strong>每一次提示词修改都变成一次可以打分的回归测试</strong>——和你改完 EA 参数先跑回测,是同一个肌肉记忆。
+  </div>
+  <div class="en">
+    <div class="head">4 · FIX, THEN REGRESS: PROMPTS CAN BE REGRESSION-TESTED TOO</div>
+    "Delete half a sentence" sounds tiny, but today it ran the full course: tighten the rubric → re-run only target paper C and control paper B → the FP disappears, B takes zero damage, acceptance closed.<br>
+    That is the compound interest of evals: without those three papers, prompt changes are guesswork; with them, <strong>every prompt edit becomes a scored regression test</strong> — the same muscle memory as re-running a backtest after touching EA parameters.
+  </div>
+</div>
+
+<h2>二、今日一战 Today's Battle: Error 1213</h2>
+<div class="h2sub">症状 → 根因 → 教训,数字说话 · Symptom → root cause → lesson, told with numbers</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">病状:round 3 明明正常结束,round 4 却撞墙</div>
+    第一次跑 A 卷,round 3 打印出 <code>stop=end_turn</code>(模型说完了),紧接着却是 API 报错 <code>1213 未正常接收到prompt参数</code>。<br>
+    <strong>根因</strong>:抄写时 <code>if not tool_calls:</code> 里只写了 max_tokens 分支的 return,<strong>end_turn 这条正常出路没有 return</strong>。程序掉出 if,给 messages 追加了一条<strong>内容为空</strong>的 user 消息,循环进入 round 4 又去调 API——最后一条消息是空的,中转站拒收。<br>
+    就像 EA 里给 <code>!OrderSelect()</code> 写了防护,却忘了正常路径的 return——行情走对了反而掉进下面的错误处理。<strong>教训:循环的每个分支都要有出口;这种 bug 会在下一轮、以 API 报错的伪装出现,round 打印就是飞行记录仪。</strong>
+  </div>
+  <div class="en">
+    <div class="head">SYMPTOM: ROUND 3 ENDED CLEANLY, ROUND 4 HIT A WALL</div>
+    First A-paper run: round 3 printed <code>stop=end_turn</code> (the model finished speaking), immediately followed by API error <code>1213: prompt parameter not received properly</code>.<br>
+    <strong>Root cause</strong>: in transcription, the <code>if not tool_calls:</code> block had a return only for the max_tokens branch — <strong>the normal end_turn exit had no return at all</strong>. Execution fell through, appended a user message with <strong>empty content</strong> to messages, and the loop entered round 4 calling the API again — trailing empty message, relay refused it.<br>
+    Like an EA that guards <code>!OrderSelect()</code> but forgets the return on the normal path — the good case stumbles into error handling below. <strong>Lesson: every branch of a loop needs exactly one exit; this bug type surfaces one round LATER, disguised as an API error — and the per-round printout is your flight recorder.</strong>
+  </div>
+</div>
+
+<h2>三、Today's English 今天遇到的英语</h2>
+<div class="h2sub">只收今天真实碰到的 · Drawn only from today's real encounters — click the right column to listen</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① short-circuit — 短路</div>
+    B 卷跑出 <code>NO BUGS FOUND</code>,校验官根本没出场,账单 1179 tokens 全场最低——这条便宜的路就叫 short-circuit(短路)。你的退出码 0 也从这条路回家。<br>
+    <strong>拆一处</strong>:电气里"短路"是电流抄了近路;代码里 <code>&amp;&amp;</code> 左边是 false 时右边直接不算,也叫 short-circuit evaluation——同一个词,同一层意思:近路一通,后面全免。
+  </div>
+  <div class="en">
+    <div class="head">① SHORT-CIRCUIT</div>
+    Paper B returned <code>NO BUGS FOUND</code>, the critic never took the stage, and the bill came to 1179 tokens — the cheapest run of the day. That cheap path is called a short-circuit. Your exit code 0 went home through it too.<br>
+    <strong>One note</strong>: in electronics a short circuit is current taking a shortcut; in code, when the left of <code>&amp;&amp;</code> is false the right never runs — short-circuit evaluation. Same word, same idea: once the shortcut opens, everything after is skipped.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② verbatim — 一字不差</div>
+    校验官今天反复说 <code>matches the quotes verbatim</code> = 引文和原文一字不差。它的工作一半就是 verbatim 比对:你引的第 57 行,和文件里真实的第 57 行,逐字对。<br>
+    <strong>记法</strong>:verb(词语)+ atim,按"词"来——一个词都不改,就是 verbatim。
+  </div>
+  <div class="en">
+    <div class="head">② VERBATIM</div>
+    The critic kept saying <code>matches the quotes verbatim</code> — the quote matches the original word for word. Half its job IS verbatim comparison: the line 57 you cited, against the real line 57 in the file, character by character.<br>
+    <strong>Memory hook</strong>: verbatim ≈ "by the word" — not one word changed.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ refute / refuted — 驳倒</div>
+    校验官的判词只有两个:VERIFIED(证实)或 REFUTED(驳倒)。refute = 拿证据把一条主张打翻,不是"我觉得不对",是"引文对不上/代码不支持"。<br>
+    今天还学到一层:refute 不一定能用上——那条误报<strong>事实全真</strong>,所以没被驳倒,它输在了评分标准,不是证据战。<strong>还有个动词反身用法</strong>:我们说 the hypothesis was refuted by the experiment(假设被实验证伪)——今天"校验官能挡住误报"这个假设,就被你亲手证伪了。
+  </div>
+  <div class="en">
+    <div class="head">③ REFUTE / REFUTED</div>
+    The critic has exactly two verdicts: VERIFIED or REFUTED. To refute is to overturn a claim WITH evidence — not "I feel it's wrong", but "the citation does not match / the code does not support it".<br>
+    Today added a layer: refuting was not even possible here — the false positive was <strong>all true facts</strong>, so it lost on the rubric, not on evidence. <strong>Note the passive in use</strong>: "the hypothesis was refuted by the experiment." Today, "a critic stops false positives" was exactly that — refuted by your own hands.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">④ in series — 串联</div>
+    0006 的两个角色是 <code>two agents in series</code>(串联):审计员的输出是校验员的输入,一条流水线。反义词是 in parallel(并联)——多个角色同时开工、互不等待,那是 L2 才解锁的拓扑。<br>
+    <strong>用法</strong>:series 单复数同形,a series of findings = 一连串发现。今天的流水线:审计 → 校验,一站接一站。
+  </div>
+  <div class="en">
+    <div class="head">④ IN SERIES</div>
+    The two roles in 0006 are <code>two agents in series</code>: the auditor's output is the critic's input — one assembly line. The opposite is in parallel — several roles starting at once, none waiting for another; that topology unlocks at L2.<br>
+    <strong>Usage</strong>: series keeps the same form in singular and plural; a series of findings = findings, one after another. Today's line: audit → verify, station by station.
+  </div>
+</div>
+
+<h2>四、明天见 Tomorrow</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    明天进门第一件事还是那道协议题——第五次问,assistant 发 tool_use、user 回 tool_result、靠 tool_use_id 配对,这次一定能一口气说完。然后做决定:0006 要不要去碰那条 700 行的真实 EA(账单约 40 万 tokens 起),还是先进入下一个模式。两条路都是前进,老大挑顺眼的走。
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    First thing tomorrow: that protocol question again — the fifth time. The assistant sends tool_use, the user returns tool_result, and they pair up by tool_use_id. This time you will say it in one breath. Then a decision: does 0006 take on the real 700-line EA (a bill starting around 400K tokens), or do we advance to the next pattern first? Both roads move forward — pick the one that suits you.
+  </div>
+</div>
+
+<div class="note">
+  <strong>Day 6/730</strong> — 今天你手敲出了第一个多智能体系统,还亲手证伪了一个漂亮的假设——这比证实它值钱多了。完整档案在 logs/0008-orchestrator-critic.md。睡前点点右边的英文列,听三分钟今天的自己。
+</div>
+
+<footer>
+  Generated 2026-11-12 · ~/growth-plan/agent-fullstack/reports/0006-report-2026-11-12.html<br>
+  Mirror bilingual: 中文 | English · One-page digest v2 · Voice: warm teacher, example-first
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) {
+      return v.lang && v.lang.indexOf("en") === 0;
+    });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+
+    el.classList.add("speaking");
+    current = el;
+
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function () {};
+
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>

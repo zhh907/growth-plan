@@ -5,7 +5,7 @@
 
 ## Task: Phase 1 — Agent engineering [Phase 1]
 
-**Status: NOT STARTED (entry decisions pending)**
+**Status: IN PROGRESS — Unit 1 (multi-agent, hand-rolled) first artifact DONE**
 **Phase 0: DONE 2026-11-11 (7 weeks early; see below)**
 
 ### Step 1 — Language: **Python (decided 2026-11-07)**
@@ -40,8 +40,13 @@
 
 ### Phase 0 CLOSED 2026-11-11 (~7 weeks ahead of 2026-12-31 checkpoint)
 
-**NEXT: Phase 1 — Agent engineering (roadmap 2027 Q1~Q2, starting ~7 weeks early)**
-Entry decisions pending: first unit pick (multi-agent patterns vs RAG vs evals-first), framework choice (LangGraph vs Claude Agent SDK).
+### Phase 1 — Unit 1: Multi-agent patterns, hand-rolled (decided 2026-11-11: orchestrator-critic first, framework choice deferred)
+
+- [x] 0006-orchestrator-critic.py hand-typed + accepted 3/3 papers (2026-11-12: A 3/3 VERIFIED / B short-circuit in=1179 / C FP eliminated by rubric fix, B regression clean; 1213 missing-return debug saga; critic-boundary finding: fact-check cannot catch rubric overreach; SURVIVED string-matching hazard logged, structured output queued)
+- [ ] Decide: run 0006 on real 700-line EA (~2× the 206K cost) or advance to next sub-pattern first
+- [ ] Next sub-patterns: parallel sub-agents + message routing (L2), structured output for critic verdicts (JSON schema)
+- [ ] Opening quiz standing items: tool protocol direction (assistant tool_use → user tool_result, matched by tool_use_id); critic defense boundary; SURVIVED string hazard
+
 Phase 1 remediation list (from final review): tool_use_id pairing · execute_tool/resolve_path boundary layers · max_tokens thinking+text pool · weekly 10-min log re-read.
 
 ### Notes
