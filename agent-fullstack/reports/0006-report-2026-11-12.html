@@ -74,86 +74,97 @@
 <header>
   <div class="kicker">Growth Plan · Agent Full-Stack Track · Day 6</div>
   <h1>学习报告 Study Report — 2026-11-12</h1>
-  <div class="meta">Session 8 · 你的 agent 今天带上了第二双眼睛,三张卷子全过 · Your agent grew a second pair of eyes today, and passed all three papers</div>
+  <div class="meta">Session 8 + 9 · 上午串联收徒,下午并联出门,晚上带回一道新伤口 · Serial in the morning, parallel in the afternoon, and a fresh wound to show for it</div>
 </header>
 
 <div class="grid">
-  <div class="stat"><div class="num">3/3</div><div class="lbl">三张卷子全部通过<br>All three papers accepted</div></div>
-  <div class="stat"><div class="num">1.4×</div><div class="lbl">双 agent 的账单倍数<br>Cost of running two agents</div></div>
-  <div class="stat"><div class="num">1179</div><div class="lbl">B 卷短路的 token 账单<br>Tokens on the short-circuit path</div></div>
-  <div class="stat"><div class="num">4</div><div class="lbl">今天真实遇到的英语<br>English met in the wild today</div></div>
+  <div class="stat"><div class="num">3/3</div><div class="lbl">L1 串联三卷全过(上午)<br>All three papers passed (AM)</div></div>
+  <div class="stat"><div class="num">-53%</div><div class="lbl">L2 并联后输入成本下降(下午)<br>Input cost saved (PM)</div></div>
+  <div class="stat"><div class="num">2</div><div class="lbl">rubric 歧义,两次都修复<br>Rubric ambiguities, both fixed</div></div>
+  <div class="stat"><div class="num">5</div><div class="lbl">今天真实遇到的英语<br>English met in the wild today</div></div>
 </div>
 
-<h2>一、今天的四个概念 Four Ideas, Told with Examples</h2>
+<h2>一、今天的五个概念 Five Ideas, Told with Examples</h2>
 <div class="h2sub">每个概念配一个你熟悉的例子 · Each idea comes with an example you already know</div>
 
 <div class="bi">
   <div class="cn">
     <div class="head">1 · 多智能体:同一台机器,演两个角色</div>
-    你今天的直觉其实很准——0006 比 0005 只多了约 20 行。这不是偷工减料,是真相:<strong>agent 循环还是那一台,只是提示词从焊死在函数里,变成了参数</strong>。同一台机器,今天演审计员,明天演校验官。<br>
-    就像你在 MT4 里写过一个下单函数:参数是 magic number 它就是这套 EA,参数一换它就是另一套。多智能体 L1 的增量在<strong>拓扑</strong>(谁先谁后、谁的结果喂给谁),不在代码量。
+    你上午的直觉很准——0006 只比 0005 多约 20 行。这不是偷工减料,是真相:<strong>agent 循环还是那一台,只是提示词从焊死在函数里,变成了参数</strong>。同一台机器,上午演审计员,下午演校验官。<br>
+    就像你在 MT4 里写过的下单函数:参数是 magic number 它就属于这套 EA,参数一换它服务另一套。多智能体的增量在<strong>拓扑</strong>(谁先谁后、谁的结果喂给谁),不在代码量。
   </div>
   <div class="en">
-    <div class="head">1 · MULTI-AGENT: ONE MACHINE, TWO ROLES</div>
-    Your instinct was right — 0006 adds only ~20 lines over 0005. That is not cutting corners; it is the truth: <strong>the agent loop stays the same machine, only the prompt stops being welded inside the function and becomes a parameter</strong>. Same machine plays the auditor today, the critic tomorrow.<br>
-    Like your order-sending function in MT4: with one magic number it belongs to this EA; change the parameter, it serves another. The L1 delta lives in <strong>topology</strong> — who runs first, whose output feeds whom — not in lines of code.
+    <div class="head">1 · MULTI-AGENT: ONE MACHINE, MANY ROLES</div>
+    Your morning instinct was right — 0006 adds only ~20 lines over 0005. Not corner-cutting; the truth: <strong>the loop stays one machine, only the prompt stops being welded inside the function and becomes a parameter</strong>. Same machine, auditor in the morning, critic in the evening.<br>
+    Like your order-sending function in MT4: with one magic number it belongs to this EA; change the argument, it serves another. The multi-agent delta lives in <strong>topology</strong> — who runs first, whose output feeds whom — not in lines of code.
   </div>
 </div>
 
 <div class="bi">
   <div class="cn">
     <div class="head">2 · 编排器:确定性 Python,不是 LLM</div>
-    0006 的 main() 自己一个模型都没调。它做的事是:先审计 → 看报告里有没有"NO BUGS FOUND" → 没有才让校验官出场 → 最后按存活数定退出码。<strong>控制流在代码里,概率只在角色内部</strong>。<br>
-    这和你的交易习惯是同一条纪律:信号可以来自指标(有概率),但"信号要不要过风控、仓位超没超限"这种流程判断,永远写在确定性的代码里,绝不交给模型即兴发挥。
+    0006 的 main() 自己一个模型都不调:先审计 → 看报告有没有 "NO BUGS FOUND" → 没有才让校验官出场 → 按存活数定退出码。下午 0007 同理:Python 自己切文件、自己扇入。<strong>控制流永远在代码里,概率只在角色内部</strong>。<br>
+    这和你的交易纪律同源:信号可以来自指标(有概率),但"过不过风控、仓位超没超限"永远写在确定性的代码里,绝不交给模型即兴发挥。
   </div>
   <div class="en">
     <div class="head">2 · THE ORCHESTRATOR: DETERMINISTIC PYTHON, NOT AN LLM</div>
-    main() in 0006 never calls a model itself. It does this: run the audit → check whether the report says "NO BUGS FOUND" → only then wake the critic → set the exit code by survivor count. <strong>Control flow lives in code; probability lives only inside the roles.</strong><br>
-    It is the same discipline as your trading habit: signals may come from indicators (probabilistic), but "does this signal pass risk control, is the position within limits" is always written in deterministic code — never improvised by a model.
+    main() in 0006 never calls a model: audit first → check for "NO BUGS FOUND" → only then wake the critic → exit code by survivor count. 0007 in the afternoon: Python splits the file itself, fans in itself. <strong>Control flow lives in code; probability lives only inside the roles.</strong><br>
+    Same root as your trading discipline: signals may come from indicators (probabilistic), but "does it pass risk control, is the position within limits" is always deterministic code — never a model's improvisation.
   </div>
 </div>
 
 <div class="bi">
   <div class="cn">
-    <div class="head">3 · 校验官的边界:真话审不出越界</div>
-    今天最有价值的发现是个负结果:C 卷那条误报(固定手数被当成立案)<strong>穿过了校验官</strong>。不是它失职——它给的证据句句属实:BaseLots 确实是 0.01,全文件确实没有 AccountBalance。<br>
-    问题在于:这条 finding <strong>事实全对,判罚越界</strong>。事实核查员只会问"引文是真的吗",不会问"这该不该立案"。所以修的是上游的评分标准(rubric),删掉提示词里那半句主观条款——C 卷立刻从 2 条降到 1 条,B 卷复跑无伤。两道防线,各管一段。
+    <div class="head">3 · rubric:判卷标准,歧义是会被放大的</div>
+    rubric = 判卷标准(词根是拉丁语"红色",中世纪红墨水写的执行指引)。今天它两次咬人,病理相同——<strong>可以有多种解读的标准,必然导致判罚漂移</strong>:上午,"手数控制"里混着客观条款和主观观点 → C 卷误报;下午,"有无持仓检查"读字面还是读语义 → A 卷漏报。<br>
+    修法都是同一个动作:把歧义问题改写成<strong>可判定问题</strong>——"没做 NormalizeDouble"换成"同类持仓已存在时,新信号还会不会成交"。开仓条件写成可判定的表达式,不写"趋势看起来不错",你写 EA 时早就会了。
   </div>
   <div class="en">
-    <div class="head">3 · THE CRITIC'S LIMIT: TRUE FACTS PASS AN OVERREACHING VERDICT</div>
-    Today's most valuable finding was a negative result: the C-paper false positive (fixed-lot design prosecuted as a bug) <strong>survived the critic</strong>. Not because it failed — every piece of its evidence was true: BaseLots really is 0.01, the file really has no AccountBalance.<br>
-    The problem: the finding's <strong>facts were all correct, but the verdict stepped outside the rubric</strong>. A fact-checker asks "is the citation real", never "should this have been filed at all". So the fix belongs upstream — delete the subjective clause from the prompt. C dropped from 2 findings to 1 instantly, and B re-ran unharmed. Two defense lines, each guarding its own section.
+    <div class="head">3 · THE RUBRIC: AMBIGUITY GETS AMPLIFIED</div>
+    A rubric is the grading standard (root: Latin "red" — medieval red-ink instructions). It bit twice today, same pathology: <strong>a standard open to multiple readings guarantees drifting verdicts</strong>. Morning: "lot control" mixed an objective clause with a subjective opinion → a false positive. Afternoon: "is there a position check" read literally or semantically → a miss.<br>
+    Both fixes were the same move: rewrite the ambiguous question as a <strong>decidable one</strong> — "can a new signal still fire while a same-type position is open". Entry conditions as decidable expressions, never "the trend looks decent" — you already wrote EAs that way.
   </div>
 </div>
 
 <div class="bi">
   <div class="cn">
-    <div class="head">4 · 改完就回归:提示词也能做回归测试</div>
-    "删半句话"听起来很小,但今天它走的是完整流程:改 rubric → 只重跑目标卷 C 和对照卷 B → C 的误报消失、B 零误伤,验收关账。<br>
-    这就是 eval 的复利:没有那三张卷子,改提示词只能靠感觉;有了它们,<strong>每一次提示词修改都变成一次可以打分的回归测试</strong>——和你改完 EA 参数先跑回测,是同一个肌肉记忆。
+    <div class="head">4 · 上下文经济学:切开的文件,半价的账单</div>
+    下午把 A 卷切成三段、三个审计员并联各审各的:输入从 3150 降到 1472,<strong>半价</strong>。账单跟着"每个模型要看多少东西"走——你审计 700 行 EA 花了 206K 就是这条定律。分段 = 分而治之的上下文管理。<br>
+    而且小视野的审计员反而嘴严:看不见的就写 NOT JUDGEABLE,绝不编造。诚实的"我判不了",比自信的瞎猜值钱——对模型和人一样成立。
   </div>
   <div class="en">
-    <div class="head">4 · FIX, THEN REGRESS: PROMPTS CAN BE REGRESSION-TESTED TOO</div>
-    "Delete half a sentence" sounds tiny, but today it ran the full course: tighten the rubric → re-run only target paper C and control paper B → the FP disappears, B takes zero damage, acceptance closed.<br>
-    That is the compound interest of evals: without those three papers, prompt changes are guesswork; with them, <strong>every prompt edit becomes a scored regression test</strong> — the same muscle memory as re-running a backtest after touching EA parameters.
+    <div class="head">4 · CONTEXT ECONOMICS: A SLICED FILE, A HALF-PRICE BILL</div>
+    Slice paper A into three segments, three auditors in parallel: input dropped from 3150 to 1472 — <strong>half price</strong>. The bill follows "how much each model must look at" — the same law behind your 206K audit of the 700-line EA. Slicing is divide-and-conquer for context.<br>
+    And small-view auditors keep tighter mouths: what they cannot see, they mark NOT JUDGEABLE — never invented. An honest "I cannot tell" beats a confident guess, for models and people alike.
   </div>
 </div>
 
-<h2>二、今日一战 Today's Battle: Error 1213</h2>
+<div class="bi">
+  <div class="cn">
+    <div class="head">5 · 边界盲区:看不见的,被当作不存在</div>
+    今天最深的伤口。C 卷里,段 1 <strong>看见了</strong> 20-23 行的 new-bar guard;段 2 的格子从 26 行开始,看不见那几行,于是写下"可见路径无防护"并立案 [HIGH]。<strong>每个兵的视野都对,拼起来却是错案</strong>。解药已设计好(今晚的 0008):请一位看<strong>全图</strong>的校验官,任何"防护缺失"的主张先查全文件再判。三个信号员各盯一个品种,风控总监看全账户总表签字——兵要快,官要稳。
+  </div>
+  <div class="en">
+    <div class="head">5 · BOUNDARY BLINDNESS: WHAT YOU CANNOT SEE, YOU ASSUME AWAY</div>
+    Today's deepest cut. On paper C, segment 1 <strong>saw</strong> the new-bar guard at lines 20-23; segment 2's slice starts at line 26, cannot see those lines, so it wrote "no guard in the visible path" and filed a HIGH finding. <strong>Every scout was honest about its own view, yet the merged verdict was wrong.</strong> The cure is designed (tonight's 0008): one whole-file critic — any "missing protection" claim gets checked against the FULL file first. Three signal clerks each watch one symbol; the risk director signs off against the whole account. Scouts for speed, an officer for certainty.
+  </div>
+</div>
+
+<h2>二、今日一战 Today's Battle: The C-Paper False Positive</h2>
 <div class="h2sub">症状 → 根因 → 教训,数字说话 · Symptom → root cause → lesson, told with numbers</div>
 
 <div class="bi">
   <div class="cn">
-    <div class="head">病状:round 3 明明正常结束,round 4 却撞墙</div>
-    第一次跑 A 卷,round 3 打印出 <code>stop=end_turn</code>(模型说完了),紧接着却是 API 报错 <code>1213 未正常接收到prompt参数</code>。<br>
-    <strong>根因</strong>:抄写时 <code>if not tool_calls:</code> 里只写了 max_tokens 分支的 return,<strong>end_turn 这条正常出路没有 return</strong>。程序掉出 if,给 messages 追加了一条<strong>内容为空</strong>的 user 消息,循环进入 round 4 又去调 API——最后一条消息是空的,中转站拒收。<br>
-    就像 EA 里给 <code>!OrderSelect()</code> 写了防护,却忘了正常路径的 return——行情走对了反而掉进下面的错误处理。<strong>教训:循环的每个分支都要有出口;这种 bug 会在下一轮、以 API 报错的伪装出现,round 打印就是飞行记录仪。</strong>
+    <div class="head">病状:防护明明在,却被判"无防护"</div>
+    C 卷 ground truth 只有 1 个 seed:57 行 SL=0。切成三段(1-25 / 26-50 / 51-75)后:段 3 抓到 SL ✅(命中 1/1);段 1 引用 20-23 行的 guard 判"无 bug" ✅;但段 2 立案 "SAME-BAR [HIGH]",理由是"可见路径无 guard"——可 guard 就住在段 1 的格子里。<br>
+    扇入拿到一对矛盾证词,我们的字符串汇总不会对质,exit 1 带着假警报出门。<strong>根因不在模型不诚实,是判断所需的事实被切刀分进了两个格子</strong>。<br>
+    顺带一提上午那场同样精彩的 1213 战:round 3 正常 end_turn 后程序又发起调用——end_turn 分支忘了 return,追加了一条空消息,下一轮被中转站拒收。两个 bug,一个教训:<strong>每个分支都要有出口</strong>,逐轮打印就是飞行记录仪。
   </div>
   <div class="en">
-    <div class="head">SYMPTOM: ROUND 3 ENDED CLEANLY, ROUND 4 HIT A WALL</div>
-    First A-paper run: round 3 printed <code>stop=end_turn</code> (the model finished speaking), immediately followed by API error <code>1213: prompt parameter not received properly</code>.<br>
-    <strong>Root cause</strong>: in transcription, the <code>if not tool_calls:</code> block had a return only for the max_tokens branch — <strong>the normal end_turn exit had no return at all</strong>. Execution fell through, appended a user message with <strong>empty content</strong> to messages, and the loop entered round 4 calling the API again — trailing empty message, relay refused it.<br>
-    Like an EA that guards <code>!OrderSelect()</code> but forgets the return on the normal path — the good case stumbles into error handling below. <strong>Lesson: every branch of a loop needs exactly one exit; this bug type surfaces one round LATER, disguised as an API error — and the per-round printout is your flight recorder.</strong>
+    <div class="head">SYMPTOM: THE GUARD EXISTS, YET "NO GUARD" WAS FILED</div>
+    Paper C's ground truth: exactly one seed, SL=0 at line 57. Sliced into three (1-25 / 26-50 / 51-75): segment 3 caught the SL ✅ (1/1 hits); segment 1 quoted the guard at 20-23 and correctly ruled "no bug" ✅; but segment 2 filed "SAME-BAR [HIGH]" because "no guard exists in the visible path" — the guard lives in segment 1's slice.<br>
+    Fan-in received contradictory testimony; our string-counting merge cannot cross-examine, so exit 1 shipped with a false alarm. <strong>The root cause is not dishonesty — the facts needed were split across two slices by the knife.</strong><br>
+    Worth noting the morning's equally fine battle, error 1213: after a clean end_turn the program called the API again — the end_turn branch had no return, appended an empty message, and the next round was refused. Two bugs, one lesson: <strong>every branch needs an exit</strong>, and per-round printouts are your flight recorder.
   </div>
 </div>
 
@@ -162,76 +173,89 @@
 
 <div class="bi">
   <div class="cn">
-    <div class="head">① short-circuit — 短路</div>
-    B 卷跑出 <code>NO BUGS FOUND</code>,校验官根本没出场,账单 1179 tokens 全场最低——这条便宜的路就叫 short-circuit(短路)。你的退出码 0 也从这条路回家。<br>
-    <strong>拆一处</strong>:电气里"短路"是电流抄了近路;代码里 <code>&amp;&amp;</code> 左边是 false 时右边直接不算,也叫 short-circuit evaluation——同一个词,同一层意思:近路一通,后面全免。
+    <div class="head">① rubric — 判卷标准</div>
+    你今天亲自问的词。/ˈruːbrɪk/,来自拉丁语 ruber(红色)——中世纪修道士用红墨水写章节指引,红字后来成了"照着执行的标准"。<br>
+    高频搭配:<code>grading rubric</code> 评分细则、<code>tighten the rubric</code> 收紧判卷标准(你今天的高频动作)。同根词:ruby 红宝石、rubella 风疹("小红病")。
   </div>
   <div class="en">
-    <div class="head">① SHORT-CIRCUIT</div>
-    Paper B returned <code>NO BUGS FOUND</code>, the critic never took the stage, and the bill came to 1179 tokens — the cheapest run of the day. That cheap path is called a short-circuit. Your exit code 0 went home through it too.<br>
+    <div class="head">① RUBRIC</div>
+    The word you asked about yourself. /ˈruːbrɪk/, from Latin ruber (red) — medieval monks wrote chapter instructions in red ink, and the red letters became "the standard you follow".<br>
+    Frequent pairs: <code>grading rubric</code>; <code>tighten the rubric</code> — your most-repeated action today. Same root family: ruby, rubella ("little red" disease).
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② fan-out / fan-in — 扇出 / 扇入</div>
+    下午代码的主角。fan-out = 任务从一点散出去给多个工人;fan-in = 结果从多处收拢回一点。像折扇:从扇轴散开是 out,收拢回来是 in。<br>
+    <strong>用法</strong>:可作名词(a fan-out of 3 auditors)也可作动词(to fan out the work)。硬件圈的老词——一个输出接多个负载就叫 fan-out,软件圈借来描述任务分发。
+  </div>
+  <div class="en">
+    <div class="head">② FAN-OUT / FAN-IN</div>
+    The afternoon's headline pair. Fan-out = tasks scattering from one point to many workers; fan-in = results converging from many back to one. Like a folding fan: opening from the pivot is out, closing back is in.<br>
+    <strong>Usage</strong>: noun ("a fan-out of 3 auditors") or verb ("to fan out the work"). An old hardware term — one output driving many loads was fan-out; software borrowed it for task distribution.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ short-circuit — 短路</div>
+    上午 B 卷跑出 NO BUGS FOUND,校验官根本没出场,账单 1179 tokens 全场最低——这条便宜的路叫 short-circuit。<br>
+    <strong>拆一处</strong>:电气里"短路"是电流抄近路;代码里 <code>&amp;&amp;</code> 左边是 false 时右边直接不算,叫 short-circuit evaluation。同一个词,同一层意思:近路一通,后面全免。
+  </div>
+  <div class="en">
+    <div class="head">③ SHORT-CIRCUIT</div>
+    In the morning, paper B returned NO BUGS FOUND, the critic never took the stage, and the bill came to 1179 tokens — the cheapest run of the day. That cheap path is a short-circuit.<br>
     <strong>One note</strong>: in electronics a short circuit is current taking a shortcut; in code, when the left of <code>&amp;&amp;</code> is false the right never runs — short-circuit evaluation. Same word, same idea: once the shortcut opens, everything after is skipped.
   </div>
 </div>
 
 <div class="bi">
   <div class="cn">
-    <div class="head">② verbatim — 一字不差</div>
-    校验官今天反复说 <code>matches the quotes verbatim</code> = 引文和原文一字不差。它的工作一半就是 verbatim 比对:你引的第 57 行,和文件里真实的第 57 行,逐字对。<br>
-    <strong>记法</strong>:verb(词语)+ atim,按"词"来——一个词都不改,就是 verbatim。
+    <div class="head">④ wall-clock — 墙钟时间</div>
+    程序输出里的 <code>wall-clock=61.9s</code>:你手表真实走过的时间。它和"CPU 时间"相对——三个 agent 等 API 回包时,CPU 几乎在睡觉,但墙上的钟照走。并联优化的就是墙钟:61.9s ≈ 最慢的一段,而不是三段之和。<br>
+    <strong>记法</strong>:钟挂在墙上,对所有人都一样公平地走——真实流逝的时间。
   </div>
   <div class="en">
-    <div class="head">② VERBATIM</div>
-    The critic kept saying <code>matches the quotes verbatim</code> — the quote matches the original word for word. Half its job IS verbatim comparison: the line 57 you cited, against the real line 57 in the file, character by character.<br>
-    <strong>Memory hook</strong>: verbatim ≈ "by the word" — not one word changed.
+    <div class="head">④ WALL-CLOCK</div>
+    From today's output: <code>wall-clock=61.9s</code> — the time your watch actually measured. Contrast with "CPU time": while three agents wait for API replies, the CPU mostly sleeps, but the clock on the wall keeps walking. Parallelism optimizes wall-clock: 61.9s ≈ the slowest segment, not the sum of three.<br>
+    <strong>Memory hook</strong>: the clock on the wall ticks the same for everyone — real elapsed time.
   </div>
 </div>
 
 <div class="bi">
   <div class="cn">
-    <div class="head">③ refute / refuted — 驳倒</div>
-    校验官的判词只有两个:VERIFIED(证实)或 REFUTED(驳倒)。refute = 拿证据把一条主张打翻,不是"我觉得不对",是"引文对不上/代码不支持"。<br>
-    今天还学到一层:refute 不一定能用上——那条误报<strong>事实全真</strong>,所以没被驳倒,它输在了评分标准,不是证据战。<strong>还有个动词反身用法</strong>:我们说 the hypothesis was refuted by the experiment(假设被实验证伪)——今天"校验官能挡住误报"这个假设,就被你亲手证伪了。
+    <div class="head">⑤ judgeable — 可判定的</div>
+    段审计员的口头禅 <code>NOT JUDGEABLE FROM SEGMENT</code>:仅凭我这一段,判不了。judge + able——注意拼写是 judgeable,judge 结尾的 e 保留后再加 -able。<br>
+    这个词今天立了大功:三段共 6 次 NOT JUDGEABLE,零编造。它和 refute 是一对:判不了是诚实,REFUTED 是拿证据驳倒——你的校验官只做后者,不越界做前者。
   </div>
   <div class="en">
-    <div class="head">③ REFUTE / REFUTED</div>
-    The critic has exactly two verdicts: VERIFIED or REFUTED. To refute is to overturn a claim WITH evidence — not "I feel it's wrong", but "the citation does not match / the code does not support it".<br>
-    Today added a layer: refuting was not even possible here — the false positive was <strong>all true facts</strong>, so it lost on the rubric, not on evidence. <strong>Note the passive in use</strong>: "the hypothesis was refuted by the experiment." Today, "a critic stops false positives" was exactly that — refuted by your own hands.
+    <div class="head">⑤ JUDGEABLE</div>
+    The segment auditors' refrain: <code>NOT JUDGEABLE FROM SEGMENT</code> — "from my slice alone, I cannot rule". Judge + able — note the spelling: judgeable, the e survives before -able.<br>
+    It earned its keep today: six NOT-JUDGEABLE verdicts, zero fabrication. It pairs with refute: "not judgeable" is honesty; REFUTED is overturning WITH evidence — your critic does only the latter, never trespassing into the former.
   </div>
 </div>
 
-<div class="bi">
-  <div class="cn">
-    <div class="head">④ in series — 串联</div>
-    0006 的两个角色是 <code>two agents in series</code>(串联):审计员的输出是校验员的输入,一条流水线。反义词是 in parallel(并联)——多个角色同时开工、互不等待,那是 L2 才解锁的拓扑。<br>
-    <strong>用法</strong>:series 单复数同形,a series of findings = 一连串发现。今天的流水线:审计 → 校验,一站接一站。
-  </div>
-  <div class="en">
-    <div class="head">④ IN SERIES</div>
-    The two roles in 0006 are <code>two agents in series</code>: the auditor's output is the critic's input — one assembly line. The opposite is in parallel — several roles starting at once, none waiting for another; that topology unlocks at L2.<br>
-    <strong>Usage</strong>: series keeps the same form in singular and plural; a series of findings = findings, one after another. Today's line: audit → verify, station by station.
-  </div>
-</div>
-
-<h2>四、明天见 Tomorrow</h2>
+<h2>四、今晚见 Tonight</h2>
 
 <div class="bi">
   <div class="cn">
     <div class="head">中文</div>
-    明天进门第一件事还是那道协议题——第五次问,assistant 发 tool_use、user 回 tool_result、靠 tool_use_id 配对,这次一定能一口气说完。然后做决定:0006 要不要去碰那条 700 行的真实 EA(账单约 40 万 tokens 起),还是先进入下一个模式。两条路都是前进,老大挑顺眼的走。
+    今晚敲 0008:三个侦察兵照旧并联出发,后头加一位看全图的校验官。验收仪式是 C 卷——那条边界盲区误报,应当被拿着 20-23 行原文的校验官当庭 REFUTED。敲完跑三张卷,今天的伤口就算缝上了。
   </div>
   <div class="en">
     <div class="head">ENGLISH</div>
-    First thing tomorrow: that protocol question again — the fifth time. The assistant sends tool_use, the user returns tool_result, and they pair up by tool_use_id. This time you will say it in one breath. Then a decision: does 0006 take on the real 700-line EA (a bill starting around 400K tokens), or do we advance to the next pattern first? Both roads move forward — pick the one that suits you.
+    Tonight you type 0008: three scouts fan out as usual, with one whole-file critic standing behind them. The acceptance ritual is paper C — today's boundary-blindness false positive should get REFUTED in open court by a critic holding the original lines 20-23. Three papers, and today's wound is stitched closed.
   </div>
 </div>
 
 <div class="note">
-  <strong>Day 6/730</strong> — 今天你手敲出了第一个多智能体系统,还亲手证伪了一个漂亮的假设——这比证实它值钱多了。完整档案在 logs/0008-orchestrator-critic.md。睡前点点右边的英文列,听三分钟今天的自己。
+  <strong>Day 6/730</strong> — 上午你合上了 L1,下午你打开了地图、跑通了 L2,还亲手撞见了并联的标志性代价。一天两种地形,这进度不叫拉了。完整档案在 logs/0008 和 logs/0009。睡前点点右边的英文列,听三分钟今天的自己。
 </div>
 
 <footer>
   Generated 2026-11-12 · ~/growth-plan/agent-fullstack/reports/0006-report-2026-11-12.html<br>
-  Mirror bilingual: 中文 | English · One-page digest v2 · Voice: warm teacher, example-first
+  Mirror bilingual: 中文 | English · One-page digest v2 · One report per day
 </footer>
 
 <script>
