@@ -11,11 +11,11 @@ AI 时代"会执行命令"不值钱,"知道系统为什么坏、坏了怎么办�
 
 ## 阶段路线
 
-### 阶段 0:k8s 上手(2026-11 ~ 2026-12)← 当前
-- [ ] 本机 OrbStack 集群启动(orbctl start k8s)
-- [ ] **Docker 基础**(2026-11-08 加入):镜像与分层缓存 / 容器=被隔离的进程(呼应已见的 containerd-shim 与 pause)/ run·exec·logs·inspect / `-p` 端口映射与 bridge 网络 / volume 挂载 / Compose 多容器编排 —— 用自己现成的 Tomcat 容器当活教材
-- [ ] 核心对象:Pod / Deployment / Service / ConfigMap / Ingress
-- [ ] 独立部署一个多服务应用(含滚动更新与回滚)
+### 阶段 0:k8s 上手(2026-11 ~ 2026-12)— **DONE 2026-11-12(~11 weeks early)**
+- [x] 本机 OrbStack 集群启动(orbctl start k8s)
+- [x] **Docker 基础**(2026-11-08 加入):镜像与分层缓存 / 容器=被隔离的进程(呼应已见的 containerd-shim 与 pause)/ run·exec·logs·inspect / `-p` 端口映射与 bridge 网络 / volume 挂载 / Compose 多容器编排 —— 用自己现成的 Tomcat 容器当活教材
+- [x] 核心对象:Pod / Deployment / Service / ConfigMap / Ingress
+- [x] 独立部署一个多服务应用(含滚动更新与回滚)
 - 环境:macOS arm64 / 32GB / OrbStack 2.2.5 / kubectl(上下文 orbstack)
 
 ### 阶段 1:地基 —— Linux + 网络(2027 Q1)
@@ -74,4 +74,4 @@ AI 时代"会执行命令"不值钱,"知道系统为什么坏、坏了怎么办�
 | 2028-06-30 | Phase 3 done: full observability stack + **CKS or cloud cert** | resume-completeness review |
 | 2028-11 | Senior-ops capability validated: multi-cluster/HA design, incident drills | final deadline |
 
-> Break point today: Phase 0 step 1 (`orbctl start k8s`) — resume anytime.
+> Break point today (2026-11-12): **Phase 0 CLOSED**. Next decision: start Phase 1 (Linux + networking, CKA-oriented) — ops is secondary, agent track primary until its pattern tour completes.

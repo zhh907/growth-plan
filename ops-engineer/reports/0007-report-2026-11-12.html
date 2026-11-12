@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-12 · Ops Engineer</title>
+<style>
+  :root {
+    --ink: #e8f2ec;
+    --ink-soft: #9dbcab;
+    --accent: #2dd4a7;
+    --accent-soft: #1f3a2f;
+    --warn: #fbbf24;
+    --ok: #34d399;
+    --line: #2a4a3c;
+    --bg: #12241c;
+    --card: #1a3328;
+    --code-bg: #0b1712;
+    --code-ink: #d7efe4;
+    --en-soft: #172e25;
+    --en-ink: #c4dccc;
+    --ok-bg: #14352a;
+    --speak-bg: #2a4636;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+    line-height: 1.9; font-size: 17px;
+    padding: 48px 40px 90px;
+  }
+  header { border-bottom: 4px solid var(--accent); padding-bottom: 26px; margin-bottom: 36px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; }
+  h1 { font-size: 34px; margin: 8px 0 6px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 15px; }
+
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); margin: 18px 0; }
+  .bi > div { padding: 20px 24px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 15.5px; color: var(--en-ink); }
+  .bi .head { font-weight: 800; font-size: 16.5px; margin-bottom: 10px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+
+  h2 { font-size: 25px; margin: 48px 0 8px; padding-left: 14px; border-left: 5px solid var(--accent); }
+  .h2sub { color: var(--ink-soft); font-size: 15px; margin-bottom: 14px; padding-left: 19px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 20px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .stat .num { font-size: 34px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 14px; color: var(--ink-soft); }
+
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; color: var(--code-ink); background: var(--code-bg); padding: 8px 11px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 4px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; background: var(--accent-soft); color: var(--accent); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+  .tag.ok { background: var(--ok-bg); color: var(--ok); }
+  .tag.warn { background: var(--speak-bg); color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; font-size: 15.5px; margin: 18px 0; }
+  footer { margin-top: 56px; color: var(--ink-soft); font-size: 14px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
+
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: var(--speak-bg) !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; color: #222; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Ops Engineer Track · Day 6</div>
+  <h1>学习报告 Study Report — 2026-11-12</h1>
+  <div class="meta">Session 8 · 集群大门立起来了,阶段 0 提前十一周关门 · The cluster's front door went up, and Phase 0 closed eleven weeks early</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">6 站</div><div class="lbl">多服务验收链路<br>All-green chain across six stations</div></div>
+  <div class="stat"><div class="num">4 层</div><div class="lbl">从 curl 到容器的全局图<br>Whole map from curl to container</div></div>
+  <div class="stat"><div class="num">-11w</div><div class="lbl">阶段 0 提前关门<br>Weeks ahead of schedule</div></div>
+  <div class="stat"><div class="num">4</div><div class="lbl">今天真实遇到的英语<br>English met in the wild today</div></div>
+</div>
+
+<h2>一、今天的三个概念 Three Ideas, Told with Examples</h2>
+<div class="h2sub">每个概念配一个你熟悉的例子 · Each idea comes with an example you already know</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">1 · 入口层四阶梯:从"只在内部可达"到"一个总机分流"</div>
+    集群里的服务想被外面访问,有四档:<strong>ClusterIP</strong> 只在集群内可达(api 就是这种);<strong>NodePort</strong> 在节点上开一个端口,一个服务吃一个口(web 的 30081);<strong>Ingress</strong> 只留一个总机,按域名/路径把流量分给各个服务;再往上是云厂商的 LoadBalancer。<br>
+    用你的行当打比方:ClusterIP 是内部电话,NodePort 是每个部门开一个对公窗口,Ingress 是前台总机——客户只记一个号码,报名字转分机。你现在站在第三档。
+  </div>
+  <div class="en">
+    <div class="head">1 · THE EXPOSURE LADDER: FROM INSIDE-ONLY TO ONE SWITCHBOARD</div>
+    A service can reach the outside world in four grades: <strong>ClusterIP</strong>, in-cluster only (that's service/api); <strong>NodePort</strong>, one port per service (web's 30081); <strong>Ingress</strong>, a single switchboard routing by host and path; and above that, a cloud LoadBalancer.<br>
+    In your own trade's terms: ClusterIP is an internal line, NodePort gives every department its own public window, and Ingress is the front desk — customers memorize one number and ask for a name. You stand on the third rung now.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">2 · 纸和总机:Ingress 资源不是 Ingress 控制器</div>
+    这是 Ingress 排第一的坑:<strong>Ingress 资源只是一张路由表</strong>(几行 YAML:"/api → api 服务"),必须有一个真正干活的 Pod 去读它并执行转发——那就是 Ingress Controller(我们装的 ingress-nginx)。<br>
+    没有控制器,你写一百张路由表也没人看。所以顺序永远是:先请总机(装 Controller),再给总机递表(写 Ingress)。你的 show 里先查了 kube-system 确认没有现成总机(OrbStack 的 k3s 把自带的 Traefik 关了),再安装——这个"先查再动手"救了你一次。
+  </div>
+  <div class="en">
+    <div class="head">2 · THE PAPER AND THE SWITCHBOARD: INGRESS RESOURCE ≠ INGRESS CONTROLLER</div>
+    The number-one Ingress trap: <strong>an Ingress resource is just a routing table</strong> — a few lines of YAML ("/api → service api") — and someone must actually read it and forward traffic. That someone is the Ingress Controller (the ingress-nginx we installed).<br>
+    No controller, and a hundred routing tables sit unread. So the order is always: hire the operator first, then hand over the sheet. Today you checked kube-system and found no operator (OrbStack's k3s keeps its bundled Traefik switched off) — that "verify before assuming" check saved you once already.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">3 · Service 是标签契约,真身永远是 Pod IP:端口</div>
+    describe 里那一行 <code>/api  api:80 (192.168.194.21:5678)</code> 值得盯三秒:括号里是总机解析后的真实目的地——Pod IP + <strong>5678</strong>。5678 是 http-echo 容器自己监听的端口,不是 Service 的 80。Service 只是写在标签上的契约("app=api 的 Pod 都算我的人"),转发时走的是 Pod 的真地址。<br>
+    这也解释了当年僵尸 Pod 劫持事件:契约只认标签,不查户口。
+  </div>
+  <div class="en">
+    <div class="head">3 · A SERVICE IS A LABEL CONTRACT; THE BODY IS ALWAYS POD IP:PORT</div>
+    Give this describe line three seconds: <code>/api  api:80 (192.168.194.21:5678)</code> — the parenthesized part is the controller's resolved target: Pod IP plus <strong>5678</strong>, the port the http-echo container itself listens on, not the Service's 80. The Service is merely a contract written on labels ("every Pod with app=api is mine"); traffic rides on the Pod's true address.<br>
+    Which also explains the zombie-Pod hijack from before: the contract checks labels, never lineage.
+  </div>
+</div>
+
+<h2>二、今日一战 Today's Battle: `web-svc` NotFound, Twice</h2>
+<div class="h2sub">症状 → 根因 → 教训,数字说话 · Symptom → root cause → lesson, told with numbers</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">病状:删除命令报"找不到",连报两次</div>
+    清场第一步 <code>kubectl delete service web-svc</code> → <code>Error from server (NotFound)</code>,重跑一次,还是 NotFound。<br>
+    <strong>根因</strong>:这个 Service 在本场更早的时候已经被删过一次(当时命令输出没有贴出来)。两次 NotFound 不是两条错误,是同一个事实被复述了两次:目标状态早已达成。<br>
+    <strong>教训</strong>:删除类命令的 NotFound = "你要删的东西不在" = 结果已经正确,重启不了任何东西,重跑也安全(声明式工具不介意)。别追着命令的提示跑,<strong>相信终态查询</strong>——随后 <code>kubectl get pods,svc,ingress</code> 给出全图:2 Pod / 3 Service / 1 Ingress,干净收场。
+  </div>
+  <div class="en">
+    <div class="head">SYMPTOM: THE DELETE SAID "NOT FOUND" — TWICE</div>
+    First cleanup step: <code>kubectl delete service web-svc</code> → <code>Error from server (NotFound)</code>; re-run, NotFound again.<br>
+    <strong>Root cause</strong>: the Service had already been deleted earlier in this very session (that output was never pasted). Two NotFounds are not two errors — they restate one fact twice: the desired state was already achieved.<br>
+    <strong>Lesson</strong>: NotFound on delete means "the thing you want gone is gone" — the outcome is already correct, nothing restarts, re-running is safe (declarative tooling doesn't mind). Don't chase the command's message — <strong>trust the final-state query</strong>. The following <code>kubectl get pods,svc,ingress</code> drew the whole picture: 2 Pods / 3 Services / 1 Ingress, clean exit.
+  </div>
+</div>
+
+<h2>三、Today's English 今天遇到的英语</h2>
+<div class="h2sub">只收今天真实碰到的 · Drawn only from today's real encounters — click the right column to listen</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① describe — 描述;给对象调档案</div>
+    你今天亲自问的词。de(完全)+ scribe(写)= 完整写下来。同根一家:scribe 抄写员、prescribe 开处方、subscribe 订阅、script 脚本。<br>
+    命令语义:<code>kubectl get</code> 是点名册(几列摘要),<code>kubectl describe</code> 是人事档案(规格 + 状态 + 最近事件流水)。排障顺序永远是:get 发现不对劲 → describe 看 Events 找原因。
+  </div>
+  <div class="en">
+    <div class="head">① DESCRIBE</div>
+    The word you asked about yourself. De (fully) + scribe (write) = write it all down. One family: scribe, prescribe, subscribe, script.<br>
+    Command semantics: <code>kubectl get</code> is a roll-call table (a few summary columns); <code>kubectl describe</code> is the full HR file (spec + status + recent events). Troubleshooting order is fixed: get shows something off → describe reads the Events for why.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② ingress — 入口;进入</div>
+    动词 ingress = 进入(比 enter 更书面,常说 ingress of air 空气进入);名词 = 入口。网络语境里,ingress traffic = 入站流量,egress traffic = 出站流量(一对反义词,云账单和防火墙规则里天天见)。<br>
+    Kubernetes 把 "Ingress" 专名化为那个负责入站路由的对象——名字本身就是它的职责:管进来的人。
+  </div>
+  <div class="en">
+    <div class="head">② INGRESS</div>
+    As a verb, ingress = to enter (more formal than enter; "the ingress of air"). As a noun = an entrance. In networking: ingress traffic = inbound, egress traffic = outbound — a pair you meet daily in cloud billing and firewall rules.<br>
+    Kubernetes capitalized "Ingress" into the object responsible for inbound routing — the name IS the job: managing who comes in.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ endpoint — 端点;一条路由的终点</div>
+    end(终点)+ point(点)。在网络里,endpoint = 通信的另一头(一个 IP:端口就是一个 endpoint)。你的 describe 表里括号中 <code>192.168.194.21:5678</code> 就是一个 endpoint。<br>
+    k8s 里 Endpoints 对象是 Service 背后真实 Pod 地址的实时清单——Pod 增减,它跟着变。Service 是名字,Endpoints 是名单。
+  </div>
+  <div class="en">
+    <div class="head">③ ENDPOINT</div>
+    End + point. In networking, an endpoint is the far side of a connection — one IP:port. In your describe table, <code>192.168.194.21:5678</code> is one endpoint.<br>
+    In Kubernetes, the Endpoints object is the live roster of real Pod addresses behind a Service — Pods come and go, the roster follows. The Service is the name; Endpoints is the list.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">④ baremetal — 裸金属;没有云的机器</div>
+    你安装用的清单叫 <code>provider/baremetal/deploy.yaml</code>。bare = 裸的,metal = 金属(铁皮机器)。云圈用它讽刺性地区分:baremetal = 真实物理机(或本机集群),相对于跑在别人云平台上的机器。<br>
+    选这个清单的原因:它在我们的 OrbStack 集群上直接给 NodePort,不需要云厂商的负载均衡器——"没有云"的部署姿势。
+  </div>
+  <div class="en">
+    <div class="head">④ BAREMETAL</div>
+    The manifest you installed is <code>provider/baremetal/deploy.yaml</code>. Bare = naked, metal = the iron box. Cloud folks use it to distinguish: baremetal = a real physical box (or a local cluster), as opposed to machines running on someone else's cloud.<br>
+    That variant was the right pick because it hands out NodePorts directly on our OrbStack cluster — no cloud load balancer involved. Deployment for the "no cloud" world.
+  </div>
+</div>
+
+<h2>四、下次见 Next Time</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    阶段 0 关门了,骨架图(配置 → 负载 → 网络 → 入口)已经长全。下次 ops 进门,先补抽今天欠下的三题:ConfigMap 热冷、标签劫持、YAML 父级法则;然后决定阶段 1 从哪起跳——Linux 原语(cgroup/namespace)还是网络(iptables/DNS),两条都是 CKA 的地基。在那之前,agent 轨道是主场。
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    Phase 0 is closed; the skeleton map (configuration → workload → network → entry) now stands complete. Next ops session opens with the three owed quiz answers — ConfigMap hot/cold, label hijack, the YAML parent law — then we pick Phase 1's first jump: Linux primitives (cgroup/namespace) or networking (iptables/DNS). Both are CKA bedrock. Until then, the agent track is center stage.
+  </div>
+</div>
+
+<div class="note">
+  <strong>Day 6/730</strong> — 今天你立起了集群的大门,也把"从 curl 到容器"的四层图看全了。完整档案在 logs/0008-ingress-phase0-close.md。睡前点点右边的英文列,听三分钟今天的自己。
+</div>
+
+<footer>
+  Generated 2026-11-12 · ~/growth-plan/ops-engineer/reports/0007-report-2026-11-12.html<br>
+  Mirror bilingual: 中文 | English · One-page digest v2 · One report per day
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) {
+      return v.lang && v.lang.indexOf("en") === 0;
+    });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+
+    el.classList.add("speaking");
+    current = el;
+
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function () {};
+
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>
