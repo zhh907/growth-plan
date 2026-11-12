@@ -43,8 +43,10 @@
 ### Phase 1 — Unit 1: Multi-agent patterns, hand-rolled (decided 2026-11-11: orchestrator-critic first, framework choice deferred)
 
 - [x] 0006-orchestrator-critic.py hand-typed + accepted 3/3 papers (2026-11-12: A 3/3 VERIFIED / B short-circuit in=1179 / C FP eliminated by rubric fix, B regression clean; 1213 missing-return debug saga; critic-boundary finding: fact-check cannot catch rubric overreach; SURVIVED string-matching hazard logged, structured output queued)
-- [ ] Decide: run 0006 on real 700-line EA (~2× the 206K cost) or advance to next sub-pattern first
-- [ ] Next sub-patterns: parallel sub-agents + message routing (L2), structured output for critic verdicts (JSON schema)
+- [x] 0007-parallel-auditors.py hand-typed + accepted with known limitation (2026-11-12 eve: A 2/3 (rubric ambiguity #2) / C 1/1 + boundary-blindness FP; in=1472 = 53% cheaper than 0006; rubric #2 fixed (decidable question); global-map lesson delivered — user preference: whole map first, consolidate later)
+- [ ] 0008-fanout-critic.py: transcription + 3-paper acceptance (A VERIFIED / B short-circuit / C boundary FP REFUTED, SURVIVED 1 of 2) ← tonight
+- [ ] Structured output for critic verdicts (JSON schema — kills SURVIVED string-match hazard)
+- [ ] L3 dynamic routing / handoff; real-EA consolidation campaign after pattern tour (deferred by user preference)
 - [ ] Opening quiz standing items: tool protocol direction (assistant tool_use → user tool_result, matched by tool_use_id); critic defense boundary; SURVIVED string hazard
 
 Phase 1 remediation list (from final review): tool_use_id pairing · execute_tool/resolve_path boundary layers · max_tokens thinking+text pool · weekly 10-min log re-read.

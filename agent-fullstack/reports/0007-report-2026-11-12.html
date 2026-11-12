@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-12 Eve · Agent Full-Stack</title>
+<style>
+  :root {
+    --ink: #e8f2ec;
+    --ink-soft: #9dbcab;
+    --accent: #2dd4a7;
+    --accent-soft: #1f3a2f;
+    --warn: #fbbf24;
+    --ok: #34d399;
+    --line: #2a4a3c;
+    --bg: #12241c;
+    --card: #1a3328;
+    --code-bg: #0b1712;
+    --code-ink: #d7efe4;
+    --en-soft: #172e25;
+    --en-ink: #c4dccc;
+    --ok-bg: #14352a;
+    --speak-bg: #2a4636;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+    line-height: 1.9; font-size: 17px;
+    padding: 48px 40px 90px;
+  }
+  header { border-bottom: 4px solid var(--accent); padding-bottom: 26px; margin-bottom: 36px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; }
+  h1 { font-size: 34px; margin: 8px 0 6px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 15px; }
+
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); margin: 18px 0; }
+  .bi > div { padding: 20px 24px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 15.5px; color: var(--en-ink); }
+  .bi .head { font-weight: 800; font-size: 16.5px; margin-bottom: 10px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+
+  h2 { font-size: 25px; margin: 48px 0 8px; padding-left: 14px; border-left: 5px solid var(--accent); }
+  .h2sub { color: var(--ink-soft); font-size: 15px; margin-bottom: 14px; padding-left: 19px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 20px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .stat .num { font-size: 34px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 14px; color: var(--ink-soft); }
+
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; color: var(--code-ink); background: var(--code-bg); padding: 8px 11px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 4px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; background: var(--accent-soft); color: var(--accent); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+  .tag.ok { background: var(--ok-bg); color: var(--ok); }
+  .tag.warn { background: var(--speak-bg); color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; font-size: 15.5px; margin: 18px 0; }
+  footer { margin-top: 56px; color: var(--ink-soft); font-size: 14px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
+
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: var(--speak-bg) !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; color: #222; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Agent Full-Stack Track · Day 6 · Evening</div>
+  <h1>学习报告 Study Report — 2026-11-12 晚间场</h1>
+  <div class="meta">Session 9 · 你的 agent 学会了分头侦察,也第一次尝到了"各自为战"的代价 · Your agents learned to scout in parallel — and met the price of working in silos</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">-53%</div><div class="lbl">并联后输入成本下降<br>Input cost saved by parallel slicing</div></div>
+  <div class="stat"><div class="num">1</div><div class="lbl">新病种:边界盲区误报<br>A new disease: boundary blindness</div></div>
+  <div class="stat"><div class="num">2</div><div class="lbl">rubric 歧义,两次都已修复<br>Rubric ambiguities, both fixed</div></div>
+  <div class="stat"><div class="num">4</div><div class="lbl">今天真实遇到的英语<br>English met in the wild today</div></div>
+</div>
+
+<h2>一、今天的三个概念 Three Ideas, Told with Examples</h2>
+<div class="h2sub">每个概念配一个你熟悉的例子 · Each idea comes with an example you already know</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">1 · 上下文经济学:切开的文件,半价的账单</div>
+    整文件审一张 A 卷,输入 3150 tokens;切成三段、三个审计员各审各的,加起来只要 1472——<strong>半价</strong>。道理和你审计 700 行 EA 花了 206K 一样:账单跟着"每个模型要看多少东西"走。分段 = 分而治之的上下文管理,省的不只是时间,是真金白银的 token。<br>
+    而且每个小格子的审计员反而嘴严:看不见的就写 NOT JUDGEABLE,绝不编。视野小,废话少。
+  </div>
+  <div class="en">
+    <div class="head">1 · CONTEXT ECONOMICS: A SLICED FILE, A HALF-PRICE BILL</div>
+    One whole-file audit of paper A cost 3150 input tokens; sliced into three segments with three auditors, the total came to 1472 — <strong>half price</strong>. Same logic as your 700-line EA audit costing 206K: the bill follows "how much each model must look at". Slicing is divide-and-conquer for context — what you save is not just time, but real tokens.<br>
+    And each small-scope auditor keeps a tighter mouth: what it cannot see, it marks NOT JUDGEABLE — never invented. Small view, no filler.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">2 · 判卷标准(rubric):歧义是会被放大的</div>
+    rubric = 判卷标准,就是提示词里"什么算违规"的定义。今天它第二次咬人:checklist 写"no check for already-open orders",整文件审计员读成语义版(MaxTrades=5 不算拒绝),段审计员读成字面版(有上限就算有检查)——同一份代码,两种判罚。<br>
+    并联放大了这个伤害,因为三个独立上下文<strong>没有共享的判案先例</strong>。修法你已经会了:把"有没有检查"这种可以多种解读的问题,改写成"同类持仓已存在时,新信号还会不会成交"——只有一个答案的问题。<br>
+    和你写 EA 一个道理:开仓条件永远写成可判定的表达式,不写"趋势看起来不错"。
+  </div>
+  <div class="en">
+    <div class="head">2 · THE RUBRIC: AMBIGUITY GETS AMPLIFIED</div>
+    A rubric is the grading standard — the checklist's definition of "what counts as a violation". Today it bit for the second time: the checklist said "no check for already-open orders". The whole-file auditor read it semantically (a MaxTrades of 5 is no refusal); the segment auditor read it literally (a cap exists, so a check exists) — same code, opposite verdicts.<br>
+    Parallelism amplifies this, because three independent contexts <strong>share no case law</strong>. The fix you already know: turn "is there a check" (multiple readings) into "can a new signal still fire while a same-type position is open" (one answer).<br>
+    Same discipline as your EAs: entry conditions are decidable expressions, never "the trend looks decent".
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">3 · 边界盲区:看不见的,被当作不存在</div>
+    今天最贵的一课。C 卷里,段 1 <strong>看见了</strong> 20-23 行的 new-bar guard(防护真实存在);段 2 的格子从 26 行开始,它看不见那几行,于是写下"可见路径中无防护"并立案 [HIGH]。<strong>每个兵的视野都对,拼起来却是错案</strong>。扇入汇总只会数字符串,不会对质,假警报就出门了。<br>
+    解药已经设计好(今晚的 0008):请一个看<strong>全图</strong>的校验官回来,任何"防护缺失"的主张,先查全文件再判。三个信号员各盯一个品种,风控总监看全账户总表签字——兵要快,官要稳。
+  </div>
+  <div class="en">
+    <div class="head">3 · BOUNDARY BLINDNESS: WHAT YOU CANNOT SEE, YOU ASSUME AWAY</div>
+    Today's most expensive lesson. On paper C, segment 1 <strong>saw</strong> the new-bar guard at lines 20-23 (the protection is real); segment 2's slice starts at line 26 — it cannot see those lines, so it wrote "no guard in the visible path" and filed a HIGH finding. <strong>Every scout was honest about its own view, yet the merged verdict was wrong.</strong> The fan-in only counts strings; it cannot cross-examine, so the false alarm shipped.<br>
+    The antidote is already designed (tonight's 0008): bring back one whole-file critic — any claim of "missing protection" gets checked against the FULL file first. Three signal clerks each watch one symbol; the risk director signs off against the whole account. Scouts for speed, an officer for certainty.
+  </div>
+</div>
+
+<h2>二、今日一战 Today's Battle: The C-Paper False Positive</h2>
+<div class="h2sub">症状 → 根因 → 教训,数字说话 · Symptom → root cause → lesson, told with numbers</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">病状:防护明明在,却被判"无防护"</div>
+    C 卷切成三段(1-25 / 26-50 / 51-75)。ground truth 只有 1 个 seed:57 行 SL=0。<br>
+    结果:段 3 抓到 SL ✅(命中 1/1);但段 2 立案 "SAME-BAR [HIGH]",引用 28-31 行信号和 47-49 行 MaxTrades——<strong>立案理由是"可见路径无 guard"</strong>。可 guard 就在 20-23 行,归段 1 管;段 1 还专门引用了它并判"无 bug"。<br>
+    扇入拿到一对矛盾证词:段 1 说"防护存在",段 2 说"无防护"。exit 1,带假警报。根因不在模型不诚实——是<strong>判断所需的事实被切刀分到了两个格子里</strong>,谁都不完整。教训:并联的省钱是真的,盲区也是真的;两样都要记账。
+  </div>
+  <div class="en">
+    <div class="head">SYMPTOM: THE GUARD EXISTS, YET "NO GUARD" WAS FILED</div>
+    Paper C sliced into three segments (1-25 / 26-50 / 51-75). Ground truth: exactly one seed, SL=0 at line 57.<br>
+    Result: segment 3 caught the SL ✅ (1/1 hits); but segment 2 filed "SAME-BAR [HIGH]", citing the signal at 28-31 and the MaxTrades cap at 47-49 — <strong>on the grounds that "no guard exists in the visible path"</strong>. The guard sits at lines 20-23, inside segment 1's slice; segment 1 quoted it and correctly ruled "no bug".<br>
+    Fan-in received contradictory testimony: segment 1 says the guard exists, segment 2 says it doesn't. Exit 1, false alarm shipped. The root cause is not dishonesty — <strong>the facts needed for the judgment were split across two slices</strong>, and neither was complete. Lesson: parallel's savings are real, and so is its blindness; book both.
+  </div>
+</div>
+
+<h2>三、Today's English 今天遇到的英语</h2>
+<div class="h2sub">只收今天真实碰到的 · Drawn only from today's real encounters — click the right column to listen</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① rubric — 判卷标准</div>
+    你今天亲自问的词。/ˈruːbrɪk/,来自拉丁语 ruber(红色)——中世纪修道士用红墨水写章节指引,红字后来就成了"照着执行的标准"。<br>
+    高频搭配:<code>grading rubric</code> 评分细则、<code>tighten the rubric</code> 收紧判卷标准(你这两天的高频动作)。同根词:ruby 红宝石、rubella 风疹("小红病")。
+  </div>
+  <div class="en">
+    <div class="head">① RUBRIC</div>
+    The word you asked about yourself. /ˈruːbrɪk/, from Latin ruber (red) — medieval monks wrote chapter instructions in red ink, and the red letters became "the standard you follow".<br>
+    Frequent pairs: <code>grading rubric</code>; <code>tighten the rubric</code> — your most-repeated action these two days. Same root family: ruby, rubella ("little red" disease).
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② fan-out / fan-in — 扇出 / 扇入</div>
+    今天代码的主角。fan-out = 任务从一点散出去给多个工人;fan-in = 结果从多处收拢回一点。像折扇:从扇轴散开是 out,收拢回来是 in。<br>
+    <strong>用法</strong>:可作名词(a fan-out of 3 auditors)也可作动词(to fan out the work)。硬件圈的老词——一个输出接多个负载就叫 fan-out,软件圈借来描述任务分发。
+  </div>
+  <div class="en">
+    <div class="head">② FAN-OUT / FAN-IN</div>
+    Today's headline pair. Fan-out = tasks scattering from one point to many workers; fan-in = results converging from many back to one. Like a folding fan: opening from the pivot is out, closing back is in.<br>
+    <strong>Usage</strong>: works as a noun ("a fan-out of 3 auditors") and as a verb ("to fan out the work"). Old hardware term — one output driving many loads was called fan-out; software borrowed it for task distribution.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ wall-clock — 墙钟时间</div>
+    程序输出里的 <code>wall-clock=61.9s</code>:你手表真实走过的时间。它和"CPU 时间"相对——三个 agent 等 API 回包时,CPU 几乎在睡觉,但墙上的钟照走。并联优化的就是墙钟:61.9s ≈ 最慢的一段,而不是三段之和。<br>
+    <strong>记法</strong>:clock 挂在墙上,对所有人都一样公平地走——真实流逝的时间。
+  </div>
+  <div class="en">
+    <div class="head">③ WALL-CLOCK</div>
+    From today's output: <code>wall-clock=61.9s</code> — the time your watch actually measured. Contrast with "CPU time": while three agents wait for API replies, the CPU mostly sleeps, but the clock on the wall keeps walking. Parallelism optimizes wall-clock: 61.9s ≈ the slowest segment, not the sum of three.<br>
+    <strong>Memory hook</strong>: the clock on the wall ticks the same for everyone — real elapsed time.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">④ judgeable — 可判定的</div>
+    段审计员的口头禅 <code>NOT JUDGEABLE FROM SEGMENT</code>:仅凭我这一段,判不了。judge(判断)+ able(能够)——注意不是 judgable,judge 结尾的 e 保留后再加 -able。<br>
+    这个词今天立了大功:三段共 6 次 NOT JUDGEABLE,零编造。诚实的"我不知道",比自信的瞎猜值钱得多——这条对模型和人一样成立。
+  </div>
+  <div class="en">
+    <div class="head">④ JUDGEABLE</div>
+    The segment auditors' refrain: <code>NOT JUDGEABLE FROM SEGMENT</code> — "from my slice alone, I cannot rule". Judge + able — note the spelling: judgeable, the e survives before -able.<br>
+    This word earned its keep today: six NOT-JUDGEABLE verdicts across three segments, zero fabrication. An honest "I cannot tell" beats a confident guess — true for models and for people alike.
+  </div>
+</div>
+
+<h2>四、今晚见 Tonight</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    今晚敲 0008:三个侦察兵照旧并联出发,后头加一位看全图的校验官。验收仪式是 C 卷——那条边界盲区误报,应当被拿着 20-23 行原文的校验官当庭 REFUTED。敲完跑三张卷,今天的伤口就算缝上了。
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    Tonight you type 0008: three scouts fan out as usual, with one whole-file critic standing behind them. The acceptance ritual is paper C — today's boundary-blindness false positive should get REFUTED in open court by a critic holding the original lines 20-23. Three papers, and today's wound is stitched closed.
+  </div>
+</div>
+
+<div class="note">
+  <strong>Day 6/730 · 晚间场</strong> — 上午你合上了 L1,下午你打开了地图、跑通了 L2,还亲手撞见了并联的标志性代价。一天两种地形,这进度不叫拉了。完整档案在 logs/0009-l2-parallel-auditors.md。睡前点点右边的英文列,听三分钟今天的自己。
+</div>
+
+<footer>
+  Generated 2026-11-12 · ~/growth-plan/agent-fullstack/reports/0007-report-2026-11-12.html<br>
+  Mirror bilingual: 中文 | English · One-page digest v2 · Voice: warm teacher, example-first
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) {
+      return v.lang && v.lang.indexOf("en") === 0;
+    });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+
+    el.classList.add("speaking");
+    current = el;
+
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function () {};
+
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>
