@@ -22,7 +22,7 @@
 目标:能从宿主视角手造一个"容器",证明容器不是魔法。
 
 - [x] L1 进程:fork/exec、PID 1、进程树、/proc(2026-11-13 DONE,log 0009:docker stop 10.2s vs --init 0.2s;tini 双职责 = 转发信号 + 收僵尸;孤儿过继 PID 1 已验证;bash -c 末命令原地 exec 实证;PID 跳号之谜留给 L2)
-- [ ] L2 namespace:7 种隔离维度,重点 pid/net/mnt —— **下一步开课**;开场先解 PID 跳号之谜(6, 8/9 → ns_last_pid)
+- [ ] L2 namespace:7 种隔离维度,重点 pid/net/mnt —— **进行中(2026-11-13,log 0010)**:pid ✅ uts ✅ net ✅ + 两本账定律($$=1 vs /proc/self=34;ps lookup-self 崩溃);**断点 = L2 下半场:mnt namespace(接 overlayfs)+ user/cgroup 房间扫尾 + lsns/nsenter,然后进 L3**
 - [ ] L3 cgroup v2:CPU / 内存 / pids 限制
 - [ ] 收尾实验:unshare + chroot 手工造容器
 
@@ -31,6 +31,7 @@
 ### Quiz debts(下次开场重抽)
 
 - L1 三题(2026-11-13 抽考 0.5/3):CapEff/Seccomp 指纹;cgroup `0::/` 两段含义(0 = v2 统一层级 / 路径 = 树上位置);软限 vs 硬限(自抬软限只需 < 硬限)
+- L2 五题(log 0010):房间模型一句话;`unshare --pid` 为什么必须 `--fork`;ps `lookup self` 崩溃机理;`$$` vs `readlink /proc/self`;`--mount-proc` 顺带拉动了哪个 namespace
 - Service 三层端口:port(ClusterIP 虚拟端口)/ targetPort(容器端口)/ nodePort(节点端口)
 - Q5 补:describe 括号值 = Pod IP + 容器端口;5678 = targetPort 落地值
 - Q3 补:YAML 法则一原话 —— 父 = 上方第一个更浅的键
