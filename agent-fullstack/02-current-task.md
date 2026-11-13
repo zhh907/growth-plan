@@ -44,8 +44,9 @@
 
 - [x] 0006-orchestrator-critic.py hand-typed + accepted 3/3 papers (2026-11-12: A 3/3 VERIFIED / B short-circuit in=1179 / C FP eliminated by rubric fix, B regression clean; 1213 missing-return debug saga; critic-boundary finding: fact-check cannot catch rubric overreach; SURVIVED string-matching hazard logged, structured output queued)
 - [x] 0007-parallel-auditors.py hand-typed + accepted with known limitation (2026-11-12 eve: A 2/3 (rubric ambiguity #2) / C 1/1 + boundary-blindness FP; in=1472 = 53% cheaper than 0006; rubric #2 fixed (decidable question); global-map lesson delivered — user preference: whole map first, consolidate later)
-- [ ] 0008-fanout-critic.py: transcription + 3-paper acceptance (A VERIFIED / B short-circuit / C boundary FP REFUTED, SURVIVED 1 of 2) ← tonight
-- [ ] Structured output for critic verdicts (JSON schema — kills SURVIVED string-match hazard)
+- [x] 0008-fanout-critic.py: transcription + 3-paper acceptance (2026-11-13 DONE, log 0010: ritual PASS — C boundary FP refuted, SL verified; B 0/3 survived; A 4/4 verified; short-circuit falsified; format drift + model self-miscount detonated live → exit=2 ×3)
+- [ ] **Structured output for critic verdicts (JSON schema)** — now evidence-backed: kills format drift (3 shapes observed) AND model self-count errors (C: said 2, truth 1; A: said 3, truth 4) ← next
+- [ ] Deferred opener experiments: surgery 1 (comment out "search the WHOLE FILE first" clause → re-run C: instruction vs data?) + surgery 2 (fan-in via as_completed → observe order dependency)
 - [ ] L3 dynamic routing / handoff; real-EA consolidation campaign after pattern tour (deferred by user preference)
 - [ ] Opening quiz standing items: tool protocol direction (assistant tool_use → user tool_result, matched by tool_use_id); critic defense boundary; SURVIVED string hazard
 
