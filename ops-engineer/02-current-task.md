@@ -2,28 +2,37 @@
 
 > 打开这个文件夹先看这里。完成后把状态改成 DONE 并更新 00-roadmap.md 的勾选框。
 
-## Task: 启动本地 k8s 集群并跑通第一个应用 [阶段 0]
+## Task: 阶段 1 地基 —— Linux + 网络(CKA 导向)[Phase 1]
 
-**Status: DONE 2026-11-12(~11 weeks ahead of 2027-01-31 checkpoint)**
-**Started: 2026-11-07 · 收官:Ingress + 清场完成**
+**Status: IN PROGRESS — Unit 1 开课 2026-11-12(secondary track;agent 仍是主轨)**
+**Phase 0: DONE 2026-11-12(~11 weeks ahead of 2027-01-31 checkpoint)**
 
-### Checklist
+### 阶段 1 全局图
 
-- [x] 1. 启动集群:`orbctl start k8s`(2026-11-08;集群实际创建于 ~310 天前,本次为唤醒)
-- [x] 2. 验证:`kubectl get nodes` → orbstack Ready, v1.36.5 (2026-11-08)
-- [x] 3. 认识第一个对象:first-pod(nginx)完整生命周期 create→Running→exec 自证→delete(2026-11-08)
-  - [x] 附:3 个追问对答案 CLOSED(2026-11-08:容器住在 OrbStack 的 k3s VM / Events=追加式事件日志 / Pod IP=cni0 内网,Mac curl 超时不可达)
-- [x] 4. 部署第一个 Deployment + Service,浏览器访问(2026-11-08 完成:自愈演示验证 endpoints .15→.16 替换;localhost:30080 通;附带破案 .orbholder = kubernetes service .129)
-- [x] 5. 滚动更新与回滚练习(2026-11-08 完成:watch 抓到"先 Ready 再杀旧"全程;坏镜像发布 44s 卡死期间 curl 不断流;undo 后 AGE 证明旧 RS 零牺牲;发现 config drift:undo 不回滚 yaml 文件)
-- [x] 6.(新增 2026-11-08)Docker 基础单元,见 00-roadmap.md 阶段 0 新条目;拿现成 Tomcat 容器当教材
-  - [x] L1 镜像分层 + 容器=进程(2026-11-09:smartpeak 581MB 千层饼考古;PID 381 vs PID 1 双视角;k8s Pod 在 docker ps 同框;开场抽考 2.5/4 创新高)
-  - [x] L2 容器网络 + volume + Compose(2026-11-09 完成:bridge=vswitch/192.168.215 段;OrbStack 主进程持有全部 -p 端口,非 pstub;容器 IP 秒通而 Pod IP 被 VPN 大路由截胡进黑洞——netstat 验尸;volume 三部曲生死对照;compose 自动建网+按名 DNS;depends_on 顺序≠就绪;3 个报错全自修。开场抽考 1.5/4,错题 4 道待重抽。实验现场保留:compose 栈 18095 + l2-web 18080 + l2-data)
-- [x] 7. 阶段 0 收尾:ConfigMap/Ingress + 多服务应用部署 ← **DONE 2026-11-12**
-  - [x] ConfigMap 单元(2026-11-10:env/volume 双路注入 + ..data symlink 原子换指针 + 热/冷对照实验)
-  - [x] yaml 结构专题课(用户主动叫停抄写:3 积木 + 2 阅读法则;8 病灶 debug 大戏横跨 yaml/k8s-schema/nginx-conf 三层,详见 log 0007)
-  - [x] 多服务应用验收(2026-11-12:`/` → web frontend OK,`/api` → hello from api v1,6 站链路全绿)
-  - [x] Ingress(2026-11-12:k3s 无 Traefik 验证 → 装 ingress-nginx 1.11.3,NodePort 32600;0004-ingress.yaml 路径分流 `/api`→api、`/`→web;describe 读出 endpoint 解析 Pod IP:5678)
-  - [x] 清场(web-svc 已不存在、cm-dome 已删;保留 web:30081 作 NodePort vs Ingress 对照实物;Docker 实验残留决定仍挂账:compose 18095 / l2-web 18080 / l2-data 卷)
+两条腿 + 一个靶子:
+
+- **腿 A · Linux 主机视角**:进程与隔离 / cgroup / systemd / 文件系统与 overlayfs / 性能分析
+- **腿 B · 网络**:TCP/IP 与状态机 / DNS / iptables(DNAT,即 kube-proxy 真身)/ tcpdump
+- **靶子:CKA**(2027-06-30 硬里程碑,全英文)
+
+已见 k8s 抽象 → 底层原语:Pod 网络 = pause + netns;limits = cgroup;Service = iptables DNAT;镜像分层 = overlayfs。
+
+### Unit 1 — Linux 隔离三件套:进程 / namespace / cgroup
+
+目标:能从宿主视角手造一个"容器",证明容器不是魔法。
+
+- [ ] L1 进程:fork/exec、PID 1、进程树、/proc —— **进行中(2026-11-13)**:已讲进程树 + /proc 四入口(status 的 CapEff/Seccomp 指纹、ns inode、cgroup 0::/、limits 软硬);**断点 = 实验 3(PID 1 信号特权,`docker run sleep 1000` vs `--init` 对照 `time docker stop`)**
+- [ ] L2 namespace:7 种隔离维度,重点 pid/net/mnt
+- [ ] L3 cgroup v2:CPU / 内存 / pids 限制
+- [ ] 收尾实验:unshare + chroot 手工造容器
+
+实验台(`docker run --rm -it --privileged ubuntu:24.04 bash`);macOS 本机没有 Linux namespace/cgroup,这是第一课要建立的边界感。
+
+### Quiz debts(下次开场重抽)
+
+- Service 三层端口:port(ClusterIP 虚拟端口)/ targetPort(容器端口)/ nodePort(节点端口)
+- Q5 补:describe 括号值 = Pod IP + 容器端口;5678 = targetPort 落地值
+- Q3 补:YAML 法则一原话 —— 父 = 上方第一个更浅的键
 
 ### Notes
 
