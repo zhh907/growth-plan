@@ -22,7 +22,7 @@
 目标:能从宿主视角手造一个"容器",证明容器不是魔法。
 
 - [x] L1 进程:fork/exec、PID 1、进程树、/proc(2026-11-13 DONE,log 0009:docker stop 10.2s vs --init 0.2s;tini 双职责 = 转发信号 + 收僵尸;孤儿过继 PID 1 已验证;bash -c 末命令原地 exec 实证;PID 跳号之谜留给 L2)
-- [ ] L2 namespace:7 种隔离维度,重点 pid/net/mnt —— **进行中(2026-11-13,log 0010+0011)**:pid ✅ uts ✅ net ✅ mnt ✅ overlay 解码 ✅;两本账模型返工重砌(纸面验收 0.5/1,**未干透**);**断点 = ①开场先纸面复验两本账 ②补跑 nsenter/lsns 实验 ③收 L2 进 L3**
+- [x] L2 namespace **CLOSED 2026-11-17(log 0014)**:pid ✅ uts ✅ net ✅ mnt ✅ overlay ✅ 两本账 ✅(4 天后纸面复验 0.5/3 → 4 句重砌 → 新增一层:--mount-proc 后旧账楼内不可见 → docker top 映射题 3/3)nsenter/lsns ✅(sleep 双号实证:楼外 20 / 楼内 5;钥匙用旧账、进门看新账;= docker exec 真身)
 - [ ] L3 cgroup v2:CPU / 内存 / pids 限制
 - [ ] 收尾实验:unshare + chroot 手工造容器
 
