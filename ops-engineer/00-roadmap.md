@@ -27,7 +27,7 @@ AI 时代"会执行命令"不值钱,"知道系统为什么坏、坏了怎么办�
 - [ ] CI/CD:GitLab CI 或 GitHub Actions
 - [ ] GitOps:ArgoCD
 - [ ] IaC:Terraform + Ansible
-- [ ] 实战项目:把自己的量化/EA 相关服务部署上 k8s,做完整交付流水线
+- [ ] 实战项目:把自己的量化服务部署上 k8s,做完整交付流水线
 
 ### 阶段 3:可观测性 + 稳定性(2027 Q4 ~ 2028 Q1)
 - [ ] Prometheus + Grafana + Loki 全套监控告警
