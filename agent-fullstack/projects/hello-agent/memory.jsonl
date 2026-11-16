@@ -1,0 +1,2 @@
+{"file": "fixtures/case_a.py", "id": "F1", "verdict": "VERIFIED", "lines": [7, 8, 9], "date": "2026-11-17"}
+{"file": "fixtures/case_a.py", "id": "F2", "verdict": "VERIFIED", "lines": [15, 16, 17], "date": "2026-11-17"}
