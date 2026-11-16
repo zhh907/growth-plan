@@ -16,11 +16,13 @@ The moat is not calling APIs — it's designing reliable agent systems (context 
 ### Phase 0: Agent fundamentals (2026-11 ~ 2027-01) — **DONE 2026-11-11, ~7 weeks early**
 - [x] LLM API basics: chat completions, streaming, structured output (prompt caching OBSERVED live in=28; systematic catch-up queued to Phase 1)
 - [x] Tool use / function calling from first principles (0003 saga + 0005 wired loop)
-- [x] Build a single-agent CLI tool: MQL4 analyzer (0005) — audited a production EA + eval suite 4/4 hits (evals/, session 0007)
+- [x] Build a single-agent CLI tool (0005) — audited a real production source file + eval suite 4/4 hits (evals/, session 0007)
 - [x] Understand context window economics: 206K-token audit post-mortem, thinking+text budget pool, cost ∝ file size × rounds
 - Final review 2026-11-11: deliverables PASS (checkpoint exceeded); cognitive gaps logged for Phase 1 remediation: execute_tool/resolve_path boundary layers, tool_use_id pairing (3× blank), max_tokens budget pool, artifact retention (weekly 10-min log re-read prescribed).
 
 ### Phase 1: Agent engineering (2027 Q1 ~ Q2)
+
+> **Case language (2026-11-13, user directive): Python only.** Knowledge map lives in `03-knowledge-checklist.md` (map, not schedule — learning is question-driven).
 - [ ] Multi-agent patterns: orchestrator, handoff, critic loops
 - [ ] RAG: embeddings, vector DB (pgvector/Qdrant), chunking strategies, eval
 - [ ] Memory systems: short-term vs long-term, file-based memory design

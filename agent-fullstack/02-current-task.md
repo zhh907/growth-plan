@@ -8,6 +8,8 @@
 **Status: IN PROGRESS — Unit 1 (multi-agent, hand-rolled) first artifact DONE**
 **Phase 0: DONE 2026-11-11 (7 weeks early; see below)**
 
+> **CASE LANGUAGE (2026-11-13, user directive): Python only.** EA/MQL4 is removed from all learning cases — no EA files, no EA prompts, no EA evals going forward. 0005–0008 stay as historical record; every new artifact from 0009 onward uses Python fixtures.
+
 ### Step 1 — Language: **Python (decided 2026-11-07)**
 
 > Rationale: it's your main-job language — zero ramp-up, agent ecosystem (LangGraph, Claude Agent SDK, OpenAI SDK) is Python-first. Frontend (main-job skill) covers the UI side in Phase 2; Java background helps when reading orchestration patterns.
@@ -36,7 +38,7 @@
 - [x] Wire both tools + analyzer prompt; findings output (2026-11-10 PASSED: audited real EA 悦鹤_均线逆势马丁_双边对冲_v2.mq4 — VERDICT 2/3 hits + 0 false positives, in=206020 out=7828; 7-bug debug saga + thinking/max_tokens/UTF-16 lessons in log 0006)
 - [x] Evals (2026-11-11 PASSED: 3 papers + answer key; **hit rate 4/4, FP 1 known-issue** — lot-control rubric ambiguity (objective normalize vs subjective risk-sizing); control group B = 0 FP; error-input robustness ×2; decision: accept & record)
 - [x] Ship + final review (2026-11-11: README.md shipped; final review teach-back — deliverables PASS, 4 cognitive gaps logged → Phase 1 remediation)
-- [x] (queued) B1 tool hardening: UTF-16 BOM sniffing; prompt caching catch-up; lot-control rubric tightening + B/C regression re-run → carried into Phase 1 polish queue
+- [x] (queued) B1 tool hardening: prompt caching catch-up; rubric tightening + regression re-run → carried into Phase 1 polish queue. (UTF-16 BOM sniffing dropped 2026-11-13 — artifact of EA files; Python fixtures are UTF-8.)
 
 ### Phase 0 CLOSED 2026-11-11 (~7 weeks ahead of 2026-12-31 checkpoint)
 
@@ -45,9 +47,9 @@
 - [x] 0006-orchestrator-critic.py hand-typed + accepted 3/3 papers (2026-11-12: A 3/3 VERIFIED / B short-circuit in=1179 / C FP eliminated by rubric fix, B regression clean; 1213 missing-return debug saga; critic-boundary finding: fact-check cannot catch rubric overreach; SURVIVED string-matching hazard logged, structured output queued)
 - [x] 0007-parallel-auditors.py hand-typed + accepted with known limitation (2026-11-12 eve: A 2/3 (rubric ambiguity #2) / C 1/1 + boundary-blindness FP; in=1472 = 53% cheaper than 0006; rubric #2 fixed (decidable question); global-map lesson delivered — user preference: whole map first, consolidate later)
 - [x] 0008-fanout-critic.py: transcription + 3-paper acceptance (2026-11-13 DONE, log 0010: ritual PASS — C boundary FP refuted, SL verified; B 0/3 survived; A 4/4 verified; short-circuit falsified; format drift + model self-miscount detonated live → exit=2 ×3)
-- [ ] **Structured output for critic verdicts (JSON schema)** — now evidence-backed: kills format drift (3 shapes observed) AND model self-count errors (C: said 2, truth 1; A: said 3, truth 4) ← next
+- [ ] **Structured output for critic verdicts (JSON schema)** — now evidence-backed: kills format drift (3 shapes observed) AND model self-count errors (C: said 2, truth 1; A: said 3, truth 4). **Rebuilt on Python fixtures (seeded-bug .py files), not the old .mq4 samples** ← next
 - [ ] Deferred opener experiments: surgery 1 (comment out "search the WHOLE FILE first" clause → re-run C: instruction vs data?) + surgery 2 (fan-in via as_completed → observe order dependency)
-- [ ] L3 dynamic routing / handoff; real-EA consolidation campaign after pattern tour (deferred by user preference)
+- [ ] L3 dynamic routing / handoff; real-codebase consolidation campaign (Python) after pattern tour (deferred by user preference)
 - [ ] Opening quiz standing items: tool protocol direction (assistant tool_use → user tool_result, matched by tool_use_id); critic defense boundary; SURVIVED string hazard
 
 Phase 1 remediation list (from final review): tool_use_id pairing · execute_tool/resolve_path boundary layers · max_tokens thinking+text pool · weekly 10-min log re-read.

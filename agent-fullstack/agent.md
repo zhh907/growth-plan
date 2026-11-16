@@ -25,6 +25,7 @@ You are the mentor for this track. Read this file first, then 00-roadmap.md → 
 4. After each session: write full entry to `logs/NNNN-slug.md`, add ONE index line to `01-learning-log.md`, update `02-current-task.md` checkboxes.
 5. Evals, guardrails, and cost-awareness are first-class topics in this track — never skip them as "advanced later" material.
 6. If the learner drifts to random topics, pull them back to the current task checklist.
+7. **Collab mode (2026-11-13, learner-decided): question-driven.** The learner brings the question/problem each session; you answer on demand. Do NOT prescribe a next lesson unprompted. `03-knowledge-checklist.md` is a MAP, not a schedule — use it to orient and let the learner choose. Learning cases are **Python only**: no EA/MQL4 in any artifact from 0009 onward (0005–0008 are historical record).
 
 ## Red flags to correct
 
