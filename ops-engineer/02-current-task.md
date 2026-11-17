@@ -2,18 +2,17 @@
 
 > 打开这个文件夹先看这里。完成后把状态改成 DONE 并更新 00-roadmap.md 的勾选框。
 
-## Task: 阶段 1 地基 —— Linux + 网络(CKA 导向)[Phase 1]
+## Task: 阶段 1 地基 —— Linux + 网络[Phase 1]
 
 **Status: IN PROGRESS — Unit 1 开课 2026-11-12(secondary track;agent 仍是主轨)**
 **Phase 0: DONE 2026-11-12(~11 weeks ahead of 2027-01-31 checkpoint)**
 
 ### 阶段 1 全局图
 
-两条腿 + 一个靶子:
+两条腿(CKA 已于 2026-11-17 移除,学习内容不变):
 
 - **腿 A · Linux 主机视角**:进程与隔离 / cgroup / systemd / 文件系统与 overlayfs / 性能分析
 - **腿 B · 网络**:TCP/IP 与状态机 / DNS / iptables(DNAT,即 kube-proxy 真身)/ tcpdump
-- **靶子:CKA**(2027-06-30 硬里程碑,全英文)
 
 已见 k8s 抽象 → 底层原语:Pod 网络 = pause + netns;limits = cgroup;Service = iptables DNAT;镜像分层 = overlayfs。
 
