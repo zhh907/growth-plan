@@ -24,7 +24,8 @@
 - [x] L1 进程:fork/exec、PID 1、进程树、/proc(2026-11-13 DONE,log 0009:docker stop 10.2s vs --init 0.2s;tini 双职责 = 转发信号 + 收僵尸;孤儿过继 PID 1 已验证;bash -c 末命令原地 exec 实证;PID 跳号之谜留给 L2)
 - [x] L2 namespace **CLOSED 2026-11-17(log 0014)**:pid ✅ uts ✅ net ✅ mnt ✅ overlay ✅ 两本账 ✅(4 天后纸面复验 0.5/3 → 4 句重砌 → 新增一层:--mount-proc 后旧账楼内不可见 → docker top 映射题 3/3)nsenter/lsns ✅(sleep 双号实证:楼外 20 / 楼内 5;钥匙用旧账、进门看新账;= docker exec 真身)
 - [ ] L3 cgroup v2:CPU / 内存 / pids 限制(2026-11-17 开课,log 0015:树/旋钮已读,`0::/` 两本账回马枪;pids.max 实验撞 subtree_control 墙,根因已定位 = v2 控制器自上而下下放,恢复点 = `echo +pids > cgroup.subtree_control`;另欠 `docker ps` 认容器真名)
-- [ ] 收尾实验:unshare + chroot 手工造容器
+- [x] 收尾实验:unshare + chroot 手工造容器(2026-11-17 DONE,log 0016:三根柱子墙/账/地板亲手拼齐,$$ = /proc/self = 7 两本账对齐;--mount-proc 记账在旧树路径的坑实证;pivot_root 加固与 cgroup 电表接线留作后续)
+- [ ] L3 收尾欠账:1) cgroup.procs 写入 EOPNOTSUPP 之谜(判别实验备好未跑,log 0015 恢复点);2) pids.max fork 被拒实操;3) 手工容器接上电表(把进程搬进 cgroup)
 
 实验台(`docker run --rm -it --privileged ubuntu:24.04 bash`);macOS 本机没有 Linux namespace/cgroup,这是第一课要建立的边界感。
 

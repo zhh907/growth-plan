@@ -24,12 +24,28 @@ Evidence gathered:
 - Root cause: cgroup v2 **top-down controller enablement** — parent must `echo +pids > cgroup.subtree_control` before children grow pids.max. Root's `cgroup.controllers` shows `cpuset cpu io memory pids` available.
 - Container identity loose end: `docker inspect ops-lab` → no such object; this container has another name (`docker ps` pending). Possibly not `--privileged`.
 
-## 4. Resume point (next session)
+## 4. Resume point (updated 2026-11-17 eve)
 
-1. Mac: `docker ps` → real container name; `docker inspect <name> --format '{{.HostConfig.Privileged}}'`.
-2. Container: `echo +pids > /sys/fs/cgroup/cgroup.subtree_control` → `ls test/` → expect pids.max to appear.
-3. If subtree_control write denied → re-open a fresh `--rm --privileged` container and redo (cgroup state dies with container — same lesson as tmpfs).
-4. Then the pids.max hands-on: limit 10, move self in (`echo $$ > cgroup.procs`), watch fork get refused (EAGAIN).
+Progress since first draft: fresh `--rm -it --privileged` container opened; `echo +pids > /sys/fs/cgroup/cgroup.subtree_control` SUCCEEDED → `pids.max/pids.current/pids.events` GREW in test/ (top-down enablement verified live; enabling on a process-occupied ns-root works because ns-root is exempt from no-internal-process).
+
+NEW WALL (experiment parked by learner): `echo $$ > test/cgroup.procs` AND `echo <sleep-pid> >` both → **Operation not supported** (EOPNOTSUPP, not EACCES — permission passed). Hypothesis "PID 1 restricted" FALSIFIED by moving sleep (PID 13) instead — same error. Remaining suspects: (a) test/cgroup.type threaded, (b) no-internal-process corollary — processes in a group with enabled subtree_control are barred from migrating. Discriminating commands prepared (toggle -pids, retry write, re-enable) — NOT RUN.
+
+1. Container: `cat /sys/fs/cgroup/test/cgroup.type`, then toggle experiment above.
+2. Then pids.max hands-on: limit 10, move process in, watch fork EAGAIN.
+
+## 5. Concept layer completed (same day, lab-free)
+
+Three knobs, three death styles (paper quiz 1.5/2 — exit code 137 and "throttle recovers next period" filled in):
+
+- **memory.max** = execution: OOM kill picks the fattest process in group, SIGKILL (137 = 128+9, uncatchable even by PID 1 — L1 callback); `memory.oom.group=1` → whole group dies (k8s Pod kill).
+- **cpu.max** = throttle: `200000 100000` = 200ms CPU per 100ms period (2 cores); over quota → hung until next period, ALIVE, reversible; `cpu.stat nr_throttled` = evidence.
+- **pids.max** = refused birth: fork returns EAGAIN; existing processes untouched; fork-bomb defense.
+
+Soft/hard isomorphism (L1 rlimit debt PAID): memory.high = soft (frantic reclaim, slow, swap — misery not death) vs memory.max = hard (kill). cpu.weight (1–10000, default 100) = cake-share weight, no cap; cpu.max = cap.
+
+k8s mapping: limits.memory→memory.max / limits.cpu→cpu.max / requests.cpu→cpu.weight.
+
+L3 concept layer DONE. Remaining: hands-on (resume point §4) + capstone hand-built container.
 
 ## Re-quiz seeds
 
