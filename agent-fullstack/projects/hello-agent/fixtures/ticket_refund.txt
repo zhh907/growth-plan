@@ -1,0 +1,15 @@
+工单 #1024(客户投诉)
+客户:付款三天了,一直没发货,要求处理。
+联系方式:客户 138****,会员等级 VIP。
+
+—— 订单系统快照(权威数据,以这份数据为准)——
+{
+  "order_id": "A-1024",
+  "paid": true,
+  "amount": 399.00,
+  "payment_time": "2026-11-14 10:22:00",
+  "stock_of_item": 0,
+  "shipped": false,
+  "warehouse": "SH-2",
+  "refund_issued": false
+}

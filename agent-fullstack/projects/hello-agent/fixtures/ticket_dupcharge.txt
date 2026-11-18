@@ -1,0 +1,14 @@
+工单 #2048(客户投诉)
+客户:这个月同一笔订单被扣了两次钱,多扣的 399 块必须退。
+
+—— 订单系统快照(权威数据,以这份数据为准)——
+{
+  "order_id": "B-2048",
+  "payments": [
+    {"tx": "P1", "time": "2026-11-15 09:00:00", "amount": 399.00, "status": "SUCCESS"},
+    {"tx": "P2", "time": "2026-11-15 09:00:01", "amount": 399.00, "status": "SUCCESS"}
+  ],
+  "order_amount": 399.00,
+  "shipped": true,
+  "stock_of_item": 15
+}
