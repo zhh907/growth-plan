@@ -51,7 +51,9 @@
 - [ ] Deferred opener experiments: surgery 1 (comment out "search the WHOLE FILE first" clause → re-run C: instruction vs data?) + surgery 2 (fan-in via as_completed → observe order dependency)
 - [x] Memory systems unit (0011-memory-agent.py, log 0013): store/retrieve/inject loop on 0009 stack; learner spotted unbounded-append flaw → upsert fix (+ self-heal: poison survives one run); poison experiment model kept VERIFIED (borderline drift test queued as optional)
 - [x] 0012-routing-agent.py:动态路由(2026-11-17 DONE,log 0014:3/3 路由正确;路由=分类+查配置表;explain 1024 截断=thinking+text 共享池实爆→每科预算+stop_reason 报警;手搓 dotenv 被引号坑→标准 load_dotenv;handoff 未做,留作下一课)
-- [ ] handoff(带上下文交接)或 supervisor-worker;real-codebase consolidation campaign(Python)after pattern tour
+- [x] 0013-handoff-agent.py:交接(2026-11-18 DONE,log 0015:两条路径首跑全通;交接单=导读 hints-not-authority + 原工单=档案,logistics 引用交接单里没有的字段证明真复核了;tool_choice any vs auto vs tool 三档;接力税 4×;跨运行缓存命中 256)——**多智能体拓扑 tour 完成**
+- [ ] RAG 单元:L1~L4 DONE(L1 纸面玩具 log 0015 前;L2 embedding 检索 log 0016;L3 chunking 闭环 log 0017;L4 recall@k 评估+参数扫描+干扰轮 log 0018)。剩:向量库(pgvector/Qdrant)⬜、precision@k/注入成本指标🟡 — RAG 主线知识面基本走完
+- [ ] supervisor-worker / debate(选学);real-codebase consolidation campaign(Python)
 - [ ] Opening quiz standing items: tool protocol direction (assistant tool_use → user tool_result, matched by tool_use_id); critic defense boundary; SURVIVED string hazard
 
 Phase 1 remediation list (from final review): tool_use_id pairing · execute_tool/resolve_path boundary layers · max_tokens thinking+text pool · weekly 10-min log re-read.
