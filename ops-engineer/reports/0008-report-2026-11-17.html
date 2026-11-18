@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-17 · Ops Engineer</title>
+<style>
+  :root {
+    --ink: #e8f2ec;
+    --ink-soft: #9dbcab;
+    --accent: #2dd4a7;
+    --accent-soft: #1f3a2f;
+    --warn: #fbbf24;
+    --ok: #34d399;
+    --line: #2a4a3c;
+    --bg: #12241c;
+    --card: #1a3328;
+    --code-bg: #0b1712;
+    --code-ink: #d7efe4;
+    --en-soft: #172e25;
+    --en-ink: #c4dccc;
+    --ok-bg: #14352a;
+    --speak-bg: #2a4636;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+    line-height: 1.9; font-size: 17px;
+    padding: 48px 40px 90px;
+  }
+  header { border-bottom: 4px solid var(--accent); padding-bottom: 26px; margin-bottom: 36px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; }
+  h1 { font-size: 34px; margin: 8px 0 6px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 15px; }
+
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); margin: 18px 0; }
+  .bi > div { padding: 20px 24px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 15.5px; color: var(--en-ink); }
+  .bi .head { font-weight: 800; font-size: 16.5px; margin-bottom: 10px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+
+  h2 { font-size: 25px; margin: 48px 0 8px; padding-left: 14px; border-left: 5px solid var(--accent); }
+  .h2sub { color: var(--ink-soft); font-size: 15px; margin-bottom: 14px; padding-left: 19px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 20px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .stat .num { font-size: 34px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 14px; color: var(--ink-soft); }
+
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; color: var(--code-ink); background: var(--code-bg); padding: 8px 11px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 4px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; background: var(--accent-soft); color: var(--accent); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+  .tag.ok { background: var(--ok-bg); color: var(--ok); }
+  .tag.warn { background: var(--speak-bg); color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; font-size: 15.5px; margin: 18px 0; }
+  footer { margin-top: 56px; color: var(--ink-soft); font-size: 14px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
+
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: var(--speak-bg) !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; color: #222; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Ops Engineer Track · Day 11</div>
+  <h1>学习报告 Study Report — 2026-11-17</h1>
+  <div class="meta">L3 cgroup 开课 + chroot 收尾 · 一行命令亲手造出容器,两本账第一次对齐 · cgroup opens, chroot closes, and a container built by hand</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">7=7</div><div class="lbl">$$ 与 /proc/self 首次同数<br>Two ledgers aligned at last</div></div>
+  <div class="stat"><div class="num">3</div><div class="lbl">亲手装齐的柱子:墙/账/地板<br>Pillars assembled by hand</div></div>
+  <div class="stat"><div class="num">137</div><div class="lbl">OOM 的退出码 = 128+9<br>The OOM exit code</div></div>
+  <div class="stat"><div class="num">2</div><div class="lbl">今天踩中的经典坑<br>Classic traps hit today</div></div>
+</div>
+
+<h2>一、今天的五个概念 Five Ideas, Told with Examples</h2>
+<div class="h2sub">每个概念配一个你熟悉的例子 · Each idea comes with an example you already know</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">1 · cgroup = 电表:三种超限,三种死法</div>
+    namespace 是墙(决定看得见什么),cgroup 是表(决定用得多少)。三种资源超限,后果完全不同:内存超限 <strong>处决</strong>(OOM kill,SIGKILL,退出码 137);CPU 超限 <strong>掐表</strong>(挂起等下个周期,卡而不死,可逆);进程数超限 <strong>拒生</strong>(fork 直接报错,已有的不杀)。<code>limits.memory</code> <code>limits.cpu</code> 写的 yaml,最后都落到这三个文件上。
+  </div>
+  <div class="en">
+    <div class="head">1 · CGROUP = THE METERS: THREE RESOURCES, THREE DEATHS</div>
+    Namespace is the wall (what you can see); cgroup is the meter (how much you may use). Three resources, three different deaths: memory over limit is <strong>execution</strong> (OOM kill, SIGKILL, exit code 137); CPU over quota is <strong>throttling</strong> (suspended till next period — slow, not dead, reversible); process count over pids.max is <strong>refused birth</strong> (fork returns an error, existing processes untouched). The <code>limits.memory</code> and <code>limits.cpu</code> lines in your yaml all land on these files.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">2 · 旋钮不是自带的:父组下放才长出来</div>
+    你 mkdir 了子组,里面却没有 pids.max——不是权限问题,是 <strong>cgroup v2 的控制器要父组在 subtree_control 里签发</strong>,子组才长出对应旋钮文件。<code>echo +pids > cgroup.subtree_control</code> 一敲,test/ 里立刻长出 pids.max。<strong>像分行开权限:总行不授权,支行办不了这项业务。</strong>
+  </div>
+  <div class="en">
+    <div class="head">2 · KNOBS ARE NOT BUILT-IN: PARENT MUST DELEGATE</div>
+    You mkdir'd a child group and found no pids.max inside — not a permission problem, but the cgroup v2 rule: <strong>the parent must enable the controller in subtree_control</strong> before the child grows those knob files. One <code>echo +pids > cgroup.subtree_control</code>, and pids.max appeared in test/. <strong>Like a bank branch: without headquarters' authorization, the branch cannot offer that service.</strong>
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">3 · chroot = 换地板,墙和账都不动</div>
+    chroot 进毛坯目录后,<code>$$ = 54</code> 还是原来的号码——<strong>地板换了,PID 楼没换</strong>。而且毛坯房里连 bash 都没有:得把 bash、它依赖的动态库(ldd 列出的那些)、还有加载器 ld-linux 一起搬进去。bash 明明在,却报 "No such file or directory"——那说的不是 bash,是<strong>加载器</strong>。这个报错今天骗到你一次,以后骗不到了。
+  </div>
+  <div class="en">
+    <div class="head">3 · CHROOT = NEW FLOOR; WALLS AND LEDGER UNTOUCHED</div>
+    After chroot into the bare directory, <code>$$ = 54</code> — the old number, because <strong>the floor changed, the PID building did not</strong>. And the bare room has no bash: you must carry in bash, its shared libraries (the ones ldd lists), and the loader ld-linux. "No such file or directory" while bash clearly exists — the message is about the <strong>loader</strong>, not bash. It fooled you once today; it won't fool you again.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">4 · 容器 = 墙 + 账 + 地板,三柱亲手装齐</div>
+    最终形态三行:<code>unshare --pid --fork --mount</code> 砌墙,<code>mount -t proc proc /myroot/proc</code> 记账,<code>chroot /myroot</code> 换地板。进去后 <code>$$ = 7</code>,<code>/proc/self</code> 也是 7——<strong>两本账第一次完全一致</strong>。为什么是 7 不是 1?因为 1 号是托住房间的门外 bash,你脚下这个是它的后代。docker run 拆到底,就是这三件事加自动化。
+  </div>
+  <div class="en">
+    <div class="head">4 · A CONTAINER = WALLS + LEDGER + FLOOR, ALL BY HAND</div>
+    The final form is three lines: <code>unshare --pid --fork --mount</code> raises the walls, <code>mount -t proc proc /myroot/proc</code> keeps the ledger, <code>chroot /myroot</code> swaps the floor. Inside, <code>$$ = 7</code> and <code>/proc/self</code> reads 7 too — <strong>the two ledgers finally agree</strong>. Why 7 and not 1? Because PID 1 is the outer bash holding the room; the one under your feet is its descendant. Strip docker run to the bone and it is these three moves plus automation.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">5 · 挂载的可见性,在记账那刻就定了</div>
+    一行命令版造容器失败:/proc 是空的。根因:<code>--mount-proc</code> 把挂载记在了<strong>旧树</strong>的 /proc 路径上,然后 chroot 才换地板——账本上的条目跟着路径走,地板一换就够不着了。这正是 L2 讲过的定律换了个方向再咬人一次:<strong>可见性绑定在记账时的路径</strong>。修法不是换工具,是换顺序:先在新地板的路径上记账,再换地板。
+  </div>
+  <div class="en">
+    <div class="head">5 · MOUNT VISIBILITY BINDS AT RECORDING TIME</div>
+    The one-liner container failed: /proc came up empty. Root cause: <code>--mount-proc</code> recorded the mount on the <strong>old tree's</strong> /proc path, and only then did chroot swap the floor — a ledger entry follows its path, and a floor swap leaves it behind. It is the L2 law biting from a new angle: <strong>visibility binds to the path at the moment of recording</strong>. The fix was not a different tool but a different order: record on the new floor's path first, swap the floor second.
+  </div>
+</div>
+
+<h2>二、今日一战 Today's Battle: The Empty /proc</h2>
+<div class="h2sub">症状 → 根因 → 修复,数字说话 · Symptom → root cause → fix, told with numbers</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">病状:PID 1 当上了,/proc 却是空的</div>
+    <code>unshare --pid --fork --mount-proc chroot /myroot /bin/bash</code> 跑完,$$ = 1 对了,但 <code>echo /proc/*</code> 原样吐回、<code>/proc/self/stat</code> 不存在。新楼的新账本,花名册没了。<br>
+    推理三步:mount 挂载是 rw(排除只读)→ --mount-proc 的执行时机在 chroot <strong>之前</strong> → 条目记在旧树路径上,换地板后不可达。修复三行:mkdir 新地板的 /proc 洞 → mount 直接记在 <code>/myroot/proc</code> → 再 chroot。结果 <code>read &lt; /proc/self/stat</code> 出 7,echo $$ 也是 7。<br>
+    同场加映:cgroup 的 <code>echo $$ > cgroup.procs</code> 报 EOPNOTSUPP,PID 1 假设被 sleep 实验证伪——这桩悬案挂着,判别实验已经备好,下次开场就办。
+  </div>
+  <div class="en">
+    <div class="head">SYMPTOM: PID 1 AT LAST, /PROC EMPTY</div>
+    After <code>unshare --pid --fork --mount-proc chroot /myroot /bin/bash</code>, $$ = 1 was right, but <code>echo /proc/*</code> echoed the glob back and <code>/proc/self/stat</code> did not exist. The new building's new ledger had no roster.<br>
+    Three-step reasoning: the mount is rw (read-only ruled out) → --mount-proc runs <strong>before</strong> the chroot → the entry lives on the old tree's path, unreachable after the floor swap. Fix, three lines: mkdir the /proc hole on the new floor → mount directly onto <code>/myroot/proc</code> → chroot last. Result: <code>read &lt; /proc/self/stat</code> yields 7, and echo $$ says 7.<br>
+    Same sitting, a cliffhanger: writing to <code>cgroup.procs</code> returned EOPNOTSUPP, and the PID-1 hypothesis was falsified by moving a sleep process instead. The case is parked with a discriminating experiment ready — first order of business next session.
+  </div>
+</div>
+
+<h2>三、Today's English 今天遇到的英语</h2>
+<div class="h2sub">只收今天真实碰到的 · Drawn only from today's real encounters — click the right column to listen</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① throttle — 掐表限流</div>
+    cpu.max 超限的官方动词。<code>nr_throttled</code> = 被掐的次数。本义是油门/节流阀:发动机不熄火,只是踩不到底。对比记忆:<strong>throttle 卡而不死,OOM kill 直接处决</strong>——CPU 可回收,内存收不回,所以手段一软一硬。
+  </div>
+  <div class="en">
+    <div class="head">① THROTTLE</div>
+    The official verb for exceeding cpu.max; <code>nr_throttled</code> counts the times you were throttled. Literal sense: a throttle valve — the engine keeps running, you just can't floor it. Contrast to memorize: <strong>throttling stalls without killing; OOM kill executes</strong> — CPU is reclaimable, memory is not, hence one soft tool and one hard.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② OOM kill — 内存耗尽处决</div>
+    OOM = out of memory,内核的最后一道手段:挑组里<strong>最肥的进程</strong>发 SIGKILL。退出码 137 = 128 + 9(9 是 SIGKILL 的编号)。运维看到 137,第一反应就该是"内存超了",就像交易员看到特定错误码就知道是哪家流动性商拒单。
+  </div>
+  <div class="en">
+    <div class="head">② OOM KILL</div>
+    OOM = out of memory; the kernel's last resort: pick the <strong>fattest process</strong> in the group and SIGKILL it. Exit code 137 = 128 + 9 (9 is SIGKILL's number). An ops engineer seeing 137 should think "memory over limit" first — the way a trader reads a specific reject code and knows which liquidity provider said no.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ EOPNOTSUPP — Operation not supported</div>
+    今天 cgroup.procs 写入的报错。Linux 错误码全家都长这样:E 前缀 + 大写缩写:ENOENT(No such file,文件不存在)、EACCES(Permission denied,权限不够)、EAGAIN(Resource temporarily unavailable,fork 被拒就是它)。读报错先认前缀,像看盘先看品种代码。
+  </div>
+  <div class="en">
+    <div class="head">③ EOPNOTSUPP — OPERATION NOT SUPPORTED</div>
+    Today's error from writing cgroup.procs. The Linux errno family all look like this: E prefix + abbreviation. ENOENT (no such file), EACCES (permission denied), EAGAIN (resource temporarily unavailable — what a refused fork gets). Read the prefix first, the way you read the symbol code before the price.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">④ pivot_root — 转轴换根</div>
+    pivot = 枢轴(篮球的转身脚不许挪,那个动作就叫 pivot)。pivot_root 不是换个参照点,是<strong>把整棵挂载树绕着轴挪走</strong>,旧根真正不可达。chroot 有个老漏洞:有 root 权限可以 chroot 两次逃回旧根。生产容器用 pivot_root,就是堵这条逃生通道。
+  </div>
+  <div class="en">
+    <div class="head">④ PIVOT_ROOT</div>
+    Pivot = the basketball move where one foot stays planted. pivot_root does not merely change a reference point — it <strong>swings the whole mount tree around that axis</strong>, leaving the old root genuinely unreachable. chroot has an old flaw: with root privilege, a double chroot can escape back. Production containers use pivot_root to close that escape hatch.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">⑤ delegation — 委托/授权</div>
+    mount 输出里的 <code>nsdelegate</code>:权限按"这个组是否<strong>过户给你</strong>"判,不按 root 身份判。住在房间里 ≠ 可以改电表;要房本过户(文件 owner 改成你)才算真授权。银行同款:你是客户 ≠ 你能动客户的账。
+  </div>
+  <div class="en">
+    <div class="head">⑤ DELEGATION</div>
+    From today's mount output, <code>nsdelegate</code>: permission is decided by whether the group is <strong>deeded over to you</strong>, not by being root. Living in the room does not mean you may touch its meters; the deed must be transferred (the files' owner set to you). Banking works the same: being the customer's son is not being the account holder.
+  </div>
+</div>
+
+<h2>四、下一步 Next</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    两桩欠账等着:①cgroup.procs 的 EOPNOTSUPP 悬案,判别实验(关掉 +pids 再搬人)已经备好;②pids.max 上限下亲眼看 fork 被拒。开场还有 0016 的四道复验题——最要紧的是"为什么 $$ 和 /proc/self 这次都是 7"。
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    Two debts waiting: the EOPNOTSUPP mystery on cgroup.procs (the discriminating experiment — disable +pids, retry the move — is already prepared), and watching a fork get refused under pids.max with your own eyes. Plus four re-quiz seeds from log 0016 — the one that matters most: why do $$ and /proc/self BOTH say 7 this time?
+  </div>
+</div>
+
+<div class="note">
+  <strong>Day 11/730</strong> — 隔离三件套今天闭环:你在 docker 里亲手把墙、账、地板三样装齐,两本账对到同一个数字。Unit 1 的靶心"证明容器不是魔法",打穿了。完整档案在 logs/0015 和 logs/0016。睡前点右边的英文列,听三分钟今天的自己。
+</div>
+
+<footer>
+  Generated 2026-11-17 · ~/growth-plan/ops-engineer/reports/0008-report-2026-11-17.html<br>
+  Mirror bilingual: 中文 | English · One-page digest v2 · One report per day
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) {
+      return v.lang && v.lang.indexOf("en") === 0;
+    });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+
+    el.classList.add("speaking");
+    current = el;
+
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function () {};
+
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>

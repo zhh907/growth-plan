@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Report · 2026-11-17 · Agent Full-Stack</title>
+<style>
+  :root {
+    --ink: #e8f2ec;
+    --ink-soft: #9dbcab;
+    --accent: #2dd4a7;
+    --accent-soft: #1f3a2f;
+    --warn: #fbbf24;
+    --ok: #34d399;
+    --line: #2a4a3c;
+    --bg: #12241c;
+    --card: #1a3328;
+    --code-bg: #0b1712;
+    --code-ink: #d7efe4;
+    --en-soft: #172e25;
+    --en-ink: #c4dccc;
+    --ok-bg: #14352a;
+    --speak-bg: #2a4636;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+    line-height: 1.9; font-size: 17px;
+    padding: 48px 40px 90px;
+  }
+  header { border-bottom: 4px solid var(--accent); padding-bottom: 26px; margin-bottom: 36px; }
+  .kicker { color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; }
+  h1 { font-size: 34px; margin: 8px 0 6px; letter-spacing: -0.5px; }
+  .meta { color: var(--ink-soft); font-size: 15px; }
+
+  .bi { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); margin: 18px 0; }
+  .bi > div { padding: 20px 24px; }
+  .bi .cn { border-right: 1px dashed var(--line); }
+  .bi .en { background: var(--en-soft); font-size: 15.5px; color: var(--en-ink); }
+  .bi .head { font-weight: 800; font-size: 16.5px; margin-bottom: 10px; }
+  .bi .cn .head { color: var(--accent); }
+  .bi .en .head { color: var(--ink-soft); letter-spacing: .5px; }
+
+  h2 { font-size: 25px; margin: 48px 0 8px; padding-left: 14px; border-left: 5px solid var(--accent); }
+  .h2sub { color: var(--ink-soft); font-size: 15px; margin-bottom: 14px; padding-left: 19px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 20px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .stat .num { font-size: 34px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 14px; color: var(--ink-soft); }
+
+  .en-code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; color: var(--code-ink); background: var(--code-bg); padding: 8px 11px; border-radius: 6px; display: block; word-break: break-all; margin-bottom: 4px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; background: var(--accent-soft); color: var(--accent); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
+  .tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+  .tag.ok { background: var(--ok-bg); color: var(--ok); }
+  .tag.warn { background: var(--speak-bg); color: var(--warn); }
+  .note { background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; font-size: 15.5px; margin: 18px 0; }
+  footer { margin-top: 56px; color: var(--ink-soft); font-size: 14px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
+
+  .speakable { cursor: pointer; position: relative; transition: box-shadow .15s, background .15s; }
+  .speakable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+  .speakable.speaking { background: var(--speak-bg) !important; box-shadow: inset 0 0 0 2px var(--warn); }
+  .speakable::after { content: "🔊"; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0; transition: opacity .15s; }
+  .speakable:hover::after { opacity: .55; }
+  .speakable.speaking::after { opacity: 1; }
+
+  @media (max-width: 760px) { .bi { grid-template-columns: 1fr; } .bi .cn { border-right: none; border-bottom: 1px dashed var(--line); } }
+  @media print { body { background: #fff; color: #222; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Growth Plan · Agent Full-Stack Track · Day 11</div>
+  <h1>学习报告 Study Report — 2026-11-17</h1>
+  <div class="meta">Session 0012 动态路由 · 一次通过 3/3,外加两场意外收获 · Three-for-three routing on the first run, plus two unplanned lessons</div>
+</header>
+
+<div class="grid">
+  <div class="stat"><div class="num">3/3</div><div class="lbl">路由判断全对,首跑<br>All routes correct, first run</div></div>
+  <div class="stat"><div class="num">1024</div><div class="lbl">explain 科被截断的输出<br>Tokens where explain got cut</div></div>
+  <div class="stat"><div class="num">256</div><div class="lbl">复跑时命中的缓存<br>Cache tokens on the re-run</div></div>
+  <div class="stat"><div class="num">16</div><div class="lbl">提示词里拆出的语法点<br>Grammar points in the prompts</div></div>
+</div>
+
+<h2>一、今天的五个概念 Five Ideas, Told with Examples</h2>
+<div class="h2sub">每个概念配一个你熟悉的例子 · Each idea comes with an example you already know</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">1 · 路由:先分诊,再派单</div>
+    前面学的编排者-评审、扇出,分工是<strong>焊死的</strong>:每篇代码必走同一条流水线。路由是<strong>先看病人是谁再决定送哪个科</strong>。分诊护士(router)不治病,只填一张单子交标签;各科医生(specialist)拿着自己的提示词接诊。你跑的三个文件,三个走了三个科,一个都没送错。
+  </div>
+  <div class="en">
+    <div class="head">1 · ROUTING: TRIAGE FIRST, THEN DISPATCH</div>
+    The orchestrator-critic and fan-out patterns you built earlier divide labor in <strong>welded</strong> ways: every paper flows the same pipeline. Routing means <strong>looking at the patient before choosing the department</strong>. The triage nurse (router) never treats — it fills a one-label form; each specialist answers with its own prompt. Your three files went to three departments; not one was misdelivered.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">2 · 代码里的路由 = 分类 + 查表</div>
+    你问"选择发生在哪",答案是:<code>route = call_router(text)</code> 拿到标签,<code>SPECIALISTS[route]</code> 查字典取出提示词——没有 if/else 链。<strong>specialist 的全部差异就是配置表里的一行</strong>:提示词、预算,生产里再加工具和模型档位。就像你的下单函数:magic number 一换,同一台机器服务另一套 EA。
+  </div>
+  <div class="en">
+    <div class="head">2 · ROUTING IN CODE: CLASSIFY, THEN LOOK UP</div>
+    You asked where the choice happens. Answer: <code>route = call_router(text)</code> returns a label; <code>SPECIALISTS[route]</code> pulls the prompt from a dict — no if/else chain. <strong>A specialist is just one row in a config table</strong>: prompt, budget, and in production also tools and model tier. Like your order function: change the magic number and the same machine serves another EA.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">3 · forced tool use:逼模型填表,不许自由发挥</div>
+    <code>tool_choice={"type":"tool","name":...}</code> 是 API 层的硬开关:这一轮只准调这个工具、只准通过参数槽交卷。0003 的工具是"模型<strong>用</strong>我们的功能",今天的是"模型<strong>填</strong>我们的表"——假工具,没有 def,参数 schema 就是答题卡。治的就是 0008 那次自由文本格式漂移。
+  </div>
+  <div class="en">
+    <div class="head">3 · FORCED TOOL USE: FILL THE FORM, NO FREE PROSE</div>
+    <code>tool_choice={"type":"tool","name":...}</code> is a hard API switch: this turn must call that tool and only that tool, submitting through its parameter slots. In 0003 tools meant the model <strong>uses</strong> our functions; today it means the model <strong>fills</strong> our form — a fake tool with no def, whose schema is the answer sheet. This is the cure for 0008's free-text format drift.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">4 · 结构化只给代码要消费的字段</div>
+    代码只分支一个东西:路由标签。所以只有标签进了 schema;医生的万字长答案塞在一个字符串字段里,给人看,不解析。0009 给 findings 数组建 schema 是因为要逐条数数——需求不同,结构化范围不同。<strong>schema 是工具,不是礼服。</strong>
+  </div>
+  <div class="en">
+    <div class="head">4 · SCHEMA ONLY WHAT CODE CONSUMES</div>
+    The code branches on exactly one thing: the route label. So only the label is schema-enforced; the doctor's thousand-word answer rides in one string field — for humans, never parsed. In 0009 the findings array got a schema because Python counted them line by line. Different needs, different schema scope. <strong>A schema is a tool, not formalwear.</strong>
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">5 · 送错科的防线:unsure + out_of_scope</div>
+    路由的经典事故:病人送错科,错科医生<strong>硬着头�皮看</strong>——不会说"这不是我的病",只会自信地答错。两道防线:router 拿不准可以交 <code>unsure</code> 走通科;医生的答题卡上有 <code>out_of_scope</code> 布尔位,提示词明写"超出职责必须报告,不许猜"。
+  </div>
+  <div class="en">
+    <div class="head">5 · MISROUTE DEFENSE: unsure + out_of_scope</div>
+    The classic routing accident: the wrong-department doctor <strong>treats anyway</strong> — it will never say "not my disease", only answer wrongly with confidence. Two barriers: the router may submit <code>unsure</code> and land in the generalist's room; the specialist's answer sheet carries an <code>out_of_scope</code> boolean, and its prompt says plainly: report it, never guess.
+  </div>
+</div>
+
+<h2>二、今日一战 Today's Battle: The Explain Doctor Who Lost His Voice</h2>
+<div class="h2sub">症状 → 根因 → 修复,数字说话 · Symptom → root cause → fix, told with numbers</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">病状:路由对了,答案却是空的</div>
+    explain_me.py 路由正确,医生却一言不发。账单露了马脚:<code>out=1024</code>,正好顶到 max_tokens 上限。根因是 remediation 清单里挂了很久的那条:<strong>max_tokens 是 thinking 和 text 共享的池子</strong>——讲解科医生思考写得长,把交卷额度烧光,answer 字段根本没写出来。<br>
+    修复两刀:每科独立预算(explain 给 4096);<code>stop_reason == "max_tokens"</code> 时 stderr 报警——截断的答案不可信,宁可叫,不许静默混过去。复跑:out=1246,答案完整,还带出 <code>cache_read=256</code>。<br>
+    顺带一句:同场的手搓 .env 解析器也被引号坑了(base_url 带着 "https://" 外层的引号,URL 缺协议),换标准 <code>load_dotenv</code> 一行解决。标准库存在的意义,就是别人已经替你踩过这些坑。
+  </div>
+  <div class="en">
+    <div class="head">SYMPTOM: RIGHT ROUTE, EMPTY ANSWER</div>
+    explain_me.py routed correctly, then the doctor said nothing. The bill gave it away: <code>out=1024</code>, pinned exactly at the max_tokens ceiling. Root cause was the long-standing item on the remediation list: <strong>max_tokens is a pool shared by thinking and text</strong> — the explainer thought at length, burned the submission budget, and the answer field never got written.<br>
+    Two fixes: per-specialist budgets (explain gets 4096), and a stderr alarm when <code>stop_reason == "max_tokens"</code> — a truncated answer cannot be trusted; fail loud, never let it slip through. Re-run: out=1246, full answer, plus <code>cache_read=256</code>.<br>
+    Same sitting: the hand-rolled .env parser tripped on quotes (base_url kept its quotation marks, so the URL "had no protocol"); the standard <code>load_dotenv</code> replaced ten lines with one. Standard libraries exist precisely because someone already hit these traps for you.
+  </div>
+</div>
+
+<h2>三、Today's English 今天遇到的英语</h2>
+<div class="h2sub">只收今天真实碰到的 · Drawn only from today's real encounters — click the right column to listen</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">① triage — 分诊</div>
+    router 提示词第一行 <code>like a triage nurse</code>。/triːˈɑːʒ/,法语来的医疗词:急诊室里决定谁先看病的动作。文件安全圈也用它:<code>triage the bugs</code> = 给 bug 按轻重排队。这节课的名字就住在这行提示词里。
+  </div>
+  <div class="en">
+    <div class="head">① TRIAGE</div>
+    Line one of the router prompt: <code>like a triage nurse</code>. /triːˈɑːʒ/, a medical word from French: the act of deciding who gets seen first in an ER. Security teams use it too: <code>triage the bugs</code> — rank bugs by severity. The whole lesson is named inside this one line.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">② forced tool use — 强制工具调用</div>
+    你问"这种方式专业名词是什么",答案。forced = 被迫的。Anthropic 官方文档的栏目名就叫 <em>Forcing tool use</em>。兄弟词:forced marriage(被迫的婚姻)——同样是"没有选择权"。OpenAI 那边对应 <code>tool_choice: required</code>。
+  </div>
+  <div class="en">
+    <div class="head">② FORCED TOOL USE</div>
+    Your own question: "what is the professional term for this?" Forced = no choice in the matter. Anthropic's docs section is literally titled <em>Forcing tool use</em>. Sibling word: forced marriage — same lack of choice. OpenAI's counterpart is <code>tool_choice: required</code>.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">③ say so — 照实这么说</div>
+    bug_hunt 提示词 <code>say so honestly</code>。这里 so 是<strong>代词</strong>,替代前面整个句子(文件是干净的)——"是干净的,就照实说它是干净的"。同类:<code>I told you so</code>(我早说过吧)。两个词顶一整句,英语的省略艺术。
+  </div>
+  <div class="en">
+    <div class="head">③ SAY SO</div>
+    From the bug_hunt prompt: <code>say so honestly</code>. Here <strong>so is a pro-form</strong> standing for the whole preceding clause ("the file is clean") — if it is clean, say THAT, and say it honestly. Same family: <code>I told you so</code>. Two words carrying a full sentence — English compression at work.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">④ what it needs is... — 强调句型</div>
+    explain 科的路由定义:<code>what it needs is an explanation of how it works</code>。这叫假拟分裂句(pseudo-cleft):what 从句当主语,专门用来<strong>点名</strong>后面的东西——"它需要的,是讲解"。比平铺的 it needs an explanation 重一档。写提示词定义类别时很好用。
+  </div>
+  <div class="en">
+    <div class="head">④ WHAT IT NEEDS IS...</div>
+    The explain route's definition: <code>what it needs is an explanation of how it works</code>. This is a pseudo-cleft: the what-clause serves as subject, built to <strong>spotlight</strong> the noun after is — "what it NEEDS is an explanation". One notch heavier than plain "it needs an explanation". Handy when defining categories in prompts.
+  </div>
+</div>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">⑤ none of the above fits — 上述皆非</div>
+    unsure 的定义句。注意 <code>fits</code> 是<strong>单数</strong>:none of + 名词在美式英语里惯用单数动词。the above = 上述内容(选择题的 E 选项)。后面还挂了个 confidently——不是"都不匹配",是"没把握的匹配不算",给 router 留了承认不确定的台阶。
+  </div>
+  <div class="en">
+    <div class="head">⑤ NONE OF THE ABOVE FITS</div>
+    The unsure route's definition. Note <code>fits</code> is <strong>singular</strong>: "none of + noun" customarily takes a singular verb in American English. "The above" = the items listed above (choice E on a multiple-choice question). And it ends with "confidently" — not "nothing matches" but "no match I'd bet on", leaving the router a dignified way to admit doubt.
+  </div>
+</div>
+
+<h2>四、下一步 Next</h2>
+
+<div class="bi">
+  <div class="cn">
+    <div class="head">中文</div>
+    多智能体清单还差 handoff(带着整段上下文交接,像转院时病历跟着走)。另外欠着三道 opening quiz:tool_use_id 配对、critic 边界、SURVIVED 字符串。下次开场先抽哪组,你定。
+  </div>
+  <div class="en">
+    <div class="head">ENGLISH</div>
+    One slot left on the multi-agent map: handoff — handing over WITH the whole conversation, like a transfer patient whose medical record travels along. Three opening-quiz debts still open: tool_use_id pairing, the critic boundary, the SURVIVED string. Your call which to draw first.
+  </div>
+</div>
+
+<div class="note">
+  <strong>Day 11/730</strong> — 一天里你把路由从名词变成了 3/3 的实物,还顺手引爆了两颗埋了几天的雷(共享池、dotenv)。顺手把 16 个语法点钉进了五段提示词——logs/0014 里有整张表。睡前点右边的英文列,听三分钟今天的自己。
+</div>
+
+<footer>
+  Generated 2026-11-17 · ~/growth-plan/agent-fullstack/reports/0007-report-2026-11-17.html<br>
+  Mirror bilingual: 中文 | English · One-page digest v2 · One report per day
+</footer>
+
+<script>
+(function () {
+  var current = null;
+  var RATE = 0.95;
+
+  var PREFERRED = ["Google US English", "Samantha", "Aaron", "Jenny"];
+  var NOVELTY = /^(Grandma|Grandpa|Rocko|Eddy|Flo|Reed|Sandy|Bells|Bubbles|Cellos|Organ|Superstar|Trinoids|Whisper|Zarfox|Zarvox|Albert|Bad News|Bahh|Boing|Bruce|Buzzer|Deranged|Hysterical|Junior|Kathy|Pipe Organ|Princess|Ralph|Fred|Wobble|Wheezy|Paulina|Nora)/i;
+  function score(v) {
+    var n = v.name || "";
+    if (NOVELTY.test(n.trim())) return 0;
+    if (PREFERRED.indexOf(n) !== -1) return 5;
+    if (/Premium|Enhanced|Natural|Neural/i.test(n)) return 4;
+    if (/^Google/i.test(n)) return 3;
+    return 1;
+  }
+  function bestEnVoice() {
+    var list = speechSynthesis.getVoices().filter(function (v) {
+      return v.lang && v.lang.indexOf("en") === 0;
+    });
+    var best = null, bs = -1;
+    list.forEach(function (v) { var s = score(v); if (s > bs) { bs = s; best = v; } });
+    return best;
+  }
+
+  function stopSpeaking() {
+    speechSynthesis.cancel();
+    if (current) { current.classList.remove("speaking"); current = null; }
+  }
+
+  function cleanAndSplit(raw) {
+    var text = raw
+      .replace(/^(中文|ENGLISH|.+ · .+)\n?/, "")
+      .replace(/🔊/g, "")
+      .replace(/[①②③④⑤⑥⑦⑧⑨⑩]/g, "")
+      .replace(/[·•→←←↔=+*#~`|_<>《》「」『』【】]/g, " ")
+      .replace(/[—–]/g, ", ")
+      .replace(/\s*\n\s*/g, " | ")
+      .replace(/\.\.+/g, ".")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    var parts = text.split(/(?<=[.!?;])\s+|\s\|\s/)
+                   .map(function (s) { return s.replace(/\s*[.,;:!?]*$/, "").trim(); })
+                   .filter(function (s) { return s.length > 1; });
+    return parts.length ? parts : [text];
+  }
+
+  function speak(el) {
+    if (current === el) { stopSpeaking(); return; }
+    stopSpeaking();
+
+    var sentences = cleanAndSplit(el.innerText);
+    if (!sentences.length) return;
+
+    el.classList.add("speaking");
+    current = el;
+
+    var voice = bestEnVoice();
+    sentences.forEach(function (s) {
+      var u = new SpeechSynthesisUtterance(s);
+      u.lang = "en-US";
+      u.rate = RATE;
+      if (voice) u.voice = voice;
+      u.onend = u.onerror = function () {
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          el.classList.remove("speaking"); current = null;
+        }
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function () {};
+
+  document.querySelectorAll(".bi .en").forEach(function (el) {
+    el.classList.add("speakable");
+    el.addEventListener("click", function () { speak(el); });
+  });
+
+  window.addEventListener("beforeunload", stopSpeaking);
+})();
+</script>
+
+</body>
+</html>
